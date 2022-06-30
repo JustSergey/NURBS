@@ -165,7 +165,7 @@ void dersBasisFuns(const double& i, const double& u_i, const int& p, const std::
         printError("** Сообщение из DersBasisFuns -- Сумма Базис. Функций НЕ РАВНА 1");
 }
 
-void curve_point_and_deriv_NURBS(const uint& n, const int& p, const std::vector<double>& u,
+void curve_point_and_deriv_NURBS(const int& n, const int& p, const std::vector<double>& u,
                                const QVector<QVector<double>>& b, const std::vector<double>& h,
                                const double& u_i, std::vector<std::vector<double>>& c2,
                                std::vector<std::vector<double>> nders)
@@ -202,7 +202,7 @@ void curve_point_and_deriv_NURBS(const uint& n, const int& p, const std::vector<
         qDebug() << "nders[j][i] =" << nders[j][i] << " b[span - p + i] =" << b[span - p + i] <<
                     " h[span - p + i] =" << h[span - p + i];
 
-        for(size_t k = 0; k < b[0].size(); ++k)
+        for(int k = 0; k < b[0].size(); ++k)
             n0[k] += b[span - p + i][k] * h[span - p + i] * nders[j][i];
 
         d += nders[j][i] * h[span - p + i];
@@ -227,11 +227,8 @@ void curve_point_and_deriv_NURBS(const uint& n, const int& p, const std::vector<
         }
     }
 
-    for(size_t i = 0; i < c2[1].size(); ++i)
-    {
-        for(size_t k = 0; k < n0.size(); ++k)
-            c2[1][i] = n1[k] / d - (n0[k] * n2[k]) / (d * d);
-    }
+    for(size_t i = 0; i < c2[0].size(); ++i)
+        c2[1][i] = n1[i] / d - (n0[i] * n2[i]) / (d * d);
 
     qDebug() << "j = 1 - 1-я производная \nc2 =" << c2;
 
@@ -249,10 +246,7 @@ void curve_point_and_deriv_NURBS(const uint& n, const int& p, const std::vector<
     std::vector<double> s1(2);
     
     for(size_t i = 0; i < s1.size(); ++i)
-    {
-        for(size_t k = 0; k < n1.size(); ++k)
-            s1[i] = n3[k] / d - (n1[k] * n2[k]) / (d * d);
-    }
+         s1[i] = n3[i] / d - (n1[i] * n2[i]) / (d * d);
     
     std::vector<double> nn(2);
 
@@ -277,34 +271,50 @@ void curve_point_and_deriv_NURBS(const uint& n, const int& p, const std::vector<
     return;
 }
 
-void plot_trace(const QVector<QVector<double>>& data_point, const std::vector<std::vector<std::vector<double>>>& data_2,
+void plot_trace(const QVector<QVector<double>>& data_point, const QVector<QVector<QVector<double>>>& data_spline,
                 const int& x_min, const int& x_max, const int& y_min, const int& y_max,
                 const QString& title, const QString& labels_legend_1, const QString& labels_legend_2, Ui::Widget* ui)
 {
     ui->widget->clearGraphs(); // Очищаем все графики
-    ui->widget->addGraph(); // Добавляем один график в widget
 
-    //ui->widget->graph(0)->setPen(QColor(0, 0, 0, 255)); // Задаем цвет точки
-    ui->widget->graph(0)->setLineStyle(QCPGraph::lsNone); // Убираем линии
-    ui->widget->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 3)); // Формируем вид точек
+    QCPCurve *curve_point { nullptr };
+    curve_point = new QCPCurve(ui->widget->xAxis, ui->widget->yAxis);
 
-    for(size_t i = 0; i < data_point.size(); ++i) // Рисуем точки
-        ui->widget->graph(0)->addData(data_point[i][0], data_point[i][1]);
+    curve_point->setPen(QColor(0, 0, 0, 255)); // Задаем чёрный цвет
+    curve_point->setLineStyle(QCPCurve::lsNone); // Убираем линии
+    curve_point->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 6)); // Формируем вид точек
 
-    //Подписываем оси Ox и Oy
-    ui->widget->xAxis->setLabel("X");
-    ui->widget->yAxis->setLabel("Y");
+    for(const auto& el: data_point) // Рисуем точки
+        curve_point->addData(el[0], el[1]);
+
+    curve_point->setLineStyle(QCPCurve::lsLine); // Добавляем линии
+
+    //ui->widget->addGraph(); // Добавляем ещё один график в widget
+
+    QCPCurve *curve_spline { nullptr };
+    curve_spline = new QCPCurve(ui->widget->xAxis, ui->widget->yAxis);
+
+    for(const auto& el: data_spline) // Рисуем сплайн
+        curve_spline->addData(el[0][0], el[0][1]);
+
+    ui->widget->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Перетаскиваемый + масштабирование колеса прокрутки
+
+    ui->widget->legend->setVisible(true); // Включаем Легенду графика
+    curve_point->setName(labels_legend_1);
+    curve_spline->setName(labels_legend_2);
+
+    // Подписываем оси Ox и Oy
+    ui->widget->xAxis->setLabel("Ось X");
+    ui->widget->yAxis->setLabel("Ось Y");
 
     // Установим область, которая будет показываться на графике
     ui->widget->xAxis->setRange(x_min, x_max); // Для оси Ox
     ui->widget->yAxis->setRange(y_min, y_max); // Для оси Oy
 
-    //ui->widget->addGraph(); // Добавляем ещё один график в widget
-    //ui->widget->graph(0)->setLineStyle(QCPGraph::lsLine); // Добавляем линии
+    ui->widget->plotLayout()->insertRow(0); // Вставляем строку
+    ui->widget->plotLayout()->addElement (0, 0, new QCPTextElement(ui->widget, title, QFont("sans", 12))); // Добавляем в первую строку и первый столбец заглавие
 
     ui->widget->replot();
-
-
 }
 
 Widget::Widget(QWidget *parent)
@@ -316,19 +326,17 @@ Widget::Widget(QWidget *parent)
 
     const QVector<QVector<double>> b // Массив точек многоугольника
     {
-        {0.0, 0.0},
         {1.0, 1.0},
-        {2.0, 2.0},
-        {3.0, 3.0},
-        {4.0, 4.0},
-        {5.0, 5.0},
+        {2.0, 3.0},
+        {4.0, 3.0},
+        {3.0, 1.0}
     };
 
     vector<double> h {1, 1, 1, 1, 1, 1}; // Весовые коэффициенты
-    vector<double> u {0, 0, 0, 0, 0.3333, 0.6666, 1, 1, 1, 1}; // Узловой вектор
+    vector<double> u {0, 0, 0, 0, 1, 1, 1, 1}; // Узловой вектор
 
     const uint p { 3 }; // Степень аппроксимирующих полиномов
-    const uint m { 9 }; // n_kn - количество узлов (длина) в узловом векторе
+    const uint m { 7 }; // n_kn - количество узлов (длина) в узловом векторе
     const uint n = m - p - 1; // n_real - количество узлов (длина) реальной части узлового вектора
 
     // Реальный диапазон
@@ -338,9 +346,9 @@ Widget::Widget(QWidget *parent)
     vector<vector<double>> nders(p + 1, vector<double>(p + 1)); // nders - для заданного "u" массив BASIS функций и  1-я и 2-я производные
     vector<vector<double>> c2(p + 1, vector<double>(2)); // Индекс 2 для 2D задачи
 
-    const int n_u = 6; // кол-во разбиений (точек) в реальной части узлов. вектора
+    const int n_u = 60; // Кол-во разбиений (точек) в реальной части узлов. вектора
 
-    vector<vector<vector<double>>> data_CurvePoin_and_Deriv_NURBS(n_u + 1, vector<vector<double>>(p + 1, vector<double>(2)));
+    QVector<QVector<QVector<double>>> data_CurvePoin_and_Deriv_NURBS(n_u + 1, QVector<QVector<double>>(p + 1, QVector<double>(2)));
 
     for(int i = 0; i < n_u + 1; ++i)
     {
@@ -354,8 +362,6 @@ Widget::Widget(QWidget *parent)
         }
     }
 
-    qDebug() << "\n" << data_CurvePoin_and_Deriv_NURBS;
-
     QString title = "NURBS 4-го порядка (кубич. полиномы)";
     QString labels_legend_1 = "Контур. многоуг.";
     QString labels_legend_2 = "B-сплайн";
@@ -364,7 +370,6 @@ Widget::Widget(QWidget *parent)
     int y_min = -1, y_max = 6;
 
     plot_trace(b, data_CurvePoin_and_Deriv_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
-
 
 }
 
