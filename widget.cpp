@@ -2,16 +2,11 @@
 #include "ui_widget.h"
 #include <QDebug>
 
-void printError(const QString& error_message)
-{
-    qDebug() << error_message;
-    return;
-}
-
-// Определяет индекс узлового промежутка
-uint findSpan(const int& n, const int& p, const std::vector<double>& u, const double& u_i)
+// Определяет индекс узлового промежутка (интервал)
+uint findSpan(const uint& n, const int& p, const std::vector<double>& u, const double& u_i)
 /*
- * Вход: n,p,u,u_i. Выход: индекс  узлового  промежутка
+ * Вход: n, p, u, u_i
+ * Выход: индекс  узлового  промежутка
  * n - кол-во Control Points (счёт от нуля)
  * p - степень полинома(=degree)
  * u - узловой вектор - мах индекс в нем m=n+1+p
@@ -21,22 +16,21 @@ uint findSpan(const int& n, const int& p, const std::vector<double>& u, const do
     for(uint k = 0; k < u.size() - 1; ++k)
     {
         if(u[k] > u[k + 1])
-            printError("** Сообщение из findSpan -- Узловой вектор убывает (u[k] > u[k + 1])");
+            qDebug() << "Сообщение из findSpan - Узловой вектор убывает u[k] > u[k + 1]";
     }
 
-    if((static_cast<int>(u.size()) - 1) != (n + 1 + p)) // Кастуем в int, чтобы не было предупреждения
-        printError("** Сообщение из findSpan -- (u.size() - 1) не равен (n + 1 + p)");
+    if((u.size() - 1) != (n + 1 + p))
+        qDebug() << "Сообщение из findSpan - (u.size() - 1) != (n + 1 + p)";
 
     if(u_i < u[p] || u_i > u[n + 1])
-        printError("** Сообщение из FindSpan -- u вышел за реальный диапазон -- (u_i < u[p] || u_i > u[n + 1])");
+        qDebug() << "Сообщение из FindSpan - u вышел за реальный диапазон u_i < u[p] || u_i > u[n + 1]";
 
     if(u_i == u[n + 1]) // Последний диапазон (начало диапазона), в котором может находиться u
         return n;
 
-    // Далее идёт двочиный поиск
-    uint low = p, high = n + 1;
-    uint middle = static_cast<uint>((low + high) / 2);
+    uint low = p, high = n + 1, middle = (low + high) / 2;
 
+    // Выполняем  двоичный  поиск
     while((u_i < u[middle]) || (u_i >= u[middle + 1]))
     {
         if(u_i < u[middle])
@@ -50,16 +44,18 @@ uint findSpan(const int& n, const int& p, const std::vector<double>& u, const do
     return middle;
 }
 
+// Вычисляет все ненулевые базисные функции и производные (от 0 до p)
 void dersBasisFuns(const double& i, const double& u_i, const int& p, const std::vector<double>& u,
                    std::vector<std::vector<double>>& nders)
-/* Функция расчитывает все ненулевые базис. функции (НЕ Нулевые - в смысле только, например, 4-ре для кубич. полиномов)
- * для заданного аргумента ("u")  и все производные (от 0 до p) помещает их в 2D массив ders
+/*
+ * Вход: i, u_i, p, U
  *
  * i - номер диапазона для которого расчитывется N (N_i-p,p ... N_i,p)
  * u_i - значение u
  * p - степень полинома (=degree)
  * u - узловой вектор
- * nders - массив basis функций - N[0],...,N[p] и их производных */
+ * nders - массив basis функций - N[0],...,N[p] и их производных
+*/
 {
     using namespace std;
 
@@ -166,7 +162,7 @@ void dersBasisFuns(const double& i, const double& u_i, const int& p, const std::
         sum += nders[0][i];
 
     if((sum < (1 - 1e-10)) || (sum > 1 + 1e-10))
-        printError("** Сообщение из DersBasisFuns -- Сумма Базис. Функций НЕ РАВНА 1");
+        qDebug() << "** Сообщение из DersBasisFuns -- Сумма Базис. Функций НЕ РАВНА 1";
 }
 
 void curve_point_and_deriv_NURBS(const int& n, const int& p, const std::vector<double>& u,
@@ -185,9 +181,9 @@ void curve_point_and_deriv_NURBS(const int& n, const int& p, const std::vector<d
 
     static uint counter; // Для отсчёта индекса в массиве u
 
-    for(const auto& el: point_u)
+    for(const auto& point: point_u)
     {
-        if(u_i == el)
+        if(u_i == point)
         {
             index_u.push_back(counter);
             break;
@@ -197,7 +193,7 @@ void curve_point_and_deriv_NURBS(const int& n, const int& p, const std::vector<d
     ++counter;
 
     if ((b.size() - 1) != n)
-        printError("** Сообщение из curvePoin_and_Deriv_NURBS -- (b[0].size() - 1) != n");
+        qDebug() << "** Сообщение из curvePoin_and_Deriv_NURBS -- (b[0].size() - 1) != n";
 
     dersBasisFuns(span, u_i, p, u, nders);
 
@@ -452,12 +448,12 @@ Widget::Widget(QWidget *parent)
         {7.5, 2.6}
     };
 
-    vector<double> h {1, 1, 1, 1, 1}; // Весовые коэффициенты
-    vector<double> u {0, 0, 0, 0.4, 0.6, 1, 1, 1}; // Узловой вектор
+    const vector<double> h {1, 1, 1, 1, 1};              // Весовые коэффициенты
+    const vector<double> u {0, 0, 0, 0.4, 0.6, 1, 1, 1}; // Узловой вектор
 
-    const uint p = 2; // Степень аппроксимирующих полиномов
+    const uint p = 2;            // Степень аппроксимирующих полиномов
     const uint m = u.size() - 1; // n_kn - количество узлов (длина) в узловом векторе
-    const uint n = m - p - 1; // n_real - количество узлов (длина) реальной части узлового вектора
+    const uint n = m - p - 1;    // n_real - количество узлов (длина) реальной части узлового вектора
 
     // Реальный диапазон
     const double u_start = u[p];
@@ -470,8 +466,8 @@ Widget::Widget(QWidget *parent)
 
     QVector<QVector<QVector<double>>> data_CurvePoin_and_Deriv_NURBS(n_u + 1, QVector<QVector<double>>(p + 1, QVector<double>(2)));
 
-    QVector<int> index_u; // Массив, хранящий индексы u в
-    QVector<double> point_u(b.size()); // Массив, хранящий u, от которых пойдёт производная
+    QVector<int> index_u; // Массив, хранящий индексы u
+    QVector<double> point_u(b.size()); // Массив, хранящий u, от которых пойдёт производная на графике
 
     for(double i = b.size() - 1; i >= 1; --i)
         point_u[b.size() - i] = 1 / i;
