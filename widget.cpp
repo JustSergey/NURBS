@@ -124,10 +124,10 @@ void dersBasisFuns(const double& i, const double& u_i, const int& p, const std::
         qDebug() << "** Сообщение из DersBasisFuns -- Сумма Базис. Функций НЕ РАВНА 1";
 }
 
-void curve_point_and_deriv_NURBS(const int& n, const int& p, const std::vector<double>& u,
+void curve_point_and_deriv_NURBS(QVector<curve>& data_CurvePoin_and_Deriv_NURBS, const int& n, const int& p, const std::vector<double>& u,
                                const QVector<QVector<double>>& b, const std::vector<double>& h,
-                               const double& u_i, std::vector<std::vector<double>>& c2,
-                               std::vector<std::vector<double>> nders, const QVector<double>& point_u, QVector<int>& index_u)
+                               const double& u_i, std::vector<QPair<double, double>>& c2,
+                               std::vector<std::vector<double>> nders)
 /* Функция расчитывает для заданного "u" одну точку на В-сплайне и 1-ю и 2-ю проиизв. для этой точки
  * n - кол-во Control Points (счёт от нуля)
  * p - степень полинома(=degree)
@@ -135,28 +135,17 @@ void curve_point_and_deriv_NURBS(const int& n, const int& p, const std::vector<d
  * b - контрольные точки (control polygon)
  * u_i - точка внутри РЕАЛЬНОГО диатазона в узловом векторе */
 {
-    double span = findSpan(n, p, u, u_i); // Диапазон узлового веткора
+    double span = findSpan(data_CurvePoin_and_Deriv_NURBS, n, p, u, u_i); // Диапазон узлового веткора
     qDebug() << "Span =" << span << "\tu =" << u_i;
-
-    static uint counter; // Для отсчёта индекса в массиве u
-
-    for(const auto& point: point_u)
-    {
-        if(u_i == point)
-        {
-            index_u.push_back(counter);
-            break;
-        }
-    }
-
-    ++counter;
 
     if ((b.size() - 1) != n)
         qDebug() << "** Сообщение из curvePoin_and_Deriv_NURBS -- (b[0].size() - 1) != n";
 
     dersBasisFuns(span, u_i, p, u, nders);
 
-    c2.assign(p + 1, std::vector<double>(2));
+    //c2.resize(p + 1, std::vector<QPair<double, double>>);
+    //c2.assign(p + 1);
+     //vector<vector<QPair<double, double>>> c2(p + 1)
 
     double d  = 0; // Знаменатель формулы NURBS (формула 5-122, Роджерс (рус.) стр 360)
     std::vector<double> n0(2); // Числитель формулы NURBS (формула 5-122, Роджерс (рус.) стр 360)
@@ -180,8 +169,8 @@ void curve_point_and_deriv_NURBS(const int& n, const int& p, const std::vector<d
         d += nders[j][i] * h[span - p + i];
     }
 
-    for(size_t i = 0; i < c2[0].size(); ++i)
-        c2[0][i] = n0[i] / d;
+    c2[0].first = n0[0] / d;
+    c2[0].second = n0[1] / d;
 
     qDebug() << "j = 0 - кривая \nc2 =" << c2;
 
@@ -199,8 +188,8 @@ void curve_point_and_deriv_NURBS(const int& n, const int& p, const std::vector<d
         }
     }
 
-    for(size_t i = 0; i < c2[0].size(); ++i)
-        c2[1][i] = n1[i] / d - (n0[i] * n2[i]) / (d * d);
+    c2[1].first = n1[0] / d - (n0[0] * n2[0]) / (d * d);
+    c2[1].second = n1[1] / d - (n0[1] * n2[1]) / (d * d);
 
     qDebug() << "j = 1 - 1-я производная \nc2 =" << c2;
 
@@ -235,29 +224,29 @@ void curve_point_and_deriv_NURBS(const int& n, const int& p, const std::vector<d
     for(size_t i = 0; i < s2.size(); ++i)
         s2[i] = nn_deriv[i] / (d * d) - (nn[i] * 2 * n2[i]) / (d * d * d * d);
 
-    for(size_t i = 0; i < c2[2].size(); ++i)
-        c2[2][i] = s1[i] - s2[i];
+    c2[2].first = s1[0] - s2[0];
+    c2[2].second = s1[1] - s2[1];
 
     qDebug() << "j = 2 - 2-я производная \nc2 =" << c2 << "\n";
 
     return;
 }
 
-void plot_deriv_for_point(const QVector<QVector<QVector<double>>>& pointDeriv, Ui::Widget* ui)
+void plot_deriv_for_point(const QVector<curve>& pointDeriv, Ui::Widget* ui)
 {
     for(const auto& point: pointDeriv)
     {
         QCPItemLine *line = new QCPItemLine(ui->graph_function);
         line->setHead(QCPLineEnding::esFlatArrow);
-        line->start->setCoords(point[0][0], point[0][1]);
-        line->end->setCoords(point[1][0] + point[0][0], point[1][1] + point[0][1]);
+        line->start->setCoords(point.curve.first, point.curve.second);
+        line->end->setCoords(point.derivative_1.first + point.curve.first, point.derivative_1.second + point.curve.second);
     }
 
     ui->graph_function->replot();
-
 }
 
-void function_plot(const QVector<QVector<double>>& data_point, const QVector<QVector<QVector<double>>>& data_spline,
+
+void function_plot(const QVector<QVector<double>>& data_point, const QVector<curve>& data_spline,
                    const int& x_min, const int& x_max, const int& y_min, const int& y_max,
                    const QString& title, const QString& labels_legend_1, const QString& labels_legend_2, Ui::Widget* ui)
 {
@@ -283,7 +272,7 @@ void function_plot(const QVector<QVector<double>>& data_point, const QVector<QVe
     curve_spline->setPen(pen);
 
     for(const auto& el: data_spline) // Рисуем сплайн
-        curve_spline->addData(el[0][0], el[0][1]);
+        curve_spline->addData(el.curve.first, el.curve.second);
 
     ui->graph_function->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Перетаскиваемый + масштабирование колеса прокрутки
 
@@ -305,7 +294,7 @@ void function_plot(const QVector<QVector<double>>& data_point, const QVector<QVe
     ui->graph_function->replot();
 }
 
-void first_derivative_plot(const QVector<QVector<double>>& data_point, const QVector<QVector<QVector<double>>>& data_deriv,
+void first_derivative_plot(const QVector<QVector<double>>& data_point, const QVector<curve>& data_deriv,
                            const int& x_min, const int& x_max, const int& y_min, const int& y_max,
                            const QString& title, const QString& labels_legend_1, const QString& labels_legend_2, Ui::Widget* ui)
 {
@@ -326,7 +315,7 @@ void first_derivative_plot(const QVector<QVector<double>>& data_point, const QVe
     curve_deriv = new QCPCurve(ui->graph_first_derivative->xAxis, ui->graph_first_derivative->yAxis);
 
     for(const auto& el: data_deriv) // Рисуем сплайн
-        curve_deriv->addData(el[1][0], el[1][1]);
+        curve_deriv->addData(el.derivative_1.first, el.derivative_1.second);
 
     ui->graph_first_derivative->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Перетаскиваемый + масштабирование колеса прокрутки
 
@@ -348,7 +337,7 @@ void first_derivative_plot(const QVector<QVector<double>>& data_point, const QVe
     ui->graph_first_derivative->replot();
 }
 
-void second_derivative_plot(const QVector<QVector<double>>& data_point, const QVector<QVector<QVector<double>>>& data_deriv,
+void second_derivative_plot(const QVector<QVector<double>>& data_point, const QVector<curve>& data_deriv,
                            const int& x_min, const int& x_max, const int& y_min, const int& y_max,
                            const QString& title, const QString& labels_legend_1, const QString& labels_legend_2, Ui::Widget* ui)
 {
@@ -369,7 +358,7 @@ void second_derivative_plot(const QVector<QVector<double>>& data_point, const QV
     curve_deriv = new QCPCurve(ui->graph_second_derivative->xAxis, ui->graph_second_derivative->yAxis);
 
     for(const auto& el: data_deriv) // Рисуем сплайн
-        curve_deriv->addData(el[2][0], el[2][1]);
+        curve_deriv->addData(el.derivative_2.first, el.derivative_2.second);
 
     ui->graph_second_derivative->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Перетаскиваемый + масштабирование колеса прокрутки
 
@@ -419,28 +408,21 @@ Widget::Widget(QWidget *parent)
     const double u_stop = u[n + 1];
 
     vector<vector<double>> nders(p + 1, vector<double>(p + 1)); // nders - для заданного "u" массив BASIS функций и  1-я и 2-я производные
-    vector<vector<double>> c2(p + 1, vector<double>(2)); // Индекс 2 для 2D задачи
+    vector<QPair<double, double>> c2(p + 1); // Индекс 2 для 2D задачи
 
     const int n_u = 60; // Кол-во разбиений (точек) в реальной части узлов. вектора
 
-    QVector<QVector<QVector<double>>> data_CurvePoin_and_Deriv_NURBS(n_u + 1, QVector<QVector<double>>(p + 1, QVector<double>(2)));
-
-    QVector<int> index_u; // Массив, хранящий индексы u
-    QVector<double> point_u(b.size()); // Массив, хранящий u, от которых пойдёт производная на графике
-
-    for(double i = b.size() - 1; i >= 1; --i)
-        point_u[b.size() - i] = 1 / i;
+    QVector<curve> data_CurvePoin_and_Deriv_NURBS(n_u + 1);
 
     for(int i = 0; i < n_u + 1; ++i)
     {
         double u_i = (i / static_cast<double>(n_u)) * (u_stop - u_start);
-        curve_point_and_deriv_NURBS(n, p, u, b, h, u_i, c2, nders, point_u, index_u);
+        curve_point_and_deriv_NURBS(data_CurvePoin_and_Deriv_NURBS, n, p, u, b, h, u_i, c2, nders);
 
-        for(size_t k = 0; k < c2.size(); ++k)
-        {
-            for(size_t l = 0; l < c2[k].size(); ++l)
-                data_CurvePoin_and_Deriv_NURBS[i][k][l] = c2[k][l];
-        }
+        data_CurvePoin_and_Deriv_NURBS[i].u = u_i;
+        data_CurvePoin_and_Deriv_NURBS[i].curve = c2[0];
+        data_CurvePoin_and_Deriv_NURBS[i].derivative_1 = c2[1];
+        data_CurvePoin_and_Deriv_NURBS[i].derivative_2 = c2[2];
     }
 
     QString title = "B-сплайн 4-го порядка";
@@ -464,12 +446,25 @@ Widget::Widget(QWidget *parent)
 
     second_derivative_plot(b, data_CurvePoin_and_Deriv_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
 
-    QVector<QVector<QVector<double>>> pointDeriv;
+    QVector<double> point_u(b.size()); // Массив, хранящий u, от которых пойдёт производная на графике
 
-    for(const auto& index: index_u)
-        pointDeriv.push_back(data_CurvePoin_and_Deriv_NURBS[index]);
+    for(double i = b.size() - 1; i >= 1; --i)
+        point_u[b.size() - i] = 1 / i;
 
-    plot_deriv_for_point(pointDeriv, ui);
+    QVector<curve> data;
+    for(uint i = 0; i < point_u.size() - 1;)
+    {
+        for(const auto& point: data_CurvePoin_and_Deriv_NURBS)
+        {
+            if(point_u[i] == point.u)
+            {
+                data.push_back(point);
+                ++i;
+            }
+        }
+    }
+
+    plot_deriv_for_point(data, ui);
 }
 
 

@@ -3,8 +3,17 @@
 #include "widget.h"
 #include <QDebug>
 
+struct curve // Хранит точку кривой, её производную (1 и 2), интервал (span) и точку u
+{
+    QPair<double, double> curve;
+    QPair<double, double> derivative_1;
+    QPair<double, double> derivative_2;
+    int span;
+    double u;
+};
+
 // Определяет индекс узлового промежутка (интервал)
-uint findSpan(const uint& n, const int& p, const std::vector<double>& u, const double& u_i)
+uint findSpan(QVector<curve>& data_CurvePoin_and_Deriv_NURBS, const uint& n, const int& p, const std::vector<double>& u, const double& u_i)
 /*
  * Вход: n, p, u, u_i
  * Выход: индекс  узлового  промежутка
@@ -14,6 +23,8 @@ uint findSpan(const uint& n, const int& p, const std::vector<double>& u, const d
  * u_i - точка внутри реального диатазона в узловом векторе
 */
 {
+    static uint counter; // Для индексирования нужной точки нужного span
+
     for(uint k = 0; k < u.size() - 1; ++k)
     {
         if(u[k] > u[k + 1])
@@ -41,6 +52,8 @@ uint findSpan(const uint& n, const int& p, const std::vector<double>& u, const d
 
         middle = (low + high) / 2;
     }
+
+    data_CurvePoin_and_Deriv_NURBS[counter++].span = middle;
 
     return middle;
 }
