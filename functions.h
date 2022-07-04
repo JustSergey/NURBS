@@ -1,11 +1,10 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include "widget.h"
-#include <QDebug>
 #include <math.h>
+#include <QDebug>
 
-struct Point_curve // Хранит точку кривой, её производную (1 и 2), интервал (span) и точку u
+struct Point_curve // Хранит точку кривой, её производную (1 и 2), интервал (span) и параметр u
 {
     QPair<double, double> curve;
     QPair<double, double> derivative_1;
@@ -23,7 +22,6 @@ uint findSpan(const uint& n, const int& p, const std::vector<double>& u, const d
  * u_i - точка внутри реального диатазона в узловом векторе
 */
 {
-
     for(uint k = 0; k < u.size() - 1; ++k)
     {
         if(u[k] > u[k + 1])
@@ -172,7 +170,7 @@ void dersBasisFuns(const double& i, const double& u_i, const int& p, const std::
         qDebug() << "Сообщение из DersBasisFuns - Сумма базисных Функций != 1";
 }
 
-void curve_point_and_deriv_NURBS(QVector<Point_curve>& data_CurvePoin_and_Deriv_NURBS, const int& n, const int& p, const std::vector<double>& u, const QVector<QVector<double>>& b,
+void curve_point_and_deriv_NURBS(QVector<Point_curve>& data_NURBS, const int& n, const int& p, const std::vector<double>& u, const QVector<QVector<double>>& b,
                                  const std::vector<double>& h, const double& u_i, std::vector<QPair<double, double>>& c2,  std::vector<std::vector<double>> nders)
 /*
  * Функция расчитывает для заданного "u" одну точку на В-сплайне и 1-ю и 2-ю проиизв. для этой точки
@@ -185,11 +183,11 @@ void curve_point_and_deriv_NURBS(QVector<Point_curve>& data_CurvePoin_and_Deriv_
 {
     double span = findSpan(n, p, u, u_i); // Диапазон узлового веткора
 
-    static uint counter;
-    data_CurvePoin_and_Deriv_NURBS[counter].span = span;
+    static int counter; // Счётчик для присваивания нужного span
+    data_NURBS[counter].span = span;
 
-    if(counter == data_CurvePoin_and_Deriv_NURBS.size() - 1)
-        counter = 0;
+    if(counter == data_NURBS.size() - 1) // Если мы дошли до конца массива
+        counter = 0; // Обнуляем счётчик
     else
         ++counter;
 
@@ -199,10 +197,6 @@ void curve_point_and_deriv_NURBS(QVector<Point_curve>& data_CurvePoin_and_Deriv_
         qDebug() << "** Сообщение из curvePoin_and_Deriv_NURBS -- (b[0].size() - 1) != n";
 
     dersBasisFuns(span, u_i, p, u, nders);
-
-    //c2.resize(p + 1, std::vector<QPair<double, double>>);
-    //c2.assign(p + 1);
-    //vector<vector<QPair<double, double>>> c2(p + 1)
 
     double d  = 0; // Знаменатель формулы NURBS (формула 5-122, Роджерс (рус.) стр 360)
     std::vector<double> n0(2); // Числитель формулы NURBS (формула 5-122, Роджерс (рус.) стр 360)
@@ -264,7 +258,7 @@ void curve_point_and_deriv_NURBS(QVector<Point_curve>& data_CurvePoin_and_Deriv_
     std::vector<double> s1(2);
 
     for(size_t i = 0; i < s1.size(); ++i)
-         s1[i] = n3[i] / d - (n1[i] * n2[i]) / (d * d);
+         s1[i] = n3[i] / d - (n1[i] * n2[i]) / (pow(d, 2));
 
     std::vector<double> nn(2);
 
@@ -279,7 +273,7 @@ void curve_point_and_deriv_NURBS(QVector<Point_curve>& data_CurvePoin_and_Deriv_
     std::vector<double> s2(2);
 
     for(size_t i = 0; i < s2.size(); ++i)
-        s2[i] = nn_deriv[i] / (d * d) - (nn[i] * 2 * n2[i]) / (d * d * d * d);
+        s2[i] = nn_deriv[i] / (d * d) - (nn[i] * 2 * n2[i]) / (pow(d, 4));
 
     c2[2].first = s1[0] - s2[0];
     c2[2].second = s1[1] - s2[1];
@@ -289,6 +283,7 @@ void curve_point_and_deriv_NURBS(QVector<Point_curve>& data_CurvePoin_and_Deriv_
     return;
 }
 
+// Вычисляет длину вектора (2D)
 double vector_len(const QPair<double, double>& point)
 {
     return sqrt(pow(point.first, 2) + pow(point.second, 2));

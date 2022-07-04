@@ -14,6 +14,7 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
+    charts.h \
     functions.h \
     qcustomplot.h \
     widget.h

@@ -1,18 +1,9 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include "functions.h"
+#include "charts.h"
 #include <QDebug>
 
-/*
-void temp(const QVector<curve>& pointDeriv, const QPair<double, double>& point, const QPair<double, double>& foundPoint,  Ui::Widget* ui)
-{
-    QCPItemLine *line = new QCPItemLine(ui->graph_function);
-    line->start->setCoords(foundPoint.first, foundPoint.second);
-    line->end->setCoords(point.first, point.second);
-
-    ui->graph_function->replot();
-}
-*/
 void point_distance(const int& n, const int& p, const std::vector<double>& u_vector, const QVector<QVector<double>>& b,
                     const std::vector<double>& h, const QPair<double, double>& point, Ui::Widget* ui)
 {
@@ -47,37 +38,12 @@ void point_distance(const int& n, const int& p, const std::vector<double>& u_vec
     line->end->setCoords(point.first, point.second);
 
     ui->graph_function->replot();
-
-/*
-    for(int i = 0; i < n_u + 1; ++i)
-    {
-        double u_i = (i / static_cast<double>(n_u)) * (u_stop - u_start);
-        curve_point_and_deriv_NURBS(data_CurvePoin_and_Deriv_NURBS, n, p, u, b, h, u_i, c2, nders);
-
-        data_CurvePoin_and_Deriv_NURBS[i].u = u_i;
-        data_CurvePoin_and_Deriv_NURBS[i].curve = c2[0];
-        data_CurvePoin_and_Deriv_NURBS[i].derivative_1 = c2[1];
-        data_CurvePoin_and_Deriv_NURBS[i].derivative_2 = c2[2];
-    }
-*/
-
-}
-
-void plot_deriv_for_point(const QVector<Point_curve>& pointDeriv, Ui::Widget* ui)
-{
-    for(const auto& point: pointDeriv)
-    {
-        QCPItemLine *line = new QCPItemLine(ui->graph_function);
-        line->setHead(QCPLineEnding::esFlatArrow);
-        line->start->setCoords(point.curve.first, point.curve.second);
-        line->end->setCoords(point.derivative_1.first + point.curve.first, point.derivative_1.second + point.curve.second);
-    }
-
-    ui->graph_function->replot();
 }
 
 
-void function_plot(const QVector<QVector<double>>& data_point, const QVector<Point_curve>& data_spline,
+
+
+void function_plot(const QVector<QVector<double>>& data_point, const QVector<Point_curve>& data_NURBS,
                    const int& x_min, const int& x_max, const int& y_min, const int& y_max,
                    const QString& title, const QString& labels_legend_1, const QString& labels_legend_2, Ui::Widget* ui)
 {
@@ -102,7 +68,7 @@ void function_plot(const QVector<QVector<double>>& data_point, const QVector<Poi
     pen.setColor(QColor(30, 144, 255));
     curve_spline->setPen(pen);
 
-    for(const auto& el: data_spline) // Рисуем сплайн
+    for(const auto& el: data_NURBS) // Рисуем сплайн
         curve_spline->addData(el.curve.first, el.curve.second);
 
     ui->graph_function->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Перетаскиваемый + масштабирование колеса прокрутки
@@ -125,7 +91,7 @@ void function_plot(const QVector<QVector<double>>& data_point, const QVector<Poi
     ui->graph_function->replot();
 }
 
-void first_derivative_plot(const QVector<QVector<double>>& data_point, const QVector<Point_curve>& data_deriv,
+void first_derivative_plot(const QVector<QVector<double>>& data_point, const QVector<Point_curve>& data_NURBS,
                            const int& x_min, const int& x_max, const int& y_min, const int& y_max,
                            const QString& title, const QString& labels_legend_1, const QString& labels_legend_2, Ui::Widget* ui)
 {
@@ -145,7 +111,7 @@ void first_derivative_plot(const QVector<QVector<double>>& data_point, const QVe
     QCPCurve *curve_deriv { nullptr };
     curve_deriv = new QCPCurve(ui->graph_first_derivative->xAxis, ui->graph_first_derivative->yAxis);
 
-    for(const auto& el: data_deriv) // Рисуем сплайн
+    for(const auto& el: data_NURBS) // Рисуем сплайн
         curve_deriv->addData(el.derivative_1.first, el.derivative_1.second);
 
     ui->graph_first_derivative->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Перетаскиваемый + масштабирование колеса прокрутки
@@ -168,7 +134,7 @@ void first_derivative_plot(const QVector<QVector<double>>& data_point, const QVe
     ui->graph_first_derivative->replot();
 }
 
-void second_derivative_plot(const QVector<QVector<double>>& data_point, const QVector<Point_curve>& data_deriv,
+void second_derivative_plot(const QVector<QVector<double>>& data_point, const QVector<Point_curve>& data_NURBS,
                            const int& x_min, const int& x_max, const int& y_min, const int& y_max,
                            const QString& title, const QString& labels_legend_1, const QString& labels_legend_2, Ui::Widget* ui)
 {
@@ -188,7 +154,7 @@ void second_derivative_plot(const QVector<QVector<double>>& data_point, const QV
     QCPCurve *curve_deriv { nullptr };
     curve_deriv = new QCPCurve(ui->graph_second_derivative->xAxis, ui->graph_second_derivative->yAxis);
 
-    for(const auto& el: data_deriv) // Рисуем сплайн
+    for(const auto& el: data_NURBS) // Рисуем сплайн
         curve_deriv->addData(el.derivative_2.first, el.derivative_2.second);
 
     ui->graph_second_derivative->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Перетаскиваемый + масштабирование колеса прокрутки
@@ -243,17 +209,17 @@ Widget::Widget(QWidget *parent)
 
     const int n_u = 60; // Кол-во разбиений (точек) в реальной части узлов. вектора
 
-    QVector<Point_curve> data_CurvePoin_and_Deriv_NURBS(n_u + 1);
+    QVector<Point_curve> data_NURBS(n_u + 1); // Содержит точки кривой, 1-ой, 2-ой производной
 
     for(int i = 0; i < n_u + 1; ++i)
     {
         double u_i = (i / static_cast<double>(n_u)) * (u_stop - u_start);
-        curve_point_and_deriv_NURBS(data_CurvePoin_and_Deriv_NURBS, n, p, u, b, h, u_i, c2, nders);
+        curve_point_and_deriv_NURBS(data_NURBS, n, p, u, b, h, u_i, c2, nders);
 
-        data_CurvePoin_and_Deriv_NURBS[i].u = u_i;
-        data_CurvePoin_and_Deriv_NURBS[i].curve = c2[0];
-        data_CurvePoin_and_Deriv_NURBS[i].derivative_1 = c2[1];
-        data_CurvePoin_and_Deriv_NURBS[i].derivative_2 = c2[2];
+        data_NURBS[i].u = u_i;
+        data_NURBS[i].curve = c2[0];
+        data_NURBS[i].derivative_1 = c2[1];
+        data_NURBS[i].derivative_2 = c2[2];
     }
 
     QString title = "B-сплайн 4-го порядка";
@@ -263,25 +229,24 @@ Widget::Widget(QWidget *parent)
     int x_min = 0, x_max = 20;
     int y_min = -5, y_max = 15;
 
-    function_plot(b, data_CurvePoin_and_Deriv_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
+    function_plot(b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
 
     title = "1-я прoизвдная B-сплайна 4-го порядка";
     x_min = -10, x_max = 30;
     y_min = -25, y_max = 30;
 
-    first_derivative_plot(b, data_CurvePoin_and_Deriv_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
+    first_derivative_plot(b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
 
     title = "2-я прoизвдная B-сплайна 4-го порядка";
     x_min = -95, x_max = 60;
     y_min = -110, y_max = 120;
 
-    second_derivative_plot(b, data_CurvePoin_and_Deriv_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
+    second_derivative_plot(b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
 
-    QVector<double> point_u(b.size()); // Массив, хранящий u, от которых пойдёт производная на графике
-    point_u = { 0, 0.2, 0.4, 0.6, 1 }; // Точки, от которых начнутся производные на графике
+    QVector<double> point_u { 0, 0.2, 0.4, 0.6, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
     QVector<Point_curve> derivs_curve(point_u.size());
 
-    for(int i = 0; i < point_u.size(); ++i)
+    for(int i = 0; i < point_u.size(); ++i) // Считаем координаты и производные для точек u
     {
         curve_point_and_deriv_NURBS(derivs_curve, n, p, u, b, h, point_u[i], c2, nders);
 
@@ -293,12 +258,9 @@ Widget::Widget(QWidget *parent)
 
     plot_deriv_for_point(derivs_curve, ui);
 
-
-
     QPair<double, double> point(1, 4);
 
     point_distance(n, p, u, b, h, point, ui);
-    //temp(data_CurvePoin_and_Deriv_NURBS, point, found_point, ui);
 }
 
 
