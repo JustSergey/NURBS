@@ -327,18 +327,22 @@ Widget::Widget(QWidget *parent)
 
     QVector<double> point_u(b.size()); // Массив, хранящий u, от которых пойдёт производная на графике
 
-    for(double i = b.size() - 1; i >= 1; --i)
-        point_u[b.size() - i] = 1 / i;
+    //for(double i = b.size() - 1; i >= 1; --i)
+    //  point_u[b.size() - i] = 1 / i;
+
+    //for(double i = 0; i < b.size() - 1; ++i)
+    //   point_u[i] = 1 / (b.size() - i);
+
+    point_u = { 0, 0.2, 0.4, 0.6, 1 };
 
     QVector<curve> data;
-    for(uint i = 0; i < point_u.size() - 1;)
+    for(int i = 0; i < point_u.size(); ++i)
     {
         for(const auto& point: data_CurvePoin_and_Deriv_NURBS)
         {
             if(point_u[i] == point.u)
             {
                 data.push_back(point);
-                ++i;
             }
         }
     }
