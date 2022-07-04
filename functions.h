@@ -3,8 +3,9 @@
 
 #include "widget.h"
 #include <QDebug>
+#include <math.h>
 
-struct curve // Хранит точку кривой, её производную (1 и 2), интервал (span) и точку u
+struct Point_curve // Хранит точку кривой, её производную (1 и 2), интервал (span) и точку u
 {
     QPair<double, double> curve;
     QPair<double, double> derivative_1;
@@ -14,7 +15,7 @@ struct curve // Хранит точку кривой, её производну�
 };
 
 // Определяет индекс узлового промежутка (интервал)
-uint findSpan(QVector<curve>& data_CurvePoin_and_Deriv_NURBS, const uint& n, const int& p, const std::vector<double>& u, const double& u_i)
+uint findSpan(const uint& n, const int& p, const std::vector<double>& u, const double& u_i)
 /*
  * n - кол-во Control Points (счёт от нуля)
  * p - степень полинома(=degree)
@@ -22,7 +23,6 @@ uint findSpan(QVector<curve>& data_CurvePoin_and_Deriv_NURBS, const uint& n, con
  * u_i - точка внутри реального диатазона в узловом векторе
 */
 {
-    static uint counter; // Для индексирования нужной точки нужного span
 
     for(uint k = 0; k < u.size() - 1; ++k)
     {
@@ -51,8 +51,6 @@ uint findSpan(QVector<curve>& data_CurvePoin_and_Deriv_NURBS, const uint& n, con
 
         middle = (low + high) / 2;
     }
-
-    data_CurvePoin_and_Deriv_NURBS[counter++].span = middle;
 
     return middle;
 }
@@ -172,6 +170,128 @@ void dersBasisFuns(const double& i, const double& u_i, const int& p, const std::
 
     if((sum < (1 - 1e-10)) || (sum > 1 + 1e-10))
         qDebug() << "Сообщение из DersBasisFuns - Сумма базисных Функций != 1";
+}
+
+void curve_point_and_deriv_NURBS(QVector<Point_curve>& data_CurvePoin_and_Deriv_NURBS, const int& n, const int& p, const std::vector<double>& u, const QVector<QVector<double>>& b,
+                                 const std::vector<double>& h, const double& u_i, std::vector<QPair<double, double>>& c2,  std::vector<std::vector<double>> nders)
+/*
+ * Функция расчитывает для заданного "u" одну точку на В-сплайне и 1-ю и 2-ю проиизв. для этой точки
+ * n - кол-во Control Points (счёт от нуля)
+ * p - степень полинома(=degree)
+ * u - узловой вектор - мах индекс в нем m=n+1+p
+ * b - контрольные точки (control polygon)
+ * u_i - точка внутри РЕАЛЬНОГО диатазона в узловом векторе
+*/
+{
+    double span = findSpan(n, p, u, u_i); // Диапазон узлового веткора
+
+    static uint counter;
+    data_CurvePoin_and_Deriv_NURBS[counter].span = span;
+
+    if(counter == data_CurvePoin_and_Deriv_NURBS.size() - 1)
+        counter = 0;
+    else
+        ++counter;
+
+    qDebug() << "Span =" << span << "\tu =" << u_i;
+
+    if ((b.size() - 1) != n)
+        qDebug() << "** Сообщение из curvePoin_and_Deriv_NURBS -- (b[0].size() - 1) != n";
+
+    dersBasisFuns(span, u_i, p, u, nders);
+
+    //c2.resize(p + 1, std::vector<QPair<double, double>>);
+    //c2.assign(p + 1);
+    //vector<vector<QPair<double, double>>> c2(p + 1)
+
+    double d  = 0; // Знаменатель формулы NURBS (формула 5-122, Роджерс (рус.) стр 360)
+    std::vector<double> n0(2); // Числитель формулы NURBS (формула 5-122, Роджерс (рус.) стр 360)
+    std::vector<double> n1(2); // Числитель Первого слагаемого формулы 1-ой Производ. NURBS (формула 5-126, Роджерс (рус.) стр 372)
+    std::vector<double> n2(2); // Множитель в Числителе Второго слагаемого формулы 1-ой Производ. NURBS (формула 5-126, Роджерс (рус.) стр 372)
+    std::vector<double> n3(2); // Множитель в Числителе при расчёте 2-ой Производ. NURBS ((см. мои листы)
+    std::vector<double> n4(2); // Мночитель в Числителе при расчёте 2-ой Производ. NURBS ((см. мои листы)
+
+    int j = 0; // кривая (нулевая производная)
+
+    for(int i = 0; i < p + 1; ++i)
+    {
+        qDebug() << "----------";
+        qDebug() << "j =" << j << " i =" << i << " span - p + i =" << span - p + i;
+        qDebug() << "nders[j][i] =" << nders[j][i] << " b[span - p + i] =" << b[span - p + i] <<
+                    " h[span - p + i] =" << h[span - p + i];
+
+        for(int k = 0; k < b[0].size(); ++k)
+            n0[k] += b[span - p + i][k] * h[span - p + i] * nders[j][i];
+
+        d += nders[j][i] * h[span - p + i];
+    }
+
+    c2[0].first = n0[0] / d;
+    c2[0].second = n0[1] / d;
+
+    qDebug() << "j = 0 - кривая \nc2 =" << c2;
+
+    if(p == 1)
+        return;
+
+    // 1-я производная
+
+    for(int i = 0; i < p + 1; ++i)
+    {
+        for(size_t k = 0; k < n1.size(); ++k)
+        {
+            n1[k] += b[span - p + i][k] * h[span - p + i] * nders[1][i];
+            n2[k] += h[span - p +i] * nders[1][i];
+        }
+    }
+
+    c2[1].first = n1[0] / d - (n0[0] * n2[0]) / (d * d);
+    c2[1].second = n1[1] / d - (n0[1] * n2[1]) / (d * d);
+
+    qDebug() << "j = 1 - 1-я производная \nc2 =" << c2;
+
+    // 2-я производная
+
+    for(int i = 0; i < p + 1; ++i)
+    {
+        for(size_t k = 0; k < n1.size(); ++k)
+        {
+            n3[k] += b[span - p + i][k] * h[span - p + i] * nders[2][i];
+            n4[k] += h[span - p +i] * nders[2][i];
+        }
+    }
+
+    std::vector<double> s1(2);
+
+    for(size_t i = 0; i < s1.size(); ++i)
+         s1[i] = n3[i] / d - (n1[i] * n2[i]) / (d * d);
+
+    std::vector<double> nn(2);
+
+    for(size_t i = 0; i < nn.size(); ++i)
+        nn[i] = n1[i] * n2[i];
+
+    std::vector<double> nn_deriv(2);
+
+    for(size_t i = 0; i < nn_deriv.size(); ++i)
+        nn_deriv[i] = n1[i] * n2[i] + n0[i] * n4[i];
+
+    std::vector<double> s2(2);
+
+    for(size_t i = 0; i < s2.size(); ++i)
+        s2[i] = nn_deriv[i] / (d * d) - (nn[i] * 2 * n2[i]) / (d * d * d * d);
+
+    c2[2].first = s1[0] - s2[0];
+    c2[2].second = s1[1] - s2[1];
+
+    qDebug() << "j = 2 - 2-я производная \nc2 =" << c2 << "\n";
+
+    return;
+}
+
+double vector_len(const QPair<double, double>& point)
+{
+    return sqrt(pow(point.first, 2) + pow(point.second, 2));
 }
 
 #endif // FUNCTIONS_H
