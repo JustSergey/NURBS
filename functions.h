@@ -289,7 +289,7 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const int& n, const in
 
 // Рассчитывает спаны реального диапазона узлового вектора
 QVector<double> real_span_calc(const uint& p, const uint& n, const std::vector<double>& u)
-{
+{ // Возвращает вектор с точками спанов реального узлового вектора
     // Реальный диапазон
     double u_start = u[p];
     const double u_end = u[n + 1];

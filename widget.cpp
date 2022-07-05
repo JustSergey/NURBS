@@ -92,14 +92,11 @@ Widget::Widget(QWidget *parent)
 
 
 
-    QPair<double, double> point(6.25, 3.25); // Точка, к которой мы будем проводить перпендикуляр
+    QPair<double, double> point(5.5, 4.5); // Точка, к которой мы будем проводить перпендикуляр
 
     Point_curve u_perpendicular = finding_perpendicular(n, p, u, b, h, point); // Ближайшая точка для перпендикуляра
-    QVector<Point_curve> p1;
-    p1.push_back(u_perpendicular);
 
-    //derivative_point_line(p1, ui);
-
+    plot_tangent(u_perpendicular, ui); // Рисуем касательную к точке
     plot_line(point, u_perpendicular, ui); // Рисуем перпендикуляр между точкой и кривой
 
 
@@ -115,7 +112,7 @@ Widget::Widget(QWidget *parent)
         u_real_spans1[i].derivative_2 = c2[2];
     }
 
-    plot_point(u_real_spans1, ui); // Рисуем точки на графике (точки границ реального диапазона спанов)
+    plot_point(u_real_spans1, QColor(123, 104, 238), ui); // Рисуем точки на графике (точки границ реального диапазона спанов)
 }
 
 Widget::~Widget()

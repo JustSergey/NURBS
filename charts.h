@@ -161,13 +161,24 @@ void plot_line(const QPair<double, double>& point, const Point_curve& u_perpendi
     ui->graph_function->replot();
 }
 
+// Рисует касательную к точке
+void plot_tangent(const Point_curve& point, Ui::Widget* ui)
+{
+    QCPItemLine *line = new QCPItemLine(ui->graph_function);
+    line->setPen(QColor(0, 128, 0)); // Задаем зелёный цвет
+    line->start->setCoords(point.curve.first - point.derivative_1.first / 10, point.curve.second - point.derivative_1.second / 10);
+    line->end->setCoords(point.curve.first + point.derivative_1.first / 10, point.curve.second + point.derivative_1.second / 10);
+    ui->graph_function->replot();
+}
+
 // Рисует точки на графике
-void plot_point(const QVector<Point_curve>& points, Ui::Widget* ui)
+void plot_point(const QVector<Point_curve>& points, const QColor& color, Ui::Widget* ui)
 {
     for(const auto& p: points)
     {
         ui->graph_function->addGraph();
-        ui->graph_function->graph()->setScatterStyle(QCPScatterStyle::ssCircle);
+        ui->graph_function->graph()->setPen(color); // Задаем чёрный цвет)
+        ui->graph_function->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 8)); // Формируем вид точек
         ui->graph_function->graph()->setLineStyle(QCPGraph::lsNone);
         ui->graph_function->graph()->addData(p.curve.first, p.curve.second);
         ui->graph_function->replot();
