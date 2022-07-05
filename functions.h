@@ -283,10 +283,16 @@ void curve_point_and_deriv_NURBS(QVector<Point_curve>& data_NURBS, const int& n,
     return;
 }
 
-// Вычисляет длину вектора (2D)
+// Вычисляет длину для радиус вектора
 double vector_len(const QPair<double, double>& point)
 {
     return sqrt(pow(point.first, 2) + pow(point.second, 2));
+}
+
+// Вычисляет длину для вектора по координатам
+double vector_len(const QPair<double, double>& p1, const QPair<double, double>& p2)
+{
+    return sqrt(pow(p2.first - p1.first, 2) + pow(p2.second - p1.second, 2));
 }
 
 #endif // FUNCTIONS_H

@@ -5,37 +5,86 @@
 #include <QDebug>
 
 // Проецирует точку в пространстве на кривую
-void pointProjection(const int& n, const int& p, const std::vector<double>& u_vector, const QVector<QVector<double>>& b,
-                    const std::vector<double>& h, const QPair<double, double>& point, Ui::Widget* ui)
+void pointProjection(const int& n, const int& p, const std::vector<double>& u_vector, const QVector<QVector<double>>& polygon, const std::vector<double>& h,
+                     const QPair<double, double>& point, Ui::Widget* ui)
 {
-    QVector<Point_curve> point_u(1); // Точка кривой
-    point_u[0].u = 0.2; // Тестовое
+    QVector<Point_curve> point_u(n - 1); // Массив точек - перпендикуляров
 
     std::vector<std::vector<double>> nders(p + 1, std::vector<double>(p + 1)); // nders - для заданного "u" массив BASIS функций и  1-я и 2-я производные
     std::vector<QPair<double, double>> c2(p + 1); // Индекс 2 для 2D задачи
 
-    for(int i = 0; i < 15; ++i)
+    // Реальный диапазон
+    double u_start = u_vector[p];
+    const double u_end = u_vector[n + 1];
+
+    QVector<double> u_real_span; // Спаны реального диапазона узлового вектора
+
+    for(int i = 1; u_start < u_end; ++i)
     {
-        curve_point_and_deriv_NURBS(point_u, n, p, u_vector, b, h, point_u[0].u, c2, nders);
+        u_real_span.push_back(u_start);
+        u_start = u_vector[p + i];
+    }
 
-        point_u[0].curve = c2[0];
-        point_u[0].derivative_1 = c2[1];
-        point_u[0].derivative_2 = c2[2];
+    u_real_span.push_back(u_end);
 
-        qDebug() << point_u[0].u;
+    for(int i = 0; i < u_real_span.size() - 1; ++i)
+    {
+        point_u[i].u = (u_real_span[i + 1] - u_real_span[i]) / 2 + u_real_span[i]; // Берём среднее спана
 
-        for(const auto& p: point_u)
+        for(int k = 0; k < 15; ++k)
         {
-            double x = p.curve.first - point.first;
-            double y = p.curve.second - point.second;
-            double numerator = x * p.derivative_1.first + y * p.derivative_1.second;
-            double denominator = x * p.derivative_2.first + y * p.derivative_2.second + pow(vector_len(p.derivative_1), 2);
-            point_u[0].u = p.u - numerator / denominator;
+            if(point_u[i].u < u_real_span[i]) // Если точка вышла из спана
+            {
+                point_u[i].u = u_real_span[i];
+                curve_point_and_deriv_NURBS(point_u, n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+                point_u[i].curve = c2[0];
+                point_u[i].derivative_1 = c2[1];
+                point_u[i].derivative_2 = c2[2];
+                break;
+            }
+            else if(point_u[i].u > u_real_span[i + 1])
+            {
+                point_u[i].u = u_real_span[i + 1];
+                curve_point_and_deriv_NURBS(point_u, n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+                point_u[i].curve = c2[0];
+                point_u[i].derivative_1 = c2[1];
+                point_u[i].derivative_2 = c2[2];
+                break;
+            }
+
+            curve_point_and_deriv_NURBS(point_u, n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+
+            point_u[i].curve = c2[0];
+            point_u[i].derivative_1 = c2[1];
+            point_u[i].derivative_2 = c2[2];
+
+            qDebug() << point_u[i].u;
+
+            double x = point_u[i].curve.first - point.first;
+            double y = point_u[i].curve.second - point.second;
+            double numerator = x * point_u[i].derivative_1.first + y * point_u[i].derivative_1.second;
+            double denominator = x * point_u[i].derivative_2.first + y * point_u[i].derivative_2.second + pow(vector_len(point_u[i].derivative_1), 2);
+            point_u[i].u = point_u[i].u - numerator / denominator; // Новая точка кривой
+        }
+    }
+
+    Point_curve min_point;
+    min_point = point_u[0];
+    double min_len = vector_len(point, point_u[0].curve);
+
+    for(int i = 1; i < point_u.size(); ++i)
+    {
+        double temp_len = vector_len(point, point_u[i].curve);
+
+        if(min_len > temp_len)
+        {
+            min_len = temp_len;
+            min_point = point_u[i];
         }
     }
 
     QCPItemLine *line = new QCPItemLine(ui->graph_function);
-    line->start->setCoords(point_u[0].curve.first, point_u[0].curve.second);
+    line->start->setCoords(min_point.curve.first, min_point.curve.second);
     line->end->setCoords(point.first, point.second);
 
     ui->graph_function->replot();
@@ -122,7 +171,7 @@ Widget::Widget(QWidget *parent)
 
     derivative_point_line(derivs_curve, ui); // Рисует линию производной в точке (касательную)
 
-    QPair<double, double> point(1, 4);
+    QPair<double, double> point(4.5, 4.5);
 
     pointProjection(n, p, u, b, h, point, ui);
 }
