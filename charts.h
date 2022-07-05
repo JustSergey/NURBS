@@ -152,4 +152,25 @@ void second_derivative_plot(const QVector<QVector<double>>& data_point, const QV
     ui->graph_second_derivative->replot();
 }
 
+void plot_perpendicular(const QPair<double, double>& point, const Point_curve& u_perpendicula, Ui::Widget* ui)
+{
+    QCPItemLine *line = new QCPItemLine(ui->graph_function);
+    line->start->setCoords(u_perpendicula.curve.first, u_perpendicula.curve.second);
+    line->end->setCoords(point.first, point.second);
+    ui->graph_function->replot();
+}
+
+void plot_point_real_span(const QVector<Point_curve>& points, Ui::Widget* ui)
+{
+    for(const auto& p: points)
+    {
+        ui->graph_function->addGraph();
+        ui->graph_function->graph()->setScatterStyle(QCPScatterStyle::ssCircle);
+        ui->graph_function->graph()->setLineStyle(QCPGraph::lsNone);
+
+        ui->graph_function->graph()->addData(p.curve.first, p.curve.second);
+        ui->graph_function->replot();
+    }
+}
+
 #endif // CHARTS_H
