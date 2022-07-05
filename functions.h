@@ -182,8 +182,8 @@ void dersBasisFuns(const double& i, const double& u_i, const int& p, const std::
         qDebug() << "Сообщение из DersBasisFuns - Сумма базисных Функций != 1";
 }
 
-void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const int& n, const int& p, const std::vector<double>& u, const QVector<QVector<double>>& b,
-                                 const std::vector<double>& h, const double& u_i, std::vector<QPair<double, double>>& c2,  std::vector<std::vector<double>> nders)
+void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const int& n, const int& p, const std::vector<double>& u, const QVector<QVector<double>>& b, const std::vector<double>& h,
+                                 const double& u_i, std::vector<QPair<double, double>>& c2,  std::vector<std::vector<double>> nders)
 /*
  * Функция расчитывает для заданного "u" одну точку на В-сплайне и 1-ю и 2-ю проиизв. для этой точки
  * n - кол-во Control Points (счёт от нуля)
@@ -216,8 +216,7 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const int& n, const in
     {
         qDebug() << "----------";
         qDebug() << "j =" << j << " i =" << i << " span - p + i =" << span - p + i;
-        qDebug() << "nders[j][i] =" << nders[j][i] << " b[span - p + i] =" << b[span - p + i] <<
-                    " h[span - p + i] =" << h[span - p + i];
+        qDebug() << "nders[j][i] =" << nders[j][i] << " b[span - p + i] =" << b[span - p + i] << " h[span - p + i] =" << h[span - p + i];
 
         for(int k = 0; k < b[0].size(); ++k)
             n0[k] += b[span - p + i][k] * h[span - p + i] * nders[j][i];
@@ -288,33 +287,39 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const int& n, const in
     return;
 }
 
-// Возвращает точку кривой, перпендикулярной точке на плоскости
-Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<double>& u_vector, const QVector<QVector<double>>& polygon, const std::vector<double>& h, const QPair<double, double>& point)
+// Рассчитывает спаны реального диапазона узлового вектора
+QVector<double> real_span_calc(const uint& p, const uint& n, const std::vector<double>& u)
 {
-    QVector<Point_curve> point_u(n - 1); // Массив точек - перпендикуляров
-
-    std::vector<std::vector<double>> nders(p + 1, std::vector<double>(p + 1)); // nders - для заданного "u" массив BASIS функций и  1-я и 2-я производные
-    std::vector<QPair<double, double>> c2(p + 1); // Индекс 2 для 2D задачи
-
     // Реальный диапазон
-    double u_start = u_vector[p];
-    const double u_end = u_vector[n + 1];
+    double u_start = u[p];
+    const double u_end = u[n + 1];
 
-    QVector<double> u_real_span; // Спаны реального диапазона узлового вектора
+    QVector<double> u_real_span;
 
     for(int i = 1; u_start < u_end; ++i)
     {
         u_real_span.push_back(u_start);
-        u_start = u_vector[p + i];
+        u_start = u[p + i];
     }
 
     u_real_span.push_back(u_end);
 
+    return u_real_span;
+}
+
+// Возвращает точку кривой, перпендикулярной точке на плоскости
+Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<double>& u_vector, const QVector<QVector<double>>& polygon, const std::vector<double>& h, const QPair<double, double>& point)
+{
+    QVector<Point_curve> point_u(n - 1); // Массив точек - перпендикуляров
+    QVector<double> u_real_span = real_span_calc(p, n, u_vector); // Спаны реального диапазона узлового вектора
+
     for(int i = 0; i < u_real_span.size() - 1; ++i)
     {
         point_u[i].u = (u_real_span[i + 1] - u_real_span[i]) / 2 + u_real_span[i]; // Берём среднее спана
+        std::vector<std::vector<double>> nders(p + 1, std::vector<double>(p + 1)); // nders - для заданного "u" массив BASIS функций и 1-я и 2-я производные
+        std::vector<QPair<double, double>> c2(p + 1); // Индекс 2 для 2D задачи
 
-        for(int k = 0; k < 35; ++k)
+        for(int k = 0; k < 35; ++k) // ПОКА 35 ИТЕРАЦИЙ
         {
 
             if(point_u[i].u < u_real_span[i]) // Если точка вышла из спана
@@ -342,19 +347,17 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
             point_u[i].derivative_1 = c2[1];
             point_u[i].derivative_2 = c2[2];
 
-            qDebug() << point_u[i].u;
-
             double x = point_u[i].curve.first - point.first;
             double y = point_u[i].curve.second - point.second;
             double numerator = x * point_u[i].derivative_1.first + y * point_u[i].derivative_1.second;
             double denominator = x * point_u[i].derivative_2.first + y * point_u[i].derivative_2.second + pow(vector_len(point_u[i].derivative_1), 2);
-            point_u[i].u = point_u[i].u - numerator / denominator * 0.1; // Новая точка кривой
+            point_u[i].u = point_u[i].u - numerator / denominator * 0.1; // Новая, приближённая точка кривой
         }
     }
 
-    Point_curve point_min_len; // Точка
+    Point_curve point_min_len; // Точка кривой с минимальным расстоянием до точки на плоскости
     point_min_len = point_u[0]; // Присваиваем первую точку для дальнейшего сравнения
-    double min_len = vector_len(point, point_u[0].curve);
+    double min_len = vector_len(point, point_u[0].curve); // Минимальная длина вектора
 
     for(int i = 1; i < point_u.size(); ++i) // Ищем вектор с минимальной длиной
     {

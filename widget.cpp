@@ -49,7 +49,9 @@ Widget::Widget(QWidget *parent)
         data_NURBS[i].derivative_2 = c2[2];
     }
 
-    QString title = "B-сплайн 4-го порядка";
+
+
+    QString title = "B-сплайн 3-го порядка";
     QString labels_legend_1 = "Контур. многоуг.";
     QString labels_legend_2 = "B-сплайн";
 
@@ -58,17 +60,20 @@ Widget::Widget(QWidget *parent)
 
     curve_plot(b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
 
-    title = "1-я прoизвдная B-сплайна 4-го порядка";
+    title = "1-я прoизвдная B-сплайна 3-го порядка";
     x_min = -10, x_max = 30;
     y_min = -25, y_max = 30;
 
     first_derivative_plot(b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
 
-    title = "2-я прoизвдная B-сплайна 4-го порядка";
+    title = "2-я прoизвдная B-сплайна 3-го порядка";
     x_min = -95, x_max = 60;
     y_min = -110, y_max = 120;
 
     second_derivative_plot(b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
+
+
+
 
     QVector<double> point_u { 0, 0.2, 0.4, 0.6, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
     QVector<Point_curve> derivs_curve(point_u.size());
@@ -83,32 +88,34 @@ Widget::Widget(QWidget *parent)
         derivs_curve[i].derivative_2 = c2[2];
     }
 
-    derivative_point_line(derivs_curve, ui); // Рисует линию производной в точке (касательную)
+    derivative_point_line(derivs_curve, ui); // Рисуем линию производной в точке (касательную)
 
-    QPair<double, double> point(6.25, 3.25);
-    //QPair<double, double> point(4.7, 3.8);
 
-    Point_curve u_perpendicular = finding_perpendicular(n, p, u, b, h, point);
+
+    QPair<double, double> point(6.25, 3.25); // Точка, к которой мы будем проводить перпендикуляр
+
+    Point_curve u_perpendicular = finding_perpendicular(n, p, u, b, h, point); // Ближайшая точка для перпендикуляра
     QVector<Point_curve> p1;
     p1.push_back(u_perpendicular);
-    derivative_point_line(p1, ui);
 
-    plot_perpendicular(point, u_perpendicular, ui);
+    //derivative_point_line(p1, ui);
+
+    plot_line(point, u_perpendicular, ui); // Рисуем перпендикуляр между точкой и кривой
 
 
 
+    QVector<double> u_real_spans = real_span_calc(p, n, u); // Вектор с точка реального диапазона спанов
+    QVector<Point_curve> u_real_spans1(u_real_spans.size());
 
-    QVector<double> v{ 0, 0.4, 0.6, 1 };
-    QVector<Point_curve> vvvv(v.size());
-    for(int i = 0; i < v.size(); ++i)
+    for(int i = 0; i < u_real_spans.size(); ++i)
     {
-        curve_point_and_deriv_NURBS(vvvv[i], n, p, u, b, h, v[i], c2, nders);
-        vvvv[i].curve = c2[0];
-        vvvv[i].derivative_1 = c2[1];
-        vvvv[i].derivative_2 = c2[2];
+        curve_point_and_deriv_NURBS(u_real_spans1[i], n, p, u, b, h, u_real_spans[i], c2, nders);
+        u_real_spans1[i].curve = c2[0];
+        u_real_spans1[i].derivative_1 = c2[1];
+        u_real_spans1[i].derivative_2 = c2[2];
     }
 
-    plot_point_real_span(vvvv, ui);
+    plot_point(u_real_spans1, ui); // Рисуем точки на графике (точки границ реального диапазона спанов)
 }
 
 Widget::~Widget()
