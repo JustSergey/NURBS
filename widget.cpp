@@ -72,7 +72,7 @@ Widget::Widget(QWidget *parent)
 
     second_derivative_plot(b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
 
-
+/*
 
 
     QVector<double> point_u { 0, 0.2, 0.4, 0.6, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
@@ -112,6 +112,7 @@ Widget::Widget(QWidget *parent)
         u_real_spans[i].derivative_2 = c2[2];
         plot_point(u_real_spans[i].curve.first, u_real_spans[i].curve.second, ui, "", QColor(123, 104, 238)); // Рисуем точки на графике (точки границ реального диапазона спанов)
     }
+    */
 
 }
 

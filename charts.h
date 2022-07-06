@@ -31,8 +31,17 @@ void plot_polygon(const QVector<QVector<double>>& polygon, Ui::Widget* ui, const
     pen.setWidth(width); // Устанавливаем ширину
     shape->setPen(pen);
 
+    uint counter = 0;
     for(const auto& point: polygon) // Рисуем точки
+    {
+        // Делаем подписи к каждой вершине многоугольника
+        QCPItemText *textLabel = new QCPItemText(ui->graph_function);
+        textLabel->position->setCoords(point[0] + 0.35, point[1] - 0.2);
+        textLabel->setFont(QFont("Times", 10));
+        textLabel->setText(QString("P%1").arg(counter++));
+
         shape->addData(point[0], point[1]);
+    }
 
     shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
     shape->setName(label); // Обзываем полигон в легенде графика
@@ -66,6 +75,17 @@ void plot_line(const double& point_x_1, const double& point_y_1, const double& p
     ui->graph_function->replot();
 }
 
+// Рисует касательную к точке
+void plot_tangent(const Point_curve& point, Ui::Widget* ui, const QColor& color = QColor(0, 128, 0))
+{
+    QCPItemLine *line = new QCPItemLine(ui->graph_function);
+    line->setPen(color);
+    line->start->setCoords(point.curve.first - point.derivative_1.first / 10, point.curve.second - point.derivative_1.second / 10);
+    line->end->setCoords(point.curve.first + point.derivative_1.first / 10, point.curve.second + point.derivative_1.second / 10);
+
+    ui->graph_function->replot();
+}
+
 void plot_curve(const QVector<Point_curve>& data_NURBS, Ui::Widget* ui,  const QString& label, const QColor& color = QColor(0, 0, 0, 255))
 {
     QCPCurve *curve = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
@@ -88,7 +108,8 @@ void curve_plot(const QVector<QVector<double>>& b, const QVector<Point_curve>& d
 
     plot_polygon(b, ui, labels_legend_1); // Рисуем многоугольник с вершинами
 
-    plot_curve(data_NURBS, ui, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
+
+    //plot_curve(data_NURBS, ui, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
 
     ui->graph_function->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Делаем график перетаскиваемым + масштабирование колеса прокрутки
 
@@ -101,7 +122,7 @@ void curve_plot(const QVector<QVector<double>>& b, const QVector<Point_curve>& d
     ui->graph_function->yAxis->setRange(y_min, y_max);
 
     ui->graph_function->plotLayout()->insertRow(0); // Вставляем строку
-    ui->graph_function->plotLayout()->addElement (0, 0, new QCPTextElement(ui->graph_function, title, QFont("sans", 12))); // Добавляем в первую строку и первый столбец заглавие
+    ui->graph_function->plotLayout()->addElement (0, 0, new QCPTextElement(ui->graph_function, title, QFont("sans", 12))); // Добавляем в первую строку и первый столбец оглавление
 
     ui->graph_function->replot();
 }
@@ -190,16 +211,6 @@ void second_derivative_plot(const QVector<QVector<double>>& data_point, const QV
     ui->graph_second_derivative->plotLayout()->addElement (0, 0, new QCPTextElement(ui->graph_second_derivative, title, QFont("sans", 12))); // Добавляем в первую строку и первый столбец заглавие
 
     ui->graph_second_derivative->replot();
-}
-
-// Рисует касательную к точке
-void plot_tangent(const Point_curve& point, Ui::Widget* ui)
-{
-    QCPItemLine *line = new QCPItemLine(ui->graph_function);
-    line->setPen(QColor(0, 128, 0)); // Задаем зелёный цвет
-    line->start->setCoords(point.curve.first - point.derivative_1.first / 10, point.curve.second - point.derivative_1.second / 10);
-    line->end->setCoords(point.curve.first + point.derivative_1.first / 10, point.curve.second + point.derivative_1.second / 10);
-    ui->graph_function->replot();
 }
 
 #endif // CHARTS_H
