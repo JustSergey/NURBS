@@ -37,7 +37,7 @@ void plot_polygon(const QVector<QVector<double>>& polygon, Ui::Widget* ui, const
         // Делаем подписи к каждой вершине многоугольника
         QCPItemText *textLabel = new QCPItemText(ui->graph_function);
         textLabel->position->setCoords(point[0] + 0.35, point[1] - 0.2);
-        textLabel->setFont(QFont("Times", 10));
+        textLabel->setFont(QFont("sans", 10));
         textLabel->setText(QString("P%1").arg(counter++));
 
         shape->addData(point[0], point[1]);
@@ -107,7 +107,6 @@ void curve_plot(const QVector<QVector<double>>& b, const QVector<Point_curve>& d
     ui->graph_function->legend->setVisible(true); // Включаем легенду графика
 
     plot_polygon(b, ui, labels_legend_1); // Рисуем многоугольник с вершинами
-
 
     //plot_curve(data_NURBS, ui, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
 

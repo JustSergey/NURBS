@@ -55,8 +55,8 @@ Widget::Widget(QWidget *parent)
     QString labels_legend_1 = "Контур. многоуг.";
     QString labels_legend_2 = "B-сплайн";
 
-    int x_min = -10, x_max = 20;
-    int y_min = -10, y_max = 20;
+    int x_min = -10, x_max = 10;
+    int y_min = -10, y_max = 10;
 
     curve_plot(b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
 
