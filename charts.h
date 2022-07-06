@@ -31,7 +31,6 @@ void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon, 
     pen.setWidth(width); // Устанавливаем ширину
     shape->setPen(pen);
 
-
     uint counter = 0;
     for(const auto& point: polygon) // Рисуем точки
     {
@@ -46,25 +45,28 @@ void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon, 
         shape->addData(point[0], point[1]);
     }
 
-
     shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
     shape->setName(label); // Обзываем полигон в легенде графика
     canvas->replot();
 }
 
 // Рисует точки на графике
-void plot_point(QCustomPlot* canvas, const double& x, const double& y, const QString& text = "", const QColor& color = QColor(0, 0, 0, 255))
+void plot_point(QCustomPlot* canvas, const double& x, const double& y, const double& width = 5, const QString& text = "", const QColor& color = QColor(0, 0, 0, 255))
 {
     canvas->addGraph();
     canvas->graph()->setPen(color);
-    canvas->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 9)); // Формируем вид точек
+    canvas->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, width)); // Формируем вид точек
     canvas->graph()->setLineStyle(QCPGraph::lsNone);
     canvas->graph()->addData(x, y);
-
-    QCPItemText *label = new QCPItemText(canvas);
-    label->position->setCoords(x + 0.2, y - 0.2);
-    label->setText(text);
     canvas->legend->removeItem(canvas->legend->itemCount() - 1); // Удаляем точку из легенды
+
+    if(!text.isEmpty()) // Если есть текст для подписи к точке
+    {
+        QCPItemText *label = new QCPItemText(canvas); // Подпись к точке
+        label->position->setCoords(x + 0.2, y - 0.2);
+        label->setText(text);
+    }
+
     canvas->replot();
 }
 

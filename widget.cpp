@@ -98,7 +98,7 @@ Widget::Widget(QWidget *parent)
     */
 
 
-    QVector<double> point_u { 0, 0.2, 0.4, 0.6, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
+    QVector<double> point_u { 0, 0.2, 0.4, 0.6, 0.8, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
     QVector<Point_curve> derivs_curve(point_u.size());
 
     for(int i = 0; i < point_u.size(); ++i) // Считаем координаты и производные для точек u
@@ -117,11 +117,12 @@ Widget::Widget(QWidget *parent)
     plot_lable(ui->graph_function,derivs_curve[1].derivative_1.first + derivs_curve[1].curve.first + 1, derivs_curve[1].derivative_1.second + derivs_curve[1].curve.second - 0.5, "C'(1/5)");
     plot_lable(ui->graph_function,derivs_curve[2].derivative_1.first + derivs_curve[2].curve.first + 1, derivs_curve[2].derivative_1.second + derivs_curve[2].curve.second - 0.5, "C'(2/5)");
     plot_lable(ui->graph_function,derivs_curve[3].derivative_1.first + derivs_curve[3].curve.first + 1, derivs_curve[3].derivative_1.second + derivs_curve[3].curve.second - 0.5, "C'(3/5)");
-    plot_lable(ui->graph_function,derivs_curve[4].derivative_1.first + derivs_curve[4].curve.first + 1, derivs_curve[4].derivative_1.second + derivs_curve[4].curve.second - 0.5, "C'(1)");
+    plot_lable(ui->graph_function,derivs_curve[4].derivative_1.first + derivs_curve[4].curve.first + 1, derivs_curve[4].derivative_1.second + derivs_curve[4].curve.second - 0.5, "C'(4/5)");
+    plot_lable(ui->graph_function,derivs_curve[5].derivative_1.first + derivs_curve[5].curve.first + 1, derivs_curve[5].derivative_1.second + derivs_curve[5].curve.second - 0.5, "C'(1)");
 
     for(const auto& p: derivs_curve)
     {
-    //    plot_point()
+        plot_point(ui->graph_function, p.curve.first, p.curve.second);
     }
 
 
