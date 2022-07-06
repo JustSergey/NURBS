@@ -45,7 +45,6 @@ void plot_polygon(const QVector<QVector<double>>& polygon, Ui::Widget* ui, const
 
     shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
     shape->setName(label); // Обзываем полигон в легенде графика
-
     ui->graph_second_derivative->replot();
 }
 
@@ -54,14 +53,14 @@ void plot_point(const double& x, const double& y, Ui::Widget* ui, const QString&
 {
     ui->graph_function->addGraph();
     ui->graph_function->graph()->setPen(color);
-    ui->graph_function->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 8)); // Формируем вид точек
+    ui->graph_function->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 9)); // Формируем вид точек
     ui->graph_function->graph()->setLineStyle(QCPGraph::lsNone);
     ui->graph_function->graph()->addData(x, y);
 
     QCPItemText *label = new QCPItemText(ui->graph_function);
     label->position->setCoords(x + 0.2, y - 0.2);
     label->setText(text);
-
+    ui->graph_function->legend->removeItem(ui->graph_function->legend->itemCount() - 1); // Удаляем точку из легенды
     ui->graph_function->replot();
 }
 
@@ -71,7 +70,6 @@ void plot_line(const double& point_x_1, const double& point_y_1, const double& p
     QCPItemLine *line = new QCPItemLine(ui->graph_function);
     line->start->setCoords(point_x_1, point_y_1);
     line->end->setCoords(point_x_2, point_y_2);
-
     ui->graph_function->replot();
 }
 
@@ -82,7 +80,6 @@ void plot_tangent(const Point_curve& point, Ui::Widget* ui, const QColor& color 
     line->setPen(color);
     line->start->setCoords(point.curve.first - point.derivative_1.first / 10, point.curve.second - point.derivative_1.second / 10);
     line->end->setCoords(point.curve.first + point.derivative_1.first / 10, point.curve.second + point.derivative_1.second / 10);
-
     ui->graph_function->replot();
 }
 
@@ -99,19 +96,33 @@ void plot_curve(const QVector<Point_curve>& data_NURBS, Ui::Widget* ui,  const Q
         curve->addData(point.curve.first, point.curve.second);
 
     curve->setName(label); // Обзываем кривую в легенде графика
-
     ui->graph_function->replot();
 }
 
 // Рисует надпись
-void plot_lable(const double& x, const double& y, const QString & text, Ui::Widget* ui)
+void plot_lable(const double& x, const double& y, const QString& text, Ui::Widget* ui)
 {
     QCPItemText *label = new QCPItemText(ui->graph_function);
     label->setFont(QFont("sans", 10));
     label->position->setCoords(x, y);
     label->setText(text);
-
     ui->graph_function->replot();
+}
+
+// Рисует надпись со стрелкой
+void plot_lable_with_arrow(const double& point_x_1, const double& point_y_1, const double& point_x_2, const double& point_y_2, const QString& text, Ui::Widget* ui)
+{
+    QCPItemText *label = new QCPItemText(ui->graph_function);
+    label->setFont(QFont("sans", 10));
+    label->position->setCoords(point_x_1, point_y_1);
+    label->setText(text);
+
+    QCPItemLine *line = new QCPItemLine(ui->graph_function);
+    line->setHead(QCPLineEnding::esFlatArrow);
+    line->start->setCoords(point_x_1, point_y_1 - 0.25);
+    line->end->setCoords(point_x_2, point_y_2);
+    ui->graph_function->replot();
+
 }
 
 // Рисует кривую и многоугольник по заданным точкам
@@ -123,6 +134,21 @@ void curve_plot(const QVector<QVector<double>>& b, const QVector<Point_curve>& d
 
     plot_polygon(b, ui, labels_legend_1); // Рисуем многоугольник с вершинами
     plot_curve(data_NURBS, ui, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
+
+    // Рисуем подписи к спана реального диапазон (убрать при необходимости)
+    plot_lable_with_arrow(1.5, 4.8, 2.58, 3.14, "u∈[0, 1/5)", ui);
+
+    QCPItemText *label = new QCPItemText(ui->graph_function);
+    label->setFont(QFont("sans", 10));
+    label->position->setCoords(4, 1.2);
+    label->setText("u∈[1/5, 3/5)");
+    QCPItemLine *line = new QCPItemLine(ui->graph_function);
+    line->setHead(QCPLineEnding::esFlatArrow);
+    line->start->setCoords(4, 1.2 + 0.2);
+    line->end->setCoords(5.46, 3.64);
+    ui->graph_function->replot();
+
+    plot_lable_with_arrow(7.4, 4.3, 6.28, 2.14, "u∈[3/5, 1)", ui);
 
     ui->graph_function->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Делаем график перетаскиваемым + масштабирование колеса прокрутки
 

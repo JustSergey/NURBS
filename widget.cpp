@@ -83,9 +83,17 @@ Widget::Widget(QWidget *parent)
         u_real_spans[i].curve = c2[0];
         u_real_spans[i].derivative_1 = c2[1];
         u_real_spans[i].derivative_2 = c2[2];
-        plot_point(u_real_spans[i].curve.first, u_real_spans[i].curve.second, ui, "", QColor(123, 104, 238)); // Рисуем точки на графике (точки границ реального диапазона спанов)
+        plot_point(u_real_spans[i].curve.first, u_real_spans[i].curve.second, ui, "", QColor(147, 112, 219)); // Рисуем точки на графике (точки границ реального диапазона спанов)
     }
 
+    ui->graph_function->addGraph();
+    ui->graph_function->graph()->setPen(QColor(147, 112, 219));
+    ui->graph_function->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 9)); // Формируем вид точек
+    ui->graph_function->graph()->setLineStyle(QCPGraph::lsNone);
+    ui->graph_function->graph()->addData(u_real_spans[0].curve.first, u_real_spans[0].curve.second);
+    ui->graph_function->graph()->setName("Точка обрыва");
+
+    ui->graph_function->replot();
 
 /*
     QVector<double> point_u { 0, 0.2, 0.4, 0.6, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
