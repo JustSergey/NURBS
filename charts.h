@@ -18,6 +18,31 @@ void derivative_point_line(const QVector<Point_curve>& data_NURBS, Ui::Widget* u
     ui->graph_function->replot();
 }
 
+// Рисует точки на графике
+void plot_point(const double& x, const double& y, Ui::Widget* ui, const QString& text = "", const QColor& color = QColor(0, 0, 0, 255))
+{
+    ui->graph_function->addGraph();
+    ui->graph_function->graph()->setPen(color);
+    ui->graph_function->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 8)); // Формируем вид точек
+    ui->graph_function->graph()->setLineStyle(QCPGraph::lsNone);
+    ui->graph_function->graph()->addData(x, y);
+
+    QCPItemText *textLabel = new QCPItemText(ui->graph_function);
+    textLabel->position->setCoords(x + 0.1, y- 0.1);
+    textLabel->setText(text);
+
+    ui->graph_function->replot();
+}
+
+// Рисует линию между двумя точками
+void plot_line(const double& point_x_1, const double& point_y_1, const double& point_x_2, const double& point_y_2, Ui::Widget* ui)
+{
+    QCPItemLine *line = new QCPItemLine(ui->graph_function);
+    line->start->setCoords(point_x_1, point_y_1);
+    line->end->setCoords(point_x_2, point_y_2);
+    ui->graph_function->replot();
+}
+
 // Рисует кривую и многоугольник по заданным точкам
 void curve_plot(const QVector<QVector<double>>& b, const QVector<Point_curve>& data_NURBS, const int& x_min, const int& x_max, const int& y_min, const int& y_max,
                 const QString& title, const QString& labels_legend_1, const QString& labels_legend_2, Ui::Widget* ui)
@@ -34,10 +59,13 @@ void curve_plot(const QVector<QVector<double>>& b, const QVector<Point_curve>& d
     pen.setWidth(1); // Устанавливаем ширину
     curve_point->setPen(pen);
 
-    for(const auto& el: b) // Рисуем точки
-        curve_point->addData(el[0], el[1]);
+    for(const auto& point: b) // Рисуем точки
+        plot_point(point[0], point[1], ui, "");
 
-    curve_point->setLineStyle(QCPCurve::lsLine); // Добавляем линии
+    for(int i = 0; i < b.size() - 1; ++i)
+        plot_line(b[i][0], b[i][1], b[i + 1][0], b[i + 1][1], ui); // Рисуем линии (многоугольник)
+
+    //curve_point->setLineStyle(QCPCurve::lsLine); // Добавляем линии
 
     QCPCurve *curve_spline = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
     pen.setColor(QColor(30, 144, 255));
@@ -152,15 +180,6 @@ void second_derivative_plot(const QVector<QVector<double>>& data_point, const QV
     ui->graph_second_derivative->replot();
 }
 
-// Рисует линию между двумя точками
-void plot_line(const QPair<double, double>& point, const Point_curve& u_perpendicula, Ui::Widget* ui)
-{
-    QCPItemLine *line = new QCPItemLine(ui->graph_function);
-    line->start->setCoords(u_perpendicula.curve.first, u_perpendicula.curve.second);
-    line->end->setCoords(point.first, point.second);
-    ui->graph_function->replot();
-}
-
 // Рисует касательную к точке
 void plot_tangent(const Point_curve& point, Ui::Widget* ui)
 {
@@ -169,20 +188,6 @@ void plot_tangent(const Point_curve& point, Ui::Widget* ui)
     line->start->setCoords(point.curve.first - point.derivative_1.first / 10, point.curve.second - point.derivative_1.second / 10);
     line->end->setCoords(point.curve.first + point.derivative_1.first / 10, point.curve.second + point.derivative_1.second / 10);
     ui->graph_function->replot();
-}
-
-// Рисует точки на графике
-void plot_point(const QVector<Point_curve>& points, const QColor& color, Ui::Widget* ui)
-{
-    for(const auto& p: points)
-    {
-        ui->graph_function->addGraph();
-        ui->graph_function->graph()->setPen(color); // Задаем чёрный цвет)
-        ui->graph_function->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 8)); // Формируем вид точек
-        ui->graph_function->graph()->setLineStyle(QCPGraph::lsNone);
-        ui->graph_function->graph()->addData(p.curve.first, p.curve.second);
-        ui->graph_function->replot();
-    }
 }
 
 #endif // CHARTS_H
