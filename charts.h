@@ -18,6 +18,28 @@ void derivative_point_line(const QVector<Point_curve>& data_NURBS, Ui::Widget* u
     ui->graph_function->replot();
 }
 
+// Рисует многоугольник с вершинами
+void plot_polygon(const QVector<QVector<double>>& polygon, Ui::Widget* ui, const QString& label, const QColor& color = QColor(0, 0, 0, 255), const double& width = 1)
+{
+    QCPCurve *shape = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
+
+    shape->setPen(color);
+    shape->setLineStyle(QCPCurve::lsNone); // Убираем линии
+    shape->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 6)); // Формируем вид точек
+
+    QPen pen;
+    pen.setWidth(width); // Устанавливаем ширину
+    shape->setPen(pen);
+
+    for(const auto& point: polygon) // Рисуем точки
+        shape->addData(point[0], point[1]);
+
+    shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
+    shape->setName(label); // Обзываем полигон в легенде графика
+
+    ui->graph_second_derivative->replot();
+}
+
 // Рисует точки на графике
 void plot_point(const double& x, const double& y, Ui::Widget* ui, const QString& text = "", const QColor& color = QColor(0, 0, 0, 255))
 {
@@ -28,7 +50,7 @@ void plot_point(const double& x, const double& y, Ui::Widget* ui, const QString&
     ui->graph_function->graph()->addData(x, y);
 
     QCPItemText *textLabel = new QCPItemText(ui->graph_function);
-    textLabel->position->setCoords(x + 0.1, y- 0.1);
+    textLabel->position->setCoords(x + 0.1, y - 0.1);
     textLabel->setText(text);
 
     ui->graph_function->replot();
@@ -40,6 +62,20 @@ void plot_line(const double& point_x_1, const double& point_y_1, const double& p
     QCPItemLine *line = new QCPItemLine(ui->graph_function);
     line->start->setCoords(point_x_1, point_y_1);
     line->end->setCoords(point_x_2, point_y_2);
+
+    ui->graph_function->replot();
+}
+
+void plot_curve(const QVector<Point_curve>& data_NURBS, Ui::Widget* ui,  const QString& label, const QColor& color = QColor(0, 0, 0, 255))
+{
+    QCPCurve *curve = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
+    curve->setPen(color);
+
+    for(const auto& point: data_NURBS) // Рисуем сплайн
+        curve->addData(point.curve.first, point.curve.second);
+
+    curve->setName(label); // Обзываем кривую в легенде графика
+
     ui->graph_function->replot();
 }
 
@@ -48,45 +84,21 @@ void curve_plot(const QVector<QVector<double>>& b, const QVector<Point_curve>& d
                 const QString& title, const QString& labels_legend_1, const QString& labels_legend_2, Ui::Widget* ui)
 {
     ui->graph_function->clearGraphs(); // Очищаем все графики
-
-    QCPCurve *curve_point = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
-
-    curve_point->setPen(QColor(0, 0, 0, 255)); // Задаем чёрный цвет
-    curve_point->setLineStyle(QCPCurve::lsNone); // Убираем линии
-    curve_point->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 6)); // Формируем вид точек
-
-    QPen pen;
-    pen.setWidth(1); // Устанавливаем ширину
-    curve_point->setPen(pen);
-
-    for(const auto& point: b) // Рисуем точки
-        plot_point(point[0], point[1], ui, "");
-
-    for(int i = 0; i < b.size() - 1; ++i)
-        plot_line(b[i][0], b[i][1], b[i + 1][0], b[i + 1][1], ui); // Рисуем линии (многоугольник)
-
-    //curve_point->setLineStyle(QCPCurve::lsLine); // Добавляем линии
-
-    QCPCurve *curve_spline = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
-    pen.setColor(QColor(30, 144, 255));
-    curve_spline->setPen(pen);
-
-    for(const auto& el: data_NURBS) // Рисуем сплайн
-        curve_spline->addData(el.curve.first, el.curve.second);
-
-    ui->graph_function->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Перетаскиваемый + масштабирование колеса прокрутки
-
     ui->graph_function->legend->setVisible(true); // Включаем легенду графика
-    curve_point->setName(labels_legend_1);
-    curve_spline->setName(labels_legend_2);
+
+    plot_polygon(b, ui, labels_legend_1); // Рисуем многоугольник с вершинами
+
+    plot_curve(data_NURBS, ui, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
+
+    ui->graph_function->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Делаем график перетаскиваемым + масштабирование колеса прокрутки
 
     // Подписываем оси Ox и Oy
     ui->graph_function->xAxis->setLabel("Ось X");
     ui->graph_function->yAxis->setLabel("Ось Y");
 
     // Установим область, которая будет показываться на графике
-    ui->graph_function->xAxis->setRange(x_min, x_max); // Для оси Ox
-    ui->graph_function->yAxis->setRange(y_min, y_max); // Для оси Oy
+    ui->graph_function->xAxis->setRange(x_min, x_max);
+    ui->graph_function->yAxis->setRange(y_min, y_max);
 
     ui->graph_function->plotLayout()->insertRow(0); // Вставляем строку
     ui->graph_function->plotLayout()->addElement (0, 0, new QCPTextElement(ui->graph_function, title, QFont("sans", 12))); // Добавляем в первую строку и первый столбец заглавие
