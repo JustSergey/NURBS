@@ -72,9 +72,22 @@ Widget::Widget(QWidget *parent)
 
     second_derivative_plot(b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2, ui);
 
+
+
+    QVector<double> real_spans = real_span_calc(p, n, u); // Вектор с точками реального диапазона спанов
+    QVector<Point_curve> u_real_spans(real_spans.size());
+
+    for(int i = 0; i < u_real_spans.size(); ++i)
+    {
+        curve_point_and_deriv_NURBS(u_real_spans[i], n, p, u, b, h, real_spans[i], c2, nders);
+        u_real_spans[i].curve = c2[0];
+        u_real_spans[i].derivative_1 = c2[1];
+        u_real_spans[i].derivative_2 = c2[2];
+        plot_point(u_real_spans[i].curve.first, u_real_spans[i].curve.second, ui, "", QColor(123, 104, 238)); // Рисуем точки на графике (точки границ реального диапазона спанов)
+    }
+
+
 /*
-
-
     QVector<double> point_u { 0, 0.2, 0.4, 0.6, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
     QVector<Point_curve> derivs_curve(point_u.size());
 
@@ -98,22 +111,7 @@ Widget::Widget(QWidget *parent)
 
     plot_tangent(u_perpendicular, ui); // Рисуем касательную к точке
     plot_line(point.first, point.second, u_perpendicular.curve.first, u_perpendicular.curve.second, ui); // Рисуем перпендикуляр между точкой и кривой
-
-
-
-    QVector<double> real_spans = real_span_calc(p, n, u); // Вектор с точками реального диапазона спанов
-    QVector<Point_curve> u_real_spans(real_spans.size());
-
-    for(int i = 0; i < u_real_spans.size(); ++i)
-    {
-        curve_point_and_deriv_NURBS(u_real_spans[i], n, p, u, b, h, real_spans[i], c2, nders);
-        u_real_spans[i].curve = c2[0];
-        u_real_spans[i].derivative_1 = c2[1];
-        u_real_spans[i].derivative_2 = c2[2];
-        plot_point(u_real_spans[i].curve.first, u_real_spans[i].curve.second, ui, "", QColor(123, 104, 238)); // Рисуем точки на графике (точки границ реального диапазона спанов)
-    }
-    */
-
+*/
 }
 
 Widget::~Widget()
