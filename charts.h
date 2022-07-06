@@ -31,7 +31,7 @@ void curve_plot(const QVector<QVector<double>>& b, const QVector<Point_curve>& d
     curve_point->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 6)); // Формируем вид точек
 
     QPen pen;
-    pen.setWidth(2); // Устанавливаем ширину
+    pen.setWidth(1); // Устанавливаем ширину
     curve_point->setPen(pen);
 
     for(const auto& el: b) // Рисуем точки
