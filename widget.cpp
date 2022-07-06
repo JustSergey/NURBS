@@ -101,18 +101,18 @@ Widget::Widget(QWidget *parent)
 
 
 
-    QVector<double> u_real_spans = real_span_calc(p, n, u); // Вектор с точка реального диапазона спанов
-    QVector<Point_curve> u_real_spans1(u_real_spans.size());
+    QVector<double> real_spans = real_span_calc(p, n, u); // Вектор с точками реального диапазона спанов
+    QVector<Point_curve> u_real_spans(real_spans.size());
 
     for(int i = 0; i < u_real_spans.size(); ++i)
     {
-        curve_point_and_deriv_NURBS(u_real_spans1[i], n, p, u, b, h, u_real_spans[i], c2, nders);
-        u_real_spans1[i].curve = c2[0];
-        u_real_spans1[i].derivative_1 = c2[1];
-        u_real_spans1[i].derivative_2 = c2[2];
+        curve_point_and_deriv_NURBS(u_real_spans[i], n, p, u, b, h, real_spans[i], c2, nders);
+        u_real_spans[i].curve = c2[0];
+        u_real_spans[i].derivative_1 = c2[1];
+        u_real_spans[i].derivative_2 = c2[2];
     }
 
-    plot_point(u_real_spans1, QColor(123, 104, 238), ui); // Рисуем точки на графике (точки границ реального диапазона спанов)
+    plot_point(u_real_spans, QColor(123, 104, 238), ui); // Рисуем точки на графике (точки границ реального диапазона спанов)
 }
 
 Widget::~Widget()

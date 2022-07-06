@@ -307,6 +307,7 @@ QVector<double> real_span_calc(const uint& p, const uint& n, const std::vector<d
     return u_real_span;
 }
 
+/*
 // Возвращает точку кривой, перпендикулярной точке на плоскости
 Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<double>& u_vector, const QVector<QVector<double>>& polygon, const std::vector<double>& h, const QPair<double, double>& point)
 {
@@ -319,7 +320,7 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
         std::vector<std::vector<double>> nders(p + 1, std::vector<double>(p + 1)); // nders - для заданного "u" массив BASIS функций и 1-я и 2-я производные
         std::vector<QPair<double, double>> c2(p + 1); // Индекс 2 для 2D задачи
 
-        for(int k = 0; k < 35; ++k) // ПОКА 35 ИТЕРАЦИЙ
+        for(int k = 0; k < 1000; ++k) // ПОКА 35 ИТЕРАЦИЙ
         {
 
             if(point_u[i].u < u_real_span[i]) // Если точка вышла из спана
@@ -351,7 +352,74 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
             double y = point_u[i].curve.second - point.second;
             double numerator = x * point_u[i].derivative_1.first + y * point_u[i].derivative_1.second;
             double denominator = x * point_u[i].derivative_2.first + y * point_u[i].derivative_2.second + pow(vector_len(point_u[i].derivative_1), 2);
-            point_u[i].u = point_u[i].u - numerator / denominator * 0.1; // Новая, приближённая точка кривой
+            point_u[i].u = point_u[i].u - numerator / denominator * 0.01; // Новая, приближённая точка кривой
+        }
+    }
+
+    Point_curve point_min_len; // Точка кривой с минимальным расстоянием до точки на плоскости
+    point_min_len = point_u[0]; // Присваиваем первую точку для дальнейшего сравнения
+    double min_len = vector_len(point, point_u[0].curve); // Минимальная длина вектора
+
+    for(int i = 1; i < point_u.size(); ++i) // Ищем вектор с минимальной длиной
+    {
+        double temp_len = vector_len(point, point_u[i].curve);
+
+        if(min_len > temp_len)
+        {
+            min_len = temp_len;
+            point_min_len = point_u[i];
+        }
+    }
+
+    return point_min_len;
+}
+*/
+
+// Возвращает точку кривой, перпендикулярной точке на плоскости
+Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<double>& u_vector, const QVector<QVector<double>>& polygon, const std::vector<double>& h, const QPair<double, double>& point)
+{
+    QVector<Point_curve> point_u(n - 1); // Массив точек - перпендикуляров
+    QVector<double> u_real_span = real_span_calc(p, n, u_vector); // Спаны реального диапазона узлового вектора
+
+    for(int i = 0; i < u_real_span.size() - 1; ++i)
+    {
+        point_u[i].u = (u_real_span[i + 1] - u_real_span[i]) / 2 + u_real_span[i]; // Берём среднее спана
+        std::vector<std::vector<double>> nders(p + 1, std::vector<double>(p + 1)); // nders - для заданного "u" массив BASIS функций и 1-я и 2-я производные
+        std::vector<QPair<double, double>> c2(p + 1); // Индекс 2 для 2D задачи
+
+        for(int k = 0; k < 1000; ++k) // ПОКА 35 ИТЕРАЦИЙ
+        {
+
+            if(point_u[i].u < u_real_span[i]) // Если точка вышла из спана
+            {
+                point_u[i].u = u_real_span[i];
+                curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+                point_u[i].curve = c2[0];
+                point_u[i].derivative_1 = c2[1];
+                point_u[i].derivative_2 = c2[2];
+                continue;
+            }
+            else if(point_u[i].u > u_real_span[i + 1])
+            {
+                point_u[i].u = u_real_span[i + 1];
+                curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+                point_u[i].curve = c2[0];
+                point_u[i].derivative_1 = c2[1];
+                point_u[i].derivative_2 = c2[2];
+                continue;
+            }
+
+            curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+
+            point_u[i].curve = c2[0];
+            point_u[i].derivative_1 = c2[1];
+            point_u[i].derivative_2 = c2[2];
+
+            double x = point_u[i].curve.first - point.first;
+            double y = point_u[i].curve.second - point.second;
+            double numerator = x * point_u[i].derivative_1.first + y * point_u[i].derivative_1.second;
+            double denominator = x * point_u[i].derivative_2.first + y * point_u[i].derivative_2.second + pow(vector_len(point_u[i].derivative_1), 2);
+            point_u[i].u = point_u[i].u - numerator / denominator * 0.01; // Новая, приближённая точка кривой
         }
     }
 
