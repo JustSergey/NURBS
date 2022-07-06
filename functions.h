@@ -19,6 +19,12 @@ double vector_len(const QPair<double, double>& point)
     return sqrt(pow(point.first, 2) + pow(point.second, 2));
 }
 
+// Вычисляет длину для радиус вектора
+double vector_len(const double& x, const double& y)
+{
+    return sqrt(pow(x, 2) + pow(y, 2));
+}
+
 // Вычисляет длину для вектора по координатам
 double vector_len(const QPair<double, double>& p1, const QPair<double, double>& p2)
 {
@@ -381,14 +387,33 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
     QVector<Point_curve> point_u(n - 1); // Массив точек - перпендикуляров
     QVector<double> u_real_span = real_span_calc(p, n, u_vector); // Спаны реального диапазона узлового вектора
 
-    for(int i = 0; i < u_real_span.size() - 1; ++i)
+    for(int i = 0; i < u_real_span.size() - 1; ++i) // Итерируемся по спанам, начиная с нулевого
     {
         point_u[i].u = (u_real_span[i + 1] - u_real_span[i]) / 2 + u_real_span[i]; // Берём среднее спана
         std::vector<std::vector<double>> nders(p + 1, std::vector<double>(p + 1)); // nders - для заданного "u" массив BASIS функций и 1-я и 2-я производные
         std::vector<QPair<double, double>> c2(p + 1); // Индекс 2 для 2D задачи
 
-        for(int k = 0; k < 1000; ++k) // ПОКА 35 ИТЕРАЦИЙ
+        curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+        point_u[i].curve = c2[0];
+        point_u[i].derivative_1 = c2[1];
+        point_u[i].derivative_2 = c2[2];
+
+        double cosine_check = 1;
+        const double EPSILON_ANGLE = 0.001; // Эпсилон для косинуса прямого угла
+
+        do
         {
+            double x = point_u[i].curve.first - point.first;
+            double y = point_u[i].curve.second - point.second;
+            double numerator = x * point_u[i].derivative_1.first + y * point_u[i].derivative_1.second;
+            double denominator = x * point_u[i].derivative_2.first + y * point_u[i].derivative_2.second + pow(vector_len(point_u[i].derivative_1), 2);
+            point_u[i].u = point_u[i].u - numerator / denominator; // Новая, приближённая точка кривой
+
+            curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+
+            point_u[i].curve = c2[0];
+            point_u[i].derivative_1 = c2[1];
+            point_u[i].derivative_2 = c2[2];
 
             if(point_u[i].u < u_real_span[i]) // Если точка вышла из спана
             {
@@ -397,7 +422,7 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
                 point_u[i].curve = c2[0];
                 point_u[i].derivative_1 = c2[1];
                 point_u[i].derivative_2 = c2[2];
-                continue;
+                break;
             }
             else if(point_u[i].u > u_real_span[i + 1])
             {
@@ -406,21 +431,15 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
                 point_u[i].curve = c2[0];
                 point_u[i].derivative_1 = c2[1];
                 point_u[i].derivative_2 = c2[2];
-                continue;
+                break;
             }
 
-            curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+            // Проверка на нулевой косинус
+            numerator = abs(numerator);
+            denominator = vector_len(point_u[i].derivative_1) * vector_len(x, y);
+            cosine_check = numerator / denominator; // Угол между точкой и u
 
-            point_u[i].curve = c2[0];
-            point_u[i].derivative_1 = c2[1];
-            point_u[i].derivative_2 = c2[2];
-
-            double x = point_u[i].curve.first - point.first;
-            double y = point_u[i].curve.second - point.second;
-            double numerator = x * point_u[i].derivative_1.first + y * point_u[i].derivative_1.second;
-            double denominator = x * point_u[i].derivative_2.first + y * point_u[i].derivative_2.second + pow(vector_len(point_u[i].derivative_1), 2);
-            point_u[i].u = point_u[i].u - numerator / denominator * 0.01; // Новая, приближённая точка кривой
-        }
+        } while (cosine_check > EPSILON_ANGLE);
     }
 
     Point_curve point_min_len; // Точка кривой с минимальным расстоянием до точки на плоскости
