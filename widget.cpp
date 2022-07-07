@@ -51,26 +51,27 @@ Widget::Widget(QWidget *parent)
 
 
 
-    QString title = "B-сплайн 3-го порядка";
-    QString labels_legend_1 = "Контур. многоуг.";
-    QString labels_legend_2 = "B-сплайн";
+    QString title = "NURBS 2-ой степени и его 1-ые производные";
+    QString labels_legend_1 = "Определяющий многоуг.";
+    QString labels_legend_2 = "NURBS производной";
 
     int x_min = -10, x_max = 10;
     int y_min = -10, y_max = 10;
 
     curve_plot(ui->graph_function, b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
-    title = "1-я прoизвдная B-сплайна 3-го порядка";
+    title = "1-я прoизвдная NURBS 2-ой степени";
     x_min = -10, x_max = 30;
     y_min = -25, y_max = 30;
 
     first_derivative_plot(ui->graph_first_derivative, b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
-    title = "2-я прoизвдная B-сплайна 3-го порядка";
+    title = "2-я прoизвдная NURBS 2-ой степени";
     x_min = -95, x_max = 60;
     y_min = -110, y_max = 120;
 
     second_derivative_plot(ui->graph_second_derivative, b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
+
 
 
 
@@ -84,7 +85,7 @@ Widget::Widget(QWidget *parent)
         u_real_spans[i].curve = c2[0];
         u_real_spans[i].derivative_1 = c2[1];
         u_real_spans[i].derivative_2 = c2[2];
-        plot_point(ui->graph_function, u_real_spans[i].curve.first, u_real_spans[i].curve.second, "", QColor(147, 112, 219)); // Рисуем точки на графике (точки границ реального диапазона спанов)
+        plot_point(ui->graph_function, u_real_spans[i].curve.first, u_real_spans[i].curve.second, 9, "", QColor(147, 112, 219)); // Рисуем точки на графике (точки границ реального диапазона спанов)
     }
 
     ui->graph_function->addGraph();
@@ -95,9 +96,10 @@ Widget::Widget(QWidget *parent)
     ui->graph_function->graph()->setName("Точка смены"); // Точка смены полинома/элемента узлового вектора
 
     ui->graph_function->replot();
-    */
+*/
 
 
+    /*
     QVector<double> point_u { 0, 0.2, 0.4, 0.6, 0.8, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
     QVector<Point_curve> derivs_curve(point_u.size());
 
@@ -111,21 +113,32 @@ Widget::Widget(QWidget *parent)
         derivs_curve[i].derivative_2 = c2[2];
     }
 
+
     derivative_point_line(ui->graph_function, derivs_curve); // Рисуем линию производной в точке (касательную)
 
-    plot_lable(ui->graph_function, derivs_curve[0].derivative_1.first + derivs_curve[0].curve.first + 1, derivs_curve[0].derivative_1.second + derivs_curve[0].curve.second - 0.5, "C'(0)");
-    plot_lable(ui->graph_function,derivs_curve[1].derivative_1.first + derivs_curve[1].curve.first + 1, derivs_curve[1].derivative_1.second + derivs_curve[1].curve.second - 0.5, "C'(1/5)");
+    plot_lable(ui->graph_function, derivs_curve[0].derivative_1.first + derivs_curve[0].curve.first + 1, derivs_curve[0].derivative_1.second + derivs_curve[0].curve.second + 0.2, "C'(0)");
+    plot_lable(ui->graph_function,derivs_curve[1].derivative_1.first + derivs_curve[1].curve.first + 1.4, derivs_curve[1].derivative_1.second + derivs_curve[1].curve.second + 0.4, "C'(1/5)");
     plot_lable(ui->graph_function,derivs_curve[2].derivative_1.first + derivs_curve[2].curve.first + 1, derivs_curve[2].derivative_1.second + derivs_curve[2].curve.second - 0.5, "C'(2/5)");
     plot_lable(ui->graph_function,derivs_curve[3].derivative_1.first + derivs_curve[3].curve.first + 1, derivs_curve[3].derivative_1.second + derivs_curve[3].curve.second - 0.5, "C'(3/5)");
-    plot_lable(ui->graph_function,derivs_curve[4].derivative_1.first + derivs_curve[4].curve.first + 1, derivs_curve[4].derivative_1.second + derivs_curve[4].curve.second - 0.5, "C'(4/5)");
-    plot_lable(ui->graph_function,derivs_curve[5].derivative_1.first + derivs_curve[5].curve.first + 1, derivs_curve[5].derivative_1.second + derivs_curve[5].curve.second - 0.5, "C'(1)");
+    plot_lable(ui->graph_function,derivs_curve[4].derivative_1.first + derivs_curve[4].curve.first + 1.3, derivs_curve[4].derivative_1.second + derivs_curve[4].curve.second - 0.5, "C'(4/5)");
+    plot_lable(ui->graph_function,derivs_curve[5].derivative_1.first + derivs_curve[5].curve.first + 1, derivs_curve[5].derivative_1.second + derivs_curve[5].curve.second + 0.1, "C'(1)");
+    derivative_point_line(ui->graph_first_derivative, derivs_curve); // Рисуем линию производной в точке (касательную)
+
+    plot_lable(ui->graph_first_derivative, derivs_curve[0].derivative_1.first + 1, derivs_curve[0].derivative_1.second + 0.5, "C'(0)");
+    plot_lable(ui->graph_first_derivative, derivs_curve[1].derivative_1.first + 1.5, derivs_curve[1].derivative_1.second + 0.3, "C'(1/5)");
+    plot_lable(ui->graph_first_derivative, derivs_curve[2].derivative_1.first + 1.4, derivs_curve[2].derivative_1.second - 0.5, "C'(2/5)");
+    plot_lable(ui->graph_first_derivative, derivs_curve[3].derivative_1.first + 0.5, derivs_curve[3].derivative_1.second - 0.8, "C'(3/5)");
+    plot_lable(ui->graph_first_derivative, derivs_curve[4].derivative_1.first + 1.4, derivs_curve[4].derivative_1.second - 0.5, "C'(4/5)");
+    plot_lable(ui->graph_first_derivative, derivs_curve[5].derivative_1.first + 0.5, derivs_curve[5].derivative_1.second + 0.8, "C'(1)");
+
+
 
     for(const auto& p: derivs_curve)
     {
         plot_point(ui->graph_function, p.curve.first, p.curve.second);
     }
 
-
+*/
     /*
     QPair<double, double> point(5.5, 4.5); // Точка, к которой мы будем проводить перпендикуляр
 

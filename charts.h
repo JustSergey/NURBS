@@ -13,6 +13,8 @@ void derivative_point_line(QCustomPlot* canvas, const QVector<Point_curve>& data
         line->setHead(QCPLineEnding::esFlatArrow);
         line->start->setCoords(point.curve.first, point.curve.second);
         line->end->setCoords(point.derivative_1.first + point.curve.first, point.derivative_1.second + point.curve.second);
+        //line->start->setCoords(0, 0);
+        //line->end->setCoords(point.derivative_1.first, point.derivative_1.second);
     }
 
     canvas->replot();
@@ -36,7 +38,7 @@ void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon, 
     {
         /*
         // Делаем подписи к каждой вершине многоугольника
-        QCPItemText *label = new QCPItemText(ui->graph_function);
+        QCPItemText *label = new QCPItemText(canvas);
         label->position->setCoords(point[0] + 0.35, point[1] - 0.2);
         label->setFont(QFont("sans", 10));
         label->setText(QString("P%1").arg(counter++));
@@ -141,22 +143,22 @@ void curve_plot(QCustomPlot* canvas, const QVector<QVector<double>>& b, const QV
     plot_polygon(canvas, b, labels_legend_1); // Рисуем многоугольник с вершинами
     plot_curve(canvas, data_NURBS, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
 
-    /*
+/*
     // Рисуем подписи к спанам реального диапазон (убрать при необходимости)
-    plot_lable_with_arrow(1.5, 4.8, 2.58, 3.14, "u∈[0, 1/5)", ui);
+    plot_lable_with_arrow(canvas, 1.5, 4.8, 2.58, 3.14, "u∈[0, 1/5)");
 
-    QCPItemText *label = new QCPItemText(ui->graph_function);
+    QCPItemText *label = new QCPItemText(canvas);
     label->setFont(QFont("sans", 10));
     label->position->setCoords(4, 1.2);
     label->setText("u∈[1/5, 3/5)");
-    QCPItemLine *line = new QCPItemLine(ui->graph_function);
+    QCPItemLine *line = new QCPItemLine(canvas);
     line->setHead(QCPLineEnding::esFlatArrow);
     line->start->setCoords(4, 1.2 + 0.2);
     line->end->setCoords(5.46, 3.64);
-    ui->graph_function->replot();
+    canvas->replot();
 
-    plot_lable_with_arrow(7.4, 4.3, 6.28, 2.14, "u∈[3/5, 1)", ui);
-    */
+    plot_lable_with_arrow(canvas, 7.4, 4.3, 6.28, 2.14, "u∈[3/5, 1)");
+*/
 
    canvas->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Делаем график перетаскиваемым + масштабирование колеса прокрутки
 
@@ -180,16 +182,16 @@ void first_derivative_plot(QCustomPlot* canvas, const QVector<QVector<double>>& 
 {
     canvas->clearGraphs(); // Очищаем все графики
 
-    QCPCurve *curve_point = new QCPCurve(canvas->xAxis, canvas->yAxis);
+    //QCPCurve *curve_point = new QCPCurve(canvas->xAxis, canvas->yAxis);
 
-    curve_point->setPen(QColor(0, 0, 0, 255)); // Задаем чёрный цвет
-    curve_point->setLineStyle(QCPCurve::lsNone); // Убираем линии
-    curve_point->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 6)); // Формируем вид точек
+    //curve_point->setPen(QColor(0, 0, 0, 255)); // Задаем чёрный цвет
+    //curve_point->setLineStyle(QCPCurve::lsNone); // Убираем линии
+    //curve_point->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 6)); // Формируем вид точек
 
-    for(const auto& el: data_point) // Рисуем точки
-        curve_point->addData(el[0], el[1]);
+    //for(const auto& el: data_point) // Рисуем точки
+    //    curve_point->addData(el[0], el[1]);
 
-    curve_point->setLineStyle(QCPCurve::lsLine); // Добавляем линии
+    //curve_point->setLineStyle(QCPCurve::lsLine); // Добавляем линии
 
     QCPCurve *curve_deriv = new QCPCurve(canvas->xAxis, canvas->yAxis);
 
@@ -199,7 +201,7 @@ void first_derivative_plot(QCustomPlot* canvas, const QVector<QVector<double>>& 
     canvas->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Перетаскиваемый + масштабирование колеса прокрутки
 
     canvas->legend->setVisible(true); // Включаем Легенду графика
-    curve_point->setName(labels_legend_1);
+    //curve_point->setName(labels_legend_1);
     curve_deriv->setName(labels_legend_2);
 
     // Подписываем оси Ox и Oy
