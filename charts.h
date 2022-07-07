@@ -82,17 +82,20 @@ void plot_line(QCustomPlot* canvas, const double& point_x_1, const double& point
 }
 
 // Рисует касательную к точке
-void plot_tangent(QCustomPlot* canvas, const Point_curve& point, const QColor& color = QColor(0, 128, 0))
+void plot_tangent(QCustomPlot* canvas, const Point_curve& point, const QColor& color = QColor(0, 100, 0), const double& width = 2.5)
 {
     QCPItemLine *line = new QCPItemLine(canvas);
-    line->setPen(color);
+    QPen pen;
+    pen.setColor(color);
+    pen.setWidth(width);
+    line->setPen(pen);
     line->start->setCoords(point.curve.first - point.derivative_1.first / 10, point.curve.second - point.derivative_1.second / 10);
     line->end->setCoords(point.curve.first + point.derivative_1.first / 10, point.curve.second + point.derivative_1.second / 10);
     canvas->replot();
 }
 
 // Рисует кривую NURBS
-void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS,  const QString& label, const QColor& color = QColor(0, 0, 0, 255))
+void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS, const QString& label, const QColor& color = QColor(0, 0, 0, 255))
 {
     QCPCurve *curve = new QCPCurve(canvas->xAxis, canvas->yAxis);
     QPen pen;
@@ -140,7 +143,7 @@ void curve_plot(QCustomPlot* canvas, const QVector<QVector<double>>& b, const QV
     canvas->clearGraphs(); // Очищаем все графики
     canvas->legend->setVisible(true); // Включаем легенду графика
 
-    plot_polygon(canvas, b, labels_legend_1); // Рисуем многоугольник с вершинами
+    //plot_polygon(canvas, b, labels_legend_1); // Рисуем многоугольник с вершинами
     plot_curve(canvas, data_NURBS, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
 
 /*
