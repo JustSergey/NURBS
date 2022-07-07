@@ -131,29 +131,39 @@ Widget::Widget(QWidget *parent)
     QPair<double, double> point(4, 1); // Точка, к которой мы будем проводить перпендикуляр
     Point_curve u_perpendicular = finding_perpendicular(n, p, u, b, h, point, ui->graph_function); // Ближайшая точка для перпендикуляра
 
+    plot_line(ui->graph_function, point.first, point.second, u_perpendicular.curve.first, u_perpendicular.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
+    //plot_tangent(ui->graph_function, u_perpendicular); // Рисуем касательную к точке
+
     // *ДОБАВЛЯЕТ В ЛЕГЕНДУ* //
     ui->graph_function->addGraph();
-    ui->graph_function->graph()->setPen(QColor(255, 160, 122));
-    ui->graph_function->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10)); // Формируем вид точек
+    ui->graph_function->graph()->setPen(QColor(244, 164, 96));
+    ui->graph_function->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 11)); // Формируем вид точек
     ui->graph_function->graph()->setLineStyle(QCPGraph::lsNone);
     ui->graph_function->graph()->addData(point.first, point.second);
     ui->graph_function->graph()->setName("Заданная точка"); // Точка смены полинома/элемента узлового вектора
 
+
+
     QCPCurve *curve = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
     QPen pen;
     pen.setColor(QColor(0, 100, 0));
-    pen.setWidthF(2.5);
+    pen.setWidthF(2.8);
     curve->setPen(pen);
     curve->setName("Касательная"); // Обзываем полигон в легенде графика
 
     QCPCurve *curve1 = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
     QPen pen1;
-    pen.setColor(QColor(0, 0, 0));
+    pen1.setWidthF(2);
+    pen1.setColor(QColor(0, 0, 0));
     curve1->setPen(pen1);
     curve1->setName("Перпендикуляр"); // Обзываем полигон в легенде графика
 
-    //plot_tangent(ui->graph_function, u_perpendicular); // Рисуем касательную к точке
-    //plot_line(ui->graph_function, point.first, point.second, u_perpendicular.curve.first, u_perpendicular.curve.second); // Рисуем перпендикуляр между точкой и кривой
+    QCPCurve *curve2 = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
+    QPen pen2;
+    pen2.setWidthF(3);
+    pen2.setColor(QColor(178, 34, 34));
+    curve2->setPen(pen2);
+    curve2->setName("Кратчайший перпендикуляр"); // Обзываем полигон в легенде графика
 }
 
 Widget::~Widget()

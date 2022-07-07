@@ -403,9 +403,9 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
     plot_tangent(canvas, point_u[1]); // Рисуем касательную к точке
     plot_tangent(canvas, point_u[2]); // Рисуем касательную к точке
 
-    plot_line(canvas, point.first, point.second, point_u[0].curve.first, point_u[0].curve.second); // Рисуем перпендикуляр между точкой и кривой
-    plot_line(canvas, point.first, point.second, point_u[1].curve.first, point_u[1].curve.second); // Рисуем перпендикуляр между точкой и кривой
-    plot_line(canvas, point.first, point.second, point_u[2].curve.first, point_u[2].curve.second); // Рисуем перпендикуляр между точкой и кривой
+    plot_line(canvas, point.first, point.second, point_u[0].curve.first, point_u[0].curve.second, QColor(0, 0, 0), 2); // Рисуем перпендикуляр между точкой и кривой
+    plot_line(canvas, point.first, point.second, point_u[1].curve.first, point_u[1].curve.second, QColor(0, 0, 0), 2); // Рисуем перпендикуляр между точкой и кривой
+    //plot_line(canvas, point.first, point.second, point_u[2].curve.first, point_u[2].curve.second); // Рисуем перпендикуляр между точкой и кривой
 
     return point_min_len;
 }

@@ -73,16 +73,20 @@ void plot_point(QCustomPlot* canvas, const double& x, const double& y, const dou
 }
 
 // Рисует линию между двумя точками
-void plot_line(QCustomPlot* canvas, const double& point_x_1, const double& point_y_1, const double& point_x_2, const double& point_y_2)
+void plot_line(QCustomPlot* canvas, const double& point_x_1, const double& point_y_1, const double& point_x_2, const double& point_y_2, const QColor& color = QColor(0, 0, 0), const double& width = 3.5)
 {
     QCPItemLine *line = new QCPItemLine(canvas);
+    QPen pen;
+    pen.setColor(color);
+    pen.setWidth(width);
+    line->setPen(pen);
     line->start->setCoords(point_x_1, point_y_1);
     line->end->setCoords(point_x_2, point_y_2);
     canvas->replot();
 }
 
 // Рисует касательную к точке
-void plot_tangent(QCustomPlot* canvas, const Point_curve& point, const QColor& color = QColor(0, 100, 0), const double& width = 2.5)
+void plot_tangent(QCustomPlot* canvas, const Point_curve& point, const QColor& color = QColor(0, 100, 0), const double& width = 2.8)
 {
     QCPItemLine *line = new QCPItemLine(canvas);
     QPen pen;
