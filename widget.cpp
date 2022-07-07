@@ -51,9 +51,9 @@ Widget::Widget(QWidget *parent)
 
 
 
-    QString title = "NURBS 2-ой степени и его 1-ые производные";
+    QString title = "NURBS 2-ой степени";
     QString labels_legend_1 = "Определяющий многоуг.";
-    QString labels_legend_2 = "NURBS производной";
+    QString labels_legend_2 = "NURBS";
 
     int x_min = -10, x_max = 10;
     int y_min = -10, y_max = 10;
@@ -61,30 +61,27 @@ Widget::Widget(QWidget *parent)
     curve_plot(ui->graph_function, b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
     title = "1-я прoизвдная NURBS 2-ой степени";
-    x_min = -10, x_max = 30;
-    y_min = -25, y_max = 30;
+    x_min = -15, x_max = 15;
+    y_min = -15, y_max = 15;
 
     first_derivative_plot(ui->graph_first_derivative, b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
     title = "2-я прoизвдная NURBS 2-ой степени";
-    x_min = -95, x_max = 60;
-    y_min = -110, y_max = 120;
+    x_min = -100, x_max = 100;
+    y_min = -100, y_max = 100;
 
     second_derivative_plot(ui->graph_second_derivative, b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
 
 
 
-    /*
+
     QVector<double> real_spans = real_span_calc(p, n, u); // Вектор с точками реального диапазона спанов
     QVector<Point_curve> u_real_spans(real_spans.size());
 
     for(int i = 0; i < u_real_spans.size(); ++i)
     {
         curve_point_and_deriv_NURBS(u_real_spans[i], n, p, u, b, h, real_spans[i], c2, nders);
-        u_real_spans[i].curve = c2[0];
-        u_real_spans[i].derivative_1 = c2[1];
-        u_real_spans[i].derivative_2 = c2[2];
         plot_point(ui->graph_function, u_real_spans[i].curve.first, u_real_spans[i].curve.second, 9, "", QColor(147, 112, 219)); // Рисуем точки на графике (точки границ реального диапазона спанов)
     }
 
@@ -96,7 +93,7 @@ Widget::Widget(QWidget *parent)
     ui->graph_function->graph()->setName("Точка смены"); // Точка смены полинома/элемента узлового вектора
 
     ui->graph_function->replot();
-*/
+
 
 
     /*
@@ -139,14 +136,23 @@ Widget::Widget(QWidget *parent)
     }
 
 */
-    /*
-    QPair<double, double> point(5.5, 4.5); // Точка, к которой мы будем проводить перпендикуляр
 
-    Point_curve u_perpendicular = finding_perpendicular(n, p, u, b, h, point); // Ближайшая точка для перпендикуляра
+   // QPair<double, double> point(4, 1); // Точка, к которой мы будем проводить перпендикуляр
+
+    QPair<double, double> point(4, 1); // Точка, к которой мы будем проводить перпендикуляр
+
+    Point_curve u_perpendicular = finding_perpendicular(n, p, u, b, h, point, ui->graph_function); // Ближайшая точка для перпендикуляра
+
+    ui->graph_function->addGraph();
+    ui->graph_function->graph()->setPen(QColor(255, 160, 122));
+    ui->graph_function->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10)); // Формируем вид точек
+    ui->graph_function->graph()->setLineStyle(QCPGraph::lsNone);
+    ui->graph_function->graph()->addData(point.first, point.second);
+    ui->graph_function->graph()->setName("Заданная точка"); // Точка смены полинома/элемента узлового вектора
+
 
     plot_tangent(ui->graph_function, u_perpendicular); // Рисуем касательную к точке
     plot_line(ui->graph_function, point.first, point.second, u_perpendicular.curve.first, u_perpendicular.curve.second); // Рисуем перпендикуляр между точкой и кривой
-*/
 }
 
 Widget::~Widget()

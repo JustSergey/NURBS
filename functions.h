@@ -290,7 +290,10 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const int& n, const in
 
     qDebug() << "j = 2 - 2-я производная \nc2 =" << c2 << "\n";
 
-    return;
+    // Присваиваем координаты точки на кривой, 1-ю и 2-ю производную
+    data_NURBS.curve = c2[0];
+    data_NURBS.derivative_1 = c2[1];
+    data_NURBS.derivative_2 = c2[2];
 }
 
 // Рассчитывает спаны реального диапазона узлового вектора
@@ -381,11 +384,25 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
 }
 */
 
+// Рассчитывает косинус между двумя точками
+double cos_calc(const Point_curve& point_u, const QPair<double, double>& point)
+{
+    double x = point_u.curve.first - point.first;
+    double y = point_u.curve.second - point.second;
+    double numerator = abs(x * point_u.derivative_1.first + y * point_u.derivative_1.second);
+    double denominator = vector_len(point_u.derivative_1) * vector_len(x, y);
+    return numerator / denominator; // Угол между точкой и u
+}
+
+#include "charts.h"
+#include "ui_widget.h"
 // Возвращает точку кривой, перпендикулярной точке на плоскости
-Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<double>& u_vector, const QVector<QVector<double>>& polygon, const std::vector<double>& h, const QPair<double, double>& point)
+Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<double>& u_vector, const QVector<QVector<double>>& polygon, const std::vector<double>& h, const QPair<double, double>& point,
+                                  QCustomPlot* canvas)
 {
     QVector<Point_curve> point_u(n - 1); // Массив точек - перпендикуляров
     QVector<double> u_real_span = real_span_calc(p, n, u_vector); // Спаны реального диапазона узлового вектора
+    QVector<double> cos_data(u_real_span.size() - 1);
 
     for(int i = 0; i < u_real_span.size() - 1; ++i) // Итерируемся по спанам, начиная с нулевого
     {
@@ -394,12 +411,9 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
         std::vector<QPair<double, double>> c2(p + 1); // Индекс 2 для 2D задачи
 
         curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
-        point_u[i].curve = c2[0];
-        point_u[i].derivative_1 = c2[1];
-        point_u[i].derivative_2 = c2[2];
 
-        double cosine_check = 1;
         const double EPSILON_ANGLE = 0.001; // Эпсилон для косинуса прямого угла
+
 
         do
         {
@@ -409,53 +423,57 @@ Point_curve finding_perpendicular(const int& n, const int& p, const std::vector<
             double denominator = x * point_u[i].derivative_2.first + y * point_u[i].derivative_2.second + pow(vector_len(point_u[i].derivative_1), 2);
             point_u[i].u = point_u[i].u - numerator / denominator; // Новая, приближённая точка кривой
 
-            curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
-
-            point_u[i].curve = c2[0];
-            point_u[i].derivative_1 = c2[1];
-            point_u[i].derivative_2 = c2[2];
-
             if(point_u[i].u < u_real_span[i]) // Если точка вышла из спана
             {
                 point_u[i].u = u_real_span[i];
                 curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
-                point_u[i].curve = c2[0];
-                point_u[i].derivative_1 = c2[1];
-                point_u[i].derivative_2 = c2[2];
+                cos_data[i] = cos_calc(point_u[i], point);
                 break;
             }
             else if(point_u[i].u > u_real_span[i + 1])
             {
                 point_u[i].u = u_real_span[i + 1];
                 curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
-                point_u[i].curve = c2[0];
-                point_u[i].derivative_1 = c2[1];
-                point_u[i].derivative_2 = c2[2];
+                cos_data[i] = cos_calc(point_u[i], point);
                 break;
             }
 
-            // Проверка на нулевой косинус
-            numerator = abs(numerator);
-            denominator = vector_len(point_u[i].derivative_1) * vector_len(x, y);
-            cosine_check = numerator / denominator; // Угол между точкой и u
-
-        } while (cosine_check > EPSILON_ANGLE);
+            curve_point_and_deriv_NURBS(point_u[i], n, p, u_vector, polygon, h, point_u[i].u, c2, nders);
+            cos_data[i] = cos_calc(point_u[i], point);
+        } while (cos_data[i] > EPSILON_ANGLE);
     }
 
     Point_curve point_min_len; // Точка кривой с минимальным расстоянием до точки на плоскости
     point_min_len = point_u[0]; // Присваиваем первую точку для дальнейшего сравнения
-    double min_len = vector_len(point, point_u[0].curve); // Минимальная длина вектора
+    double min_len = vector_len(point, point_u[0].curve);
+    double min_cos = cos_data[0];
 
-    for(int i = 1; i < point_u.size(); ++i) // Ищем вектор с минимальной длиной
+    for(int i = 1; i < point_u.size(); ++i) // Ищем точку с максимально нулевым косинусом
     {
         double temp_len = vector_len(point, point_u[i].curve);
+        double temp_cos = cos_data[i];
 
-        if(min_len > temp_len)
+        if(min_cos > temp_cos) // Сравниваем косинус двух точек
         {
             min_len = temp_len;
+            min_cos = temp_cos;
+            point_min_len = point_u[i];
+        }
+        else if(min_cos == temp_cos && min_len > temp_len) // Если косинусы равны - сравниваем длину векторов
+        {
+            min_len = temp_len;
+            min_cos = temp_cos;
             point_min_len = point_u[i];
         }
     }
+
+    //plot_tangent(canvas, point_u[0]); // Рисуем касательную к точке
+    //plot_tangent(canvas, point_u[1]); // Рисуем касательную к точке
+    //plot_tangent(canvas, point_u[2]); // Рисуем касательную к точке
+
+    //plot_line(canvas, point.first, point.second, point_u[0].curve.first, point_u[0].curve.second); // Рисуем перпендикуляр между точкой и кривой
+    //plot_line(canvas, point.first, point.second, point_u[1].curve.first, point_u[1].curve.second); // Рисуем перпендикуляр между точкой и кривой
+    //plot_line(canvas, point.first, point.second, point_u[2].curve.first, point_u[2].curve.second); // Рисуем перпендикуляр между точкой и кривой
 
     return point_min_len;
 }
