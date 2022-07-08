@@ -119,19 +119,18 @@ Widget::Widget(QWidget *parent)
     plot_lable(ui->graph_first_derivative, derivs_curve[4].derivative_1.first + 1.4, derivs_curve[4].derivative_1.second - 0.5, "C'(4/5)");
     plot_lable(ui->graph_first_derivative, derivs_curve[5].derivative_1.first + 0.5, derivs_curve[5].derivative_1.second + 0.8, "C'(1)");
 
-
-
     for(const auto& p: derivs_curve)
     {
         plot_point(ui->graph_function, p.curve.first, p.curve.second);
     }
-
 */
 
-    QPair<double, double> point(4, 1); // Точка, к которой мы будем проводить перпендикуляр
+
+    /*
+    QPair<double, double> point(2, 6); // Точка, к которой мы будем проводить перпендикуляр
     Point_curve u_perpendicular = finding_perpendicular(n, p, u, b, h, point, ui->graph_function); // Ближайшая точка для перпендикуляра
 
-    plot_line(ui->graph_function, point.first, point.second, u_perpendicular.curve.first, u_perpendicular.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
+    //plot_line(ui->graph_function, point.first, point.second, u_perpendicular.curve.first, u_perpendicular.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
     //plot_tangent(ui->graph_function, u_perpendicular); // Рисуем касательную к точке
 
     // *ДОБАВЛЯЕТ В ЛЕГЕНДУ* //
@@ -150,20 +149,21 @@ Widget::Widget(QWidget *parent)
     pen.setWidthF(2.8);
     curve->setPen(pen);
     curve->setName("Касательная"); // Обзываем полигон в легенде графика
-
+*/
+    /*
     QCPCurve *curve1 = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
     QPen pen1;
     pen1.setWidthF(2);
     pen1.setColor(QColor(0, 0, 0));
+    pen1.setStyle(Qt::PenStyle::DashLine);
     curve1->setPen(pen1);
     curve1->setName("Перпендикуляр"); // Обзываем полигон в легенде графика
 
-    QCPCurve *curve2 = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
-    QPen pen2;
-    pen2.setWidthF(3);
-    pen2.setColor(QColor(178, 34, 34));
-    curve2->setPen(pen2);
-    curve2->setName("Кратчайший перпендикуляр"); // Обзываем полигон в легенде графика
+    plot_lable_with_arrow(ui->graph_function, 6.35, 6.35, 4.8, 4.27, "Предельные\nслучаи");
+    plot_lable_with_arrow(ui->graph_function, 6.35, 6.35, 4, 4.36, "");
+    plot_lable_with_arrow(ui->graph_function, 2, 3.5, 2.75, 4.5, "");
+    plot_lable(ui->graph_function, 0.8, 3.1, "Перпендикуляр\nс мин. длиной");
+    */
 }
 
 Widget::~Widget()

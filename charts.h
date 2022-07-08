@@ -76,7 +76,9 @@ void plot_point(QCustomPlot* canvas, const double& x, const double& y, const dou
 void plot_line(QCustomPlot* canvas, const double& point_x_1, const double& point_y_1, const double& point_x_2, const double& point_y_2, const QColor& color = QColor(0, 0, 0), const double& width = 3.5)
 {
     QCPItemLine *line = new QCPItemLine(canvas);
+
     QPen pen;
+    pen.setStyle(Qt::PenStyle::DashLine);
     pen.setColor(color);
     pen.setWidth(width);
     line->setPen(pen);
@@ -129,15 +131,14 @@ void plot_lable_with_arrow(QCustomPlot* canvas, const double& point_x_1, const d
 {
     QCPItemText *label = new QCPItemText(canvas);
     label->setFont(QFont("sans", 10));
-    label->position->setCoords(point_x_1, point_y_1);
+    label->position->setCoords(point_x_1 + 0.8, point_y_1 + 0.3);
     label->setText(text);
 
     QCPItemLine *line = new QCPItemLine(canvas);
     line->setHead(QCPLineEnding::esFlatArrow);
-    line->start->setCoords(point_x_1, point_y_1 - 0.25);
+    line->start->setCoords(point_x_1, point_y_1);
     line->end->setCoords(point_x_2, point_y_2);
     canvas->replot();
-
 }
 
 // Рисует кривую и многоугольник по заданным точкам
