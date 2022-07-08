@@ -9,9 +9,7 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    using namespace std;
-
-    const QVector<QVector<double>> b // Массив точек многоугольника
+    const QVector<QVector<double>> control_points_1 // Точки определяющего многоугольника
     {
         {1.25, 1.3},
         {2.5, 3.9},
@@ -20,29 +18,24 @@ Widget::Widget(QWidget *parent)
         {7.5, 2.6}
     };
 
-    const vector<double> h {1, 1, 1, 1, 1};              // Весовые коэффициенты
-    const vector<double> u {0, 0, 0, 0.4, 0.6, 1, 1, 1}; // Узловой вектор
+    const QVector<double> w_1 {1, 1, 1, 1, 1}; // Весовые коэффициенты
+    const uint degree_1 = 2;                   // Степень аппроксимирующих полиномов
+    const int number_u_1 = 60;                 // Кол-во разбиений (точек) в реальной части узлов. вектора
 
-    const uint p = 2;            // Степень аппроксимирующих полиномов
-    const uint m = u.size() - 1; // n_kn - количество узлов (длина) в узловом векторе
-    const uint n = m - p - 1;    // n_real - количество узлов (длина) реальной части узлового вектора
-    const int n_u = 60;          // Кол-во разбиений (точек) в реальной части узлов. вектора
+    const QVector<double> u_1 = u_fill(control_points_1, degree_1); // Узловой вектор
 
-    // Реальный диапазон
-    const double u_start = u[p];
-    const double u_stop = u[n + 1];
+    QVector<QVector<double>> nders_1(degree_1 + 1, QVector<double>(degree_1 + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
+    QVector<QPair<double, double>> c2_1(degree_1 + 1);  // Индекс 2 для 2D задачи
+    QVector<Point_curve> data_NURBS_1(number_u_1 + 1);    // Содержит точки кривой, 1-ой и 2-ой производной
 
-    vector<vector<double>> nders(p + 1, vector<double>(p + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
-    vector<QPair<double, double>> c2(p + 1);  // Индекс 2 для 2D задачи
-    QVector<Point_curve> data_NURBS(n_u + 1); // Содержит точки кривой, 1-ой и 2-ой производной
+    const uint n_ver_1 = control_points_1.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
+    const uint n_real_1 = n_ver_1 - degree_1 + 1;   // Количество узлов (длина) реальной части узлового вектора
 
-    for(int i = 0; i < n_u + 1; ++i)
+    for(int i = 0; i < number_u_1 + 1; ++i)
     {
-        double u_i = (i / static_cast<double>(n_u)) * (u_stop - u_start);
-        curve_point_and_deriv_NURBS(data_NURBS[i], n, p, u, b, h, u_i, c2, nders);
+        double u_i = (i / static_cast<double>(number_u_1));
+        curve_point_and_deriv_NURBS(data_NURBS_1[i], n_real_1, degree_1, u_1, control_points_1, w_1, u_i, c2_1, nders_1);
     }
-
-
 
     QString title = "Кратчайшее расстояние от точки до интервалов";
     QString labels_legend_1 = "Определяющий многоуг.";
@@ -51,29 +44,27 @@ Widget::Widget(QWidget *parent)
     int x_min = -10, x_max = 10;
     int y_min = -10, y_max = 10;
 
-    curve_plot(ui->graph_function, b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
+    curve_plot(ui->graph_function, control_points_1, data_NURBS_1, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
     title = "1-я прoизвдная NURBS 2-ой степени";
     x_min = -15, x_max = 15;
     y_min = -15, y_max = 15;
 
-    first_derivative_plot(ui->graph_first_derivative, b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
+    first_derivative_plot(ui->graph_first_derivative, control_points_1, data_NURBS_1, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
     title = "2-я прoизвдная NURBS 2-ой степени";
     x_min = -100, x_max = 100;
     y_min = -100, y_max = 100;
 
-    second_derivative_plot(ui->graph_second_derivative, b, data_NURBS, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
+    second_derivative_plot(ui->graph_second_derivative, control_points_1, data_NURBS_1, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
-
-
-
-    QVector<double> real_spans = real_span_calc(p, n, u); // Вектор с точками реального диапазона спанов
+    /*
+    QVector<double> real_spans = real_span_calc(p_1, n_1, u_1); // Вектор с точками реального диапазона спанов
     QVector<Point_curve> u_real_spans(real_spans.size());
 
     for(int i = 0; i < u_real_spans.size(); ++i)
     {
-        curve_point_and_deriv_NURBS(u_real_spans[i], n, p, u, b, h, real_spans[i], c2, nders);
+        curve_point_and_deriv_NURBS(u_real_spans[i], n_1, p_1, u_1, b_1, h_1, real_spans[i], c2_1, nders_1);
         plot_point(ui->graph_function, u_real_spans[i].curve.first, u_real_spans[i].curve.second, 9, "", QColor(147, 112, 219)); // Рисуем точки на графике (точки границ реального диапазона спанов)
     }
 
@@ -86,7 +77,7 @@ Widget::Widget(QWidget *parent)
     ui->graph_function->graph()->setName("Точка смены"); // Точка смены полинома/элемента узлового вектора
 
     ui->graph_function->replot();
-
+    */
 
     /*
     QVector<double> point_u { 0, 0.2, 0.4, 0.6, 0.8, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
@@ -123,7 +114,7 @@ Widget::Widget(QWidget *parent)
     {
         plot_point(ui->graph_function, p.curve.first, p.curve.second);
     }
-*/
+    */
 
 
     /*
@@ -164,6 +155,33 @@ Widget::Widget(QWidget *parent)
     plot_lable_with_arrow(ui->graph_function, 2, 3.5, 2.75, 4.5, "");
     plot_lable(ui->graph_function, 0.8, 3.1, "Перпендикуляр\nс мин. длиной");
     */
+
+    const QVector<QVector<double>> control_points_2 // Массив точек многоугольника
+    {
+        {0.5, 2},
+        {8, 3.5}
+    };
+
+    const QVector<double> w_2 {1, 1, 1, 1}; // Весовые коэффициенты
+    const uint degree_2 = 1;                   // Степень аппроксимирующих полиномов
+    const int number_u_2 = 60;                 // Кол-во разбиений (точек) в реальной части узлов. вектора
+
+    const QVector<double> u_2 = u_fill(control_points_2, degree_2); // Узловой вектор
+
+    QVector<QVector<double>> nders_2(degree_2 + 1, QVector<double>(degree_2 + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
+    QVector<QPair<double, double>> c2_2(degree_2 + 1);  // Индекс 2 для 2D задачи
+    QVector<Point_curve> data_NURBS_2(number_u_2);    // Содержит точки кривой, 1-ой и 2-ой производной
+
+    const uint n_ver_2 = control_points_2.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
+    const uint n_real_2 = n_ver_2 - degree_2 + 1;   // Количество узлов (длина) реальной части узлового вектора
+
+    for(int i = 0; i < number_u_2; ++i)
+    {
+        double u_i = (i / static_cast<double>(number_u_2));
+        curve_point_and_deriv_NURBS(data_NURBS_2[i], n_real_2, degree_2, u_2, control_points_2, w_2, u_i, c2_2, nders_2);
+    }
+
+    curve_plot(ui->graph_function, control_points_2, data_NURBS_2, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 }
 
 Widget::~Widget()

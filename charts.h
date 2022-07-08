@@ -142,13 +142,13 @@ void plot_lable_with_arrow(QCustomPlot* canvas, const double& point_x_1, const d
 }
 
 // Рисует кривую и многоугольник по заданным точкам
-void curve_plot(QCustomPlot* canvas, const QVector<QVector<double>>& b, const QVector<Point_curve>& data_NURBS, const int& x_min, const int& x_max, const int& y_min, const int& y_max,
+void curve_plot(QCustomPlot* canvas, const QVector<QVector<double>>& control_points, const QVector<Point_curve>& data_NURBS, const int& x_min, const int& x_max, const int& y_min, const int& y_max,
                 const QString& title, const QString& labels_legend_1, const QString& labels_legend_2)
 {
     canvas->clearGraphs(); // Очищаем все графики
     canvas->legend->setVisible(true); // Включаем легенду графика
 
-    //plot_polygon(canvas, b, labels_legend_1); // Рисуем многоугольник с вершинами
+    //plot_polygon(canvas, control_points, labels_legend_1); // Рисуем многоугольник с вершинами
     plot_curve(canvas, data_NURBS, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
 
 /*
