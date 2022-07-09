@@ -4,6 +4,15 @@
 #include <math.h>
 #include <QDebug>
 
+struct Point_curve // Хранит точку кривой, её производную (1 и 2), интервал (span) и параметр u
+{
+    QPair<double, double> curve;
+    QPair<double, double> derivative_1;
+    QPair<double, double> derivative_2;
+    int span;
+    double u;
+};
+
 // Заполняет узловой вектор параметрами
 QVector<double> u_fill(const QVector<QVector<double>>& control_points, const double& degree)
 {
@@ -25,15 +34,6 @@ QVector<double> u_fill(const QVector<QVector<double>>& control_points, const dou
 
     return u;
 }
-
-struct Point_curve // Хранит точку кривой, её производную (1 и 2), интервал (span) и параметр u
-{
-    QPair<double, double> curve;
-    QPair<double, double> derivative_1;
-    QPair<double, double> derivative_2;
-    int span;
-    double u;
-};
 
 // Вычисляет длину для радиус вектора
 double vector_len(const QPair<double, double>& point)
@@ -333,14 +333,14 @@ double cos_calc(const Point_curve& point_u, const QPair<double, double>& point)
     double y = point_u.curve.second - point.second;
     double numerator = abs(x * point_u.derivative_1.first + y * point_u.derivative_1.second);
     double denominator = vector_len(point_u.derivative_1) * vector_len(x, y);
-    return numerator / denominator; // Угол между точкой и u
+    if(denominator == 0)
+        return 0;
+    else
+        return numerator / denominator; // Угол между точкой и u
 }
 
-#include "charts.h"
-#include "ui_widget.h"
 // Возвращает точку кривой, перпендикулярной точке на плоскости
-Point_curve finding_perpendicular(const int& n_real, const int& degree, const QVector<double>& u_vector, const QVector<QVector<double>>& polygon, const QVector<double>& w, const QPair<double, double>& point,
-                                  QCustomPlot* canvas)
+Point_curve finding_perpendicular(const int& n_real, const int& degree, const QVector<double>& u_vector, const QVector<QVector<double>>& polygon, const QVector<double>& w, const QPair<double, double>& point)
 {
     QVector<Point_curve> point_u(n_real - 1); // Массив точек - перпендикуляров
     QVector<double> u_real_span = real_span_calc(degree, n_real, u_vector); // Спаны реального диапазона узлового вектора
@@ -354,7 +354,7 @@ Point_curve finding_perpendicular(const int& n_real, const int& degree, const QV
 
         curve_point_and_deriv_NURBS(point_u[i], n_real, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
 
-        const double EPSILON_ANGLE = 0.001; // Эпсилон для косинуса прямого угла
+        const double EPSILON_ANGLE = 0.01; // Эпсилон для косинуса прямого угла
 
         do
         {
@@ -362,7 +362,11 @@ Point_curve finding_perpendicular(const int& n_real, const int& degree, const QV
             double y = point_u[i].curve.second - point.second;
             double numerator = x * point_u[i].derivative_1.first + y * point_u[i].derivative_1.second;
             double denominator = x * point_u[i].derivative_2.first + y * point_u[i].derivative_2.second + pow(vector_len(point_u[i].derivative_1), 2);
-            point_u[i].u = point_u[i].u - numerator / denominator; // Новая, приближённая точка кривой
+
+            if(denominator == 0)
+                point_u[i].u = point_u[i].u;
+            else
+                point_u[i].u = point_u[i].u - numerator / denominator * 0.05; // Новая, приближённая точка кривой
 
             if(point_u[i].u < u_real_span[i]) // Если точка вышла из спана
             {
@@ -389,6 +393,7 @@ Point_curve finding_perpendicular(const int& n_real, const int& degree, const QV
     double min_len = vector_len(point, point_u[0].curve);
     double min_cos = cos_data[0];
 
+
     for(int i = 1; i < point_u.size(); ++i) // Ищем точку с максимально нулевым косинусом
     {
         double temp_len = vector_len(point, point_u[i].curve);
@@ -408,6 +413,7 @@ Point_curve finding_perpendicular(const int& n_real, const int& degree, const QV
         }
     }
 
+    /*
     plot_tangent(canvas, point_u[0]); // Рисуем касательную к точке
     plot_tangent(canvas, point_u[1]); // Рисуем касательную к точке
     plot_tangent(canvas, point_u[2]); // Рисуем касательную к точке
@@ -415,7 +421,7 @@ Point_curve finding_perpendicular(const int& n_real, const int& degree, const QV
     plot_line(canvas, point.first, point.second, point_u[0].curve.first, point_u[0].curve.second, QColor(0, 0, 0), 2); // Рисуем перпендикуляр между точкой и кривой
     plot_line(canvas, point.first, point.second, point_u[1].curve.first, point_u[1].curve.second, QColor(0, 0, 0), 2); // Рисуем перпендикуляр между точкой и кривой
     plot_line(canvas, point.first, point.second, point_u[2].curve.first, point_u[2].curve.second, QColor(0, 0, 0), 2); // Рисуем перпендикуляр между точкой и кривой
-
+*/
     return point_min_len;
 }
 

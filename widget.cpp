@@ -37,34 +37,35 @@ Widget::Widget(QWidget *parent)
         curve_point_and_deriv_NURBS(data_NURBS_1[i], n_real_1, degree_1, u_1, control_points_1, w_1, u_i, c2_1, nders_1);
     }
 
-    QString title = "Кратчайшее расстояние от точки до интервалов";
+
+
+    QString title = "Метрики разности между двух кривых";
     QString labels_legend_1 = "Определяющий многоуг.";
-    QString labels_legend_2 = "NURBS";
+    QString labels_legend_2 = "Исходный NURBS";
 
     int x_min = -10, x_max = 10;
     int y_min = -10, y_max = 10;
-
     curve_plot(ui->graph_function, control_points_1, data_NURBS_1, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
     title = "1-я прoизвдная NURBS 2-ой степени";
     x_min = -15, x_max = 15;
     y_min = -15, y_max = 15;
-
     first_derivative_plot(ui->graph_first_derivative, control_points_1, data_NURBS_1, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
     title = "2-я прoизвдная NURBS 2-ой степени";
     x_min = -100, x_max = 100;
     y_min = -100, y_max = 100;
-
     second_derivative_plot(ui->graph_second_derivative, control_points_1, data_NURBS_1, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
 
+
+
     /*
-    QVector<double> real_spans = real_span_calc(p_1, n_1, u_1); // Вектор с точками реального диапазона спанов
+    QVector<double> real_spans = real_span_calc(degree_1, n_real_1, u_1); // Вектор с точками реального диапазона спанов
     QVector<Point_curve> u_real_spans(real_spans.size());
 
     for(int i = 0; i < u_real_spans.size(); ++i)
     {
-        curve_point_and_deriv_NURBS(u_real_spans[i], n_1, p_1, u_1, b_1, h_1, real_spans[i], c2_1, nders_1);
+        curve_point_and_deriv_NURBS(u_real_spans[i], n_real_1, degree_1, u_1, control_points_1, w_1, real_spans[i], c2_1, nders_1);
         plot_point(ui->graph_function, u_real_spans[i].curve.first, u_real_spans[i].curve.second, 9, "", QColor(147, 112, 219)); // Рисуем точки на графике (точки границ реального диапазона спанов)
     }
 
@@ -117,7 +118,7 @@ Widget::Widget(QWidget *parent)
     */
 
 
-    /*
+    /*ц
     QPair<double, double> point(2, 6); // Точка, к которой мы будем проводить перпендикуляр
     Point_curve u_perpendicular = finding_perpendicular(n, p, u, b, h, point, ui->graph_function); // Ближайшая точка для перпендикуляра
 
@@ -140,7 +141,8 @@ Widget::Widget(QWidget *parent)
     pen.setWidthF(2.8);
     curve->setPen(pen);
     curve->setName("Касательная"); // Обзываем полигон в легенде графика
-*/
+    */
+
     /*
     QCPCurve *curve1 = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
     QPen pen1;
@@ -156,32 +158,60 @@ Widget::Widget(QWidget *parent)
     plot_lable(ui->graph_function, 0.8, 3.1, "Перпендикуляр\nс мин. длиной");
     */
 
+
+
     const QVector<QVector<double>> control_points_2 // Массив точек многоугольника
     {
-        {0.5, 2},
-        {8, 3.5}
+        {0.8, 2},
+        {4, 3},
+        {7.6, 2}
     };
 
-    const QVector<double> w_2 {1, 1, 1, 1}; // Весовые коэффициенты
-    const uint degree_2 = 1;                   // Степень аппроксимирующих полиномов
-    const int number_u_2 = 60;                 // Кол-во разбиений (точек) в реальной части узлов. вектора
+    const QVector<double> w_2 {1, 1, 1}; // Весовые коэффициенты
+    const uint degree_2 = 2;          // Степень аппроксимирующих полиномов
+    const int number_u_2 = 60;        // Кол-во разбиений (точек) в реальной части узлов. вектора
 
     const QVector<double> u_2 = u_fill(control_points_2, degree_2); // Узловой вектор
 
     QVector<QVector<double>> nders_2(degree_2 + 1, QVector<double>(degree_2 + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
     QVector<QPair<double, double>> c2_2(degree_2 + 1);  // Индекс 2 для 2D задачи
-    QVector<Point_curve> data_NURBS_2(number_u_2);    // Содержит точки кривой, 1-ой и 2-ой производной
+    QVector<Point_curve> data_NURBS_2(number_u_2 + 1);      // Содержит точки кривой, 1-ой и 2-ой производной
 
-    const uint n_ver_2 = control_points_2.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
-    const uint n_real_2 = n_ver_2 - degree_2 + 1;   // Количество узлов (длина) реальной части узлового вектора
+    const uint n_ver_2 = control_points_2.size();  // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
+    const uint n_real_2 = n_ver_2 - degree_2 + 1;  // Количество узлов (длина) реальной части узлового вектора
 
-    for(int i = 0; i < number_u_2; ++i)
+    for(int i = 0; i < number_u_2 + 1; ++i)
     {
         double u_i = (i / static_cast<double>(number_u_2));
         curve_point_and_deriv_NURBS(data_NURBS_2[i], n_real_2, degree_2, u_2, control_points_2, w_2, u_i, c2_2, nders_2);
     }
 
-    curve_plot(ui->graph_function, control_points_2, data_NURBS_2, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
+    plot_curve(ui->graph_function, data_NURBS_2, "Аппроксимирующий NURBS", QColor(34, 139, 34)); // Рисуем сплайн
+
+/*
+    for(int i = 0; i < data_NURBS_2.size();)
+    {
+        Point_curve u_perpendicular = finding_perpendicular(n_real_1, degree_1, u_1, control_points_1, w_1, data_NURBS_2[i].curve);
+        plot_line(ui->graph_function, data_NURBS_2[i].curve.first, data_NURBS_2[i].curve.second, u_perpendicular.curve.first, u_perpendicular.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
+        i += 2;
+    }
+*/
+    Point_curve u_perpendicular;
+    for(int i = 0; i < data_NURBS_1.size();)
+    {
+        u_perpendicular = finding_perpendicular(n_real_2, degree_2, u_2, control_points_2, w_2, data_NURBS_1[i].curve);
+        plot_line(ui->graph_function, data_NURBS_1[i].curve.first, data_NURBS_1[i].curve.second, u_perpendicular.curve.first, u_perpendicular.curve.second); // Рисуем перпендикуляр между точкой и кривой
+        i += 3;
+    }
+
+    QCPCurve *curve = new QCPCurve(ui->graph_function->xAxis, ui->graph_function->yAxis);
+    QPen pen;
+    pen.setColor(QColor(0, 0, 0));
+    pen.setStyle(Qt::PenStyle::DashLine);
+    pen.setWidthF(2.5);
+    curve->setPen(pen);
+    curve->setName("Метрика (перпендикуляр)"); // Обзываем полигон в легенде графика
+
 }
 
 Widget::~Widget()
