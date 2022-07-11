@@ -61,13 +61,13 @@ Widget::Widget(QWidget *parent)
 
 
 
-    /*
-    QVector<double> real_spans = real_span_calc(degree_1, n_real_1, u_1); // Вектор с точками реального диапазона спанов
+
+    QVector<double> real_spans = real_span_calc(degree_1, n_kn_1, u_1); // Вектор с точками реального диапазона спанов
     QVector<Point_curve> u_real_spans(real_spans.size());
 
     for(int i = 0; i < u_real_spans.size(); ++i)
     {
-        curve_point_and_deriv_NURBS(u_real_spans[i], n_real_1, degree_1, u_1, control_points_1, w_1, real_spans[i], c2_1, nders_1);
+        curve_point_and_deriv_NURBS(u_real_spans[i], n_real_1, n_kn_1, degree_1, u_1, control_points_1, w_1, real_spans[i], c2_1, nders_1);
         plot_point(ui->graph_function, u_real_spans[i].curve.first, u_real_spans[i].curve.second, 9, "", QColor(147, 112, 219)); // Рисуем точки на графике (точки границ реального диапазона спанов)
     }
 
@@ -80,7 +80,7 @@ Widget::Widget(QWidget *parent)
     ui->graph_function->graph()->setName("Точка смены"); // Точка смены полинома/элемента узлового вектора
 
     ui->graph_function->replot();
-    */
+
 
 
     QVector<double> point_u { 0, 0.2, 2/5.0, 0.6, 0.8, 1 }; // Массив, хранящий точки u, от которых пойдёт производная на графике
