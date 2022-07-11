@@ -5,17 +5,14 @@
 #include "ui_widget.h"
 
 // Рисует линию (касательную) производной в точке
-void derivative_point_line(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS)
+void derivative_point_line(QCustomPlot* canvas, const Point_curve& point)
 {
-    for(const auto& point: data_NURBS)
-    {
-        QCPItemLine *line = new QCPItemLine(canvas);
-        line->setHead(QCPLineEnding::esFlatArrow);
-        line->start->setCoords(point.curve.first, point.curve.second);
-        line->end->setCoords(point.derivative_1.first + point.curve.first, point.derivative_1.second + point.curve.second);
-        //line->start->setCoords(0, 0);
-        //line->end->setCoords(point.derivative_1.first, point.derivative_1.second);
-    }
+    QCPItemLine *line = new QCPItemLine(canvas);
+    line->setHead(QCPLineEnding::esFlatArrow);
+    line->start->setCoords(point.curve.first, point.curve.second);
+    line->end->setCoords(point.derivative_1.first + point.curve.first, point.derivative_1.second + point.curve.second);
+    //line->start->setCoords(0, 0);
+    //line->end->setCoords(point.derivative_1.first, point.derivative_1.second);
 
     canvas->replot();
 }
@@ -47,7 +44,7 @@ void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon, 
         shape->addData(point[0], point[1]);
     }
 
-    //shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
+    shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
     shape->setName(label); // Обзываем полигон в легенде графика
     canvas->replot();
 }
@@ -148,7 +145,7 @@ void curve_plot(QCustomPlot* canvas, const QVector<QVector<double>>& control_poi
     canvas->clearGraphs(); // Очищаем все графики
     canvas->legend->setVisible(true); // Включаем легенду графика
 
-   // plot_polygon(canvas, control_points, labels_legend_1); // Рисуем многоугольник с вершинами
+    plot_polygon(canvas, control_points, labels_legend_1); // Рисуем многоугольник с вершинами
     plot_curve(canvas, data_NURBS, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
 
 /*

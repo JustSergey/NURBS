@@ -305,6 +305,14 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, co
     data_NURBS.derivative_2 = c2[2];
 }
 
+QPair<double, double> calc_epsilon(const Point_curve& point, const double& angle = M_PI / 2)
+{
+    double rotatedX = point.derivative_1.first * cos(angle) - point.derivative_1.second * sin(angle);
+    double rotatedY = point.derivative_1.first * sin(angle) + point.derivative_1.second * cos(angle);
+    QPair<double, double> perpendicular {rotatedX + point.curve.first, rotatedY + point.curve.second};
+    return perpendicular;
+}
+
 // Возвращает вектор с точками спанов реального узлового вектора
 QVector<double> real_span_calc(const uint& degree, const uint& n_kn, const QVector<double>& u)
 {
