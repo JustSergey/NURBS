@@ -47,7 +47,7 @@ void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon, 
         shape->addData(point[0], point[1]);
     }
 
-    shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
+    //shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
     shape->setName(label); // Обзываем полигон в легенде графика
     canvas->replot();
 }
@@ -131,7 +131,7 @@ void plot_lable_with_arrow(QCustomPlot* canvas, const double& point_x_1, const d
 {
     QCPItemText *label = new QCPItemText(canvas);
     label->setFont(QFont("sans", 10));
-    label->position->setCoords(point_x_1 + 0.8, point_y_1 + 0.3);
+    label->position->setCoords(point_x_1 + 0.3, point_y_1 + 0.7);
     label->setText(text);
 
     QCPItemLine *line = new QCPItemLine(canvas);

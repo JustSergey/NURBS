@@ -53,14 +53,14 @@ double vector_len(const QPair<double, double>& p1, const QPair<double, double>& 
     return sqrt(pow(p2.first - p1.first, 2) + pow(p2.second - p1.second, 2));
 }
 
+// Вычисляет длину для вектора по координатам
+double vector_len(const QPair<double, double>& p1, const Point_curve& p2)
+{
+    return sqrt(pow(p2.curve.first - p1.first, 2) + pow(p2.curve.second - p1.second, 2));
+}
+
 // Возвращает индекс узлового промежутка (интервал)
-uint findSpan(const uint& n_real, const uint& n_kn, const int& degree, const QVector<double>& u, const double& u_i)
-/*
- * n - кол-во Control Points (счёт от нуля)
- * p - степень полинома(=degree)
- * u - узловой вектор - мах индекс в нем m = n + 1 + p
- * u_i - точка внутри реального диатазона в узловом векторе
-*/
+uint findSpan(const uint& n_real, const uint& n_kn, const uint& n_ver, const int& degree, const QVector<double>& u, const double& u_i)
 {
     for(uint k = 0; k < u.size() - 1; ++k)
     {
@@ -68,14 +68,14 @@ uint findSpan(const uint& n_real, const uint& n_kn, const int& degree, const QVe
             qDebug() << "Сообщение из findSpan - Узловой вектор убывает u[k] > u[k + 1]";
     }
 
-    if((u.size() - 1) != (n_real + 1 + degree))
-        qDebug() << "Сообщение из findSpan - (u.size() - 1) != (n + 1 + p)";
+    if((u.size()) != (n_ver + degree + 1))
+        qDebug() << "Сообщение из findSpan - (u.size()) != (n_ver + degree + 1)";
 
     if(u_i < u[degree] || u_i > u[n_kn - degree - 1])
         qDebug() << "Сообщение из FindSpan - u вышел за реальный диапазон u_i < u[p] || u_i > u[n + 1]";
 
     if(u_i == u[n_kn - degree - 1]) // Последний диапазон (начало диапазона), в котором может находиться u
-        return n_kn - degree - 1;
+        return n_kn - degree - 2;
 
     uint low = degree, high = n_kn - degree - 1, middle = (low + high) / 2;
 
@@ -207,13 +207,12 @@ void dersBasisFuns(const double& span, const double& u_i, const int& degree, con
 void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, const uint& n_kn, const int& degree, const QVector<double>& u, const QVector<QVector<double>>& control_points,
                                  const QVector<double>& w, const double& u_i, QVector<QPair<double, double>>& c2,  QVector<QVector<double>> nders)
 {
-    double span = findSpan(n_real, n_kn, degree, u, u_i); // Диапазон узлового веткора
+    const double n_ver = control_points.size();
+
+    double span = findSpan(n_real, n_kn, n_ver, degree, u, u_i); // Диапазон узлового веткора
     data_NURBS.span = span;
 
-    qDebug() << "Span =" << span << "\tu =" << u_i;
-
-    if ((control_points.size() - 1) != n_real)
-        qDebug() << "** Сообщение из curvePoin_and_Deriv_NURBS -- (b[0].size() - 1) != n";
+    //qDebug() << "Span =" << span << "\tu =" << u_i;
 
     dersBasisFuns(span, u_i, degree, u, nders);
 
@@ -241,7 +240,7 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, co
     c2[0].first = n0[0] / d;
     c2[0].second = n0[1] / d;
 
-    qDebug() << "j = 0 - кривая \nc2 =" << c2;
+    //qDebug() << "j = 0 - кривая \nc2 =" << c2;
 
     data_NURBS.curve = c2[0];
     data_NURBS.u = u_i;
@@ -306,17 +305,6 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, co
     data_NURBS.derivative_2 = c2[2];
 }
 
-double find_max_len(const QPair<double, double>& p_1, const Point_curve& p_2)
-{
-    double len_p1 = vector_len(p_1);
-    double len_p2 = vector_len(p_2.curve.first, p_2.curve.second);
-
-    if(len_p1 > len_p2)
-        return len_p1;
-    else
-        return len_p2;
-}
-
 // Возвращает вектор с точками спанов реального узлового вектора
 QVector<double> real_span_calc(const uint& degree, const uint& n_kn, const QVector<double>& u)
 {
@@ -351,7 +339,8 @@ double cos_calc(const Point_curve& point_u, const QPair<double, double>& point)
 }
 
 // Возвращает точку кривой, перпендикулярной точке на плоскости
-Point_curve finding_perpendicular(const int& n_real, const uint& n_kn, const int& degree, const QVector<double>& u_vector, const QVector<QVector<double>>& polygon, const QVector<double>& w, const QPair<double, double>& point)
+Point_curve finding_perpendicular(const int& n_real, const uint& n_kn, const int& degree, const QVector<double>& u_vector,
+                                  const QVector<QVector<double>>& polygon, const QVector<double>& w, const QPair<double, double>& point)
 {
     QVector<Point_curve> point_u(n_real - 1); // Массив точек - перпендикуляров
     QVector<double> u_real_span = real_span_calc(degree, n_kn, u_vector); // Спаны реального диапазона узлового вектора
