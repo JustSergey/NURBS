@@ -148,7 +148,7 @@ void curve_plot(QCustomPlot* canvas, const QVector<QVector<double>>& control_poi
     canvas->clearGraphs(); // Очищаем все графики
     canvas->legend->setVisible(true); // Включаем легенду графика
 
-    //plot_polygon(canvas, control_points, labels_legend_1); // Рисуем многоугольник с вершинами
+   // plot_polygon(canvas, control_points, labels_legend_1); // Рисуем многоугольник с вершинами
     plot_curve(canvas, data_NURBS, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
 
 /*

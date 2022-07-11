@@ -54,7 +54,7 @@ double vector_len(const QPair<double, double>& p1, const QPair<double, double>& 
 }
 
 // Возвращает индекс узлового промежутка (интервал)
-uint findSpan(const uint& n_real, const int& degree, const QVector<double>& u, const double& u_i)
+uint findSpan(const uint& n_real, const uint& n_kn, const int& degree, const QVector<double>& u, const double& u_i)
 /*
  * n - кол-во Control Points (счёт от нуля)
  * p - степень полинома(=degree)
@@ -71,13 +71,13 @@ uint findSpan(const uint& n_real, const int& degree, const QVector<double>& u, c
     if((u.size() - 1) != (n_real + 1 + degree))
         qDebug() << "Сообщение из findSpan - (u.size() - 1) != (n + 1 + p)";
 
-    if(u_i < u[degree] || u_i > u[n_real + 1])
+    if(u_i < u[degree] || u_i > u[n_kn - degree - 1])
         qDebug() << "Сообщение из FindSpan - u вышел за реальный диапазон u_i < u[p] || u_i > u[n + 1]";
 
-    if(u_i == u[n_real + 1]) // Последний диапазон (начало диапазона), в котором может находиться u
-        return n_real;
+    if(u_i == u[n_kn - degree - 1]) // Последний диапазон (начало диапазона), в котором может находиться u
+        return n_kn - degree - 1;
 
-    uint low = degree, high = n_real + 1, middle = (low + high) / 2;
+    uint low = degree, high = n_kn - degree - 1, middle = (low + high) / 2;
 
     // Выполняем  двоичный  поиск
     while((u_i < u[middle]) || (u_i >= u[middle + 1]))
@@ -204,10 +204,10 @@ void dersBasisFuns(const double& span, const double& u_i, const int& degree, con
 }
 
 // Расчитывает для заданного "u" одну точку на В-сплайне и 1-ю и 2-ю проиизв. для этой точки
-void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, const int& degree, const QVector<double>& u, const QVector<QVector<double>>& control_points,
+void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, const uint& n_kn, const int& degree, const QVector<double>& u, const QVector<QVector<double>>& control_points,
                                  const QVector<double>& w, const double& u_i, QVector<QPair<double, double>>& c2,  QVector<QVector<double>> nders)
 {
-    double span = findSpan(n_real, degree, u, u_i); // Диапазон узлового веткора
+    double span = findSpan(n_real, n_kn, degree, u, u_i); // Диапазон узлового веткора
     data_NURBS.span = span;
 
     qDebug() << "Span =" << span << "\tu =" << u_i;
@@ -228,9 +228,9 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, co
 
     for(int i = 0; i < degree + 1; ++i)
     {
-        qDebug() << "----------";
-        qDebug() << "j =" << j << " i =" << i << " span - p + i =" << span - degree + i;
-        qDebug() << "nders[j][i] =" << nders[j][i] << " b[span - p + i] =" <<  control_points[span - degree + i] << " h[span - p + i] =" << w[span - degree + i];
+        //qDebug() << "----------";
+       // qDebug() << "j =" << j << " i =" << i << " span - p + i =" << span - degree + i;
+        //qDebug() << "nders[j][i] =" << nders[j][i] << " b[span - p + i] =" <<  control_points[span - degree + i] << " h[span - p + i] =" << w[span - degree + i];
 
         for(int k = 0; k < control_points[0].size(); ++k)
             n0[k] += control_points[span - degree + i][k] * w[span - degree + i] * nders[j][i];
@@ -263,7 +263,7 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, co
     c2[1].first = n1[0] / d - (n0[0] * n2[0]) / (d * d);
     c2[1].second = n1[1] / d - (n0[1] * n2[1]) / (d * d);
 
-    qDebug() << "j = 1 - 1-я производная \nc2 =" << c2;
+    //qDebug() << "j = 1 - 1-я производная \nc2 =" << c2;
     data_NURBS.derivative_1 = c2[1];
 
     // 2-я производная
@@ -300,18 +300,29 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, co
     c2[2].first = s1[0] - s2[0];
     c2[2].second = s1[1] - s2[1];
 
-    qDebug() << "j = 2 - 2-я производная \nc2 =" << c2 << "\n";
+    //qDebug() << "j = 2 - 2-я производная \nc2 =" << c2 << "\n";
 
     // Присваиваем координаты точки на кривой, 1-ю и 2-ю производную
     data_NURBS.derivative_2 = c2[2];
 }
 
+double find_max_len(const QPair<double, double>& p_1, const Point_curve& p_2)
+{
+    double len_p1 = vector_len(p_1);
+    double len_p2 = vector_len(p_2.curve.first, p_2.curve.second);
+
+    if(len_p1 > len_p2)
+        return len_p1;
+    else
+        return len_p2;
+}
+
 // Возвращает вектор с точками спанов реального узлового вектора
-QVector<double> real_span_calc(const uint& degree, const uint& n_real, const QVector<double>& u)
+QVector<double> real_span_calc(const uint& degree, const uint& n_kn, const QVector<double>& u)
 {
     // Реальный диапазон
     double u_start = u[degree];
-    const double u_end = u[n_real + 1];
+    const double u_end = u[n_kn - degree - 1];
 
     QVector<double> u_real_span;
 
@@ -340,10 +351,10 @@ double cos_calc(const Point_curve& point_u, const QPair<double, double>& point)
 }
 
 // Возвращает точку кривой, перпендикулярной точке на плоскости
-Point_curve finding_perpendicular(const int& n_real, const int& degree, const QVector<double>& u_vector, const QVector<QVector<double>>& polygon, const QVector<double>& w, const QPair<double, double>& point)
+Point_curve finding_perpendicular(const int& n_real, const uint& n_kn, const int& degree, const QVector<double>& u_vector, const QVector<QVector<double>>& polygon, const QVector<double>& w, const QPair<double, double>& point)
 {
     QVector<Point_curve> point_u(n_real - 1); // Массив точек - перпендикуляров
-    QVector<double> u_real_span = real_span_calc(degree, n_real, u_vector); // Спаны реального диапазона узлового вектора
+    QVector<double> u_real_span = real_span_calc(degree, n_kn, u_vector); // Спаны реального диапазона узлового вектора
     QVector<double> cos_data(u_real_span.size() - 1);
 
     for(int i = 0; i < u_real_span.size() - 1; ++i) // Итерируемся по спанам, начиная с нулевого
@@ -352,7 +363,7 @@ Point_curve finding_perpendicular(const int& n_real, const int& degree, const QV
         QVector<QVector<double>> nders(degree + 1, QVector<double>(degree + 1)); // nders - для заданного "u" массив BASIS функций и 1-я и 2-я производные
         QVector<QPair<double, double>> c2(degree + 1); // Индекс 2 для 2D задачи
 
-        curve_point_and_deriv_NURBS(point_u[i], n_real, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
+        curve_point_and_deriv_NURBS(point_u[i], n_real, n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
 
         const double EPSILON_ANGLE = 0.01; // Эпсилон для косинуса прямого угла
 
@@ -366,24 +377,24 @@ Point_curve finding_perpendicular(const int& n_real, const int& degree, const QV
             if(denominator == 0)
                 point_u[i].u = point_u[i].u;
             else
-                point_u[i].u = point_u[i].u - numerator / denominator * 0.05; // Новая, приближённая точка кривой
+                point_u[i].u = point_u[i].u - numerator / denominator * 0.01; // Новая, приближённая точка кривой
 
             if(point_u[i].u < u_real_span[i]) // Если точка вышла из спана
             {
                 point_u[i].u = u_real_span[i];
-                curve_point_and_deriv_NURBS(point_u[i], n_real, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
+                curve_point_and_deriv_NURBS(point_u[i], n_real, n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
                 cos_data[i] = cos_calc(point_u[i], point);
                 break;
             }
             else if(point_u[i].u > u_real_span[i + 1])
             {
                 point_u[i].u = u_real_span[i + 1];
-                curve_point_and_deriv_NURBS(point_u[i], n_real, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
+                curve_point_and_deriv_NURBS(point_u[i], n_real, n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
                 cos_data[i] = cos_calc(point_u[i], point);
                 break;
             }
 
-            curve_point_and_deriv_NURBS(point_u[i], n_real, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
+            curve_point_and_deriv_NURBS(point_u[i], n_real, n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
             cos_data[i] = cos_calc(point_u[i], point);
         } while (cos_data[i] > EPSILON_ANGLE);
     }

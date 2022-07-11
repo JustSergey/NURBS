@@ -9,6 +9,7 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
+    /*
     const QVector<QVector<double>> control_points_1 // Точки определяющего многоугольника
     {
         {1.25, 1.3},
@@ -159,7 +160,7 @@ Widget::Widget(QWidget *parent)
     */
 
 
-
+/*
     const QVector<QVector<double>> control_points_2 // Массив точек многоугольника
     {
         {0.8, 2},
@@ -196,6 +197,7 @@ Widget::Widget(QWidget *parent)
         i += 2;
     }
 */
+    /*
     Point_curve u_perpendicular;
     for(int i = 0; i < data_NURBS_1.size();)
     {
@@ -211,8 +213,111 @@ Widget::Widget(QWidget *parent)
     pen.setWidthF(2.5);
     curve->setPen(pen);
     curve->setName("Метрика (перпендикуляр)"); // Обзываем полигон в легенде графика
+    */
 
+
+    ///---------------////
+
+
+   /* const QVector<QVector<double>> control_points_1 // Точки определяющего многоугольника
+    {
+        {1.2, 1},
+        {4.5, 2,5},
+        {7, 6.5},
+        {10, 4},
+        {13, 6},
+        {16, 3},
+    };
+*/
+
+    const QVector<QVector<double>> control_points_1 // Точки определяющего многоугольника
+    {
+        {1, 1},
+        {3, 1.5},
+        {5, 4.5},
+        {7.5, 2},
+        {10, 4},
+        {12, 1.5}
+    };
+
+    const QVector<double> w_1 {1, 1, 1, 1, 1, 1}; // Весовые коэффициенты
+    const uint degree_1 = 5;                   // Степень аппроксимирующих полиномов
+    const int number_u_1 = 60;                 // Кол-во разбиений (точек) в реальной части узлов. вектора
+
+    const QVector<double> u_1 = u_fill(control_points_1, degree_1); // Узловой вектор
+
+    QVector<QVector<double>> nders_1(degree_1 + 1, QVector<double>(degree_1 + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
+    QVector<QPair<double, double>> c2_1(degree_1 + 1);  // Индекс 2 для 2D задачи
+    QVector<Point_curve> data_NURBS_1(number_u_1);    // Содержит точки кривой, 1-ой и 2-ой производной
+
+    const uint n_ver_1 = control_points_1.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
+    const uint n_kn_1 = n_ver_1 + degree_1 + 1;     // Количество узлов (длина) в узловом векторе (n_knots)
+    const uint n_real_1 = n_ver_1 - degree_1 + 1;   // Количество узлов (длина) реальной части узлового вектора
+
+    for(int i = 0; i < number_u_1; ++i)
+    {
+        double u_i = (i / static_cast<double>(number_u_1));
+        curve_point_and_deriv_NURBS(data_NURBS_1[i], n_real_1, n_kn_1, degree_1, u_1, control_points_1, w_1, u_i, c2_1, nders_1);
+    }
+
+    QString title = "Метрики разности между двух кривых";
+    QString labels_legend_1 = "Определяющий многоуг.";
+    QString labels_legend_2 = "1 NURBS";
+
+    int x_min = -10, x_max = 10;
+    int y_min = -10, y_max = 10;
+    curve_plot(ui->graph_function, control_points_1, data_NURBS_1, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
+
+
+
+    const QVector<QVector<double>> control_points_2 // Точки определяющего многоугольника
+    {
+        {1, 1},
+        {2.5, 3},
+        {5.2, 5},
+        {7, 1},
+        {9.5, 5},
+        {11, 3},
+        {12, 1.5}
+    };
+
+    const QVector<double> w_2 {1, 1, 1, 1, 1, 1, 1}; // Весовые коэффициенты
+    const uint degree_2 = 2;                   // Степень аппроксимирующих полиномов
+    const int number_u_2 = 60;                 // Кол-во разбиений (точек) в реальной части узлов. вектора
+
+    const QVector<double> u_2 = u_fill(control_points_2, degree_2); // Узловой вектор
+
+    QVector<QVector<double>> nders_2(degree_2 + 1, QVector<double>(degree_2 + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
+    QVector<QPair<double, double>> c2_2(degree_2 + 1);  // Индекс 2 для 2D задачи
+    QVector<Point_curve> data_NURBS_2(number_u_2);    // Содержит точки кривой, 1-ой и 2-ой производной
+
+    const uint n_ver_2 = control_points_2.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
+    const uint n_kn_2 = n_ver_2 + degree_2 + 1;     // Количество узлов (длина) в узловом векторе (n_knots)
+    const uint n_real_2 = n_ver_2 - degree_2 + 1;   // Количество узлов (длина) реальной части узлового вектора
+
+    for(int i = 0; i < number_u_2; ++i)
+    {
+        double u_i = (i / static_cast<double>(number_u_2));
+        curve_point_and_deriv_NURBS(data_NURBS_2[i], n_real_2, n_kn_2, degree_2, u_2, control_points_2, w_2, u_i, c2_2, nders_2);
+    }
+
+    labels_legend_2 = "2 NURBS";
+
+    plot_curve(ui->graph_function, data_NURBS_2, "2 NURBS", QColor(28, 172, 120));
+
+    double max_len = 0;
+    for(int i = 0; i < data_NURBS_2.size();)
+    {
+        Point_curve u_perpendicular = finding_perpendicular(n_real_1, n_kn_1, degree_1, u_1, control_points_1, w_1, data_NURBS_2[i].curve);
+        plot_line(ui->graph_function, data_NURBS_2[i].curve.first, data_NURBS_2[i].curve.second, u_perpendicular.curve.first, u_perpendicular.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
+        max_len = find_max_len(data_NURBS_2[i].curve, u_perpendicular);
+        i += 2;
+    }
+
+    qDebug() << "MAX_LEN: " << max_len;
 }
+
+
 
 Widget::~Widget()
 {
