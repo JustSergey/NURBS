@@ -9,7 +9,7 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-
+/*
     const QVector<QVector<double>> control_points_1 // Точки определяющего многоугольника
     {
         {1.25, 1.3},
@@ -229,7 +229,7 @@ Widget::Widget(QWidget *parent)
         {16, 3},
     };
 */
-/*
+
     const QVector<QVector<double>> control_points_1 // Точки определяющего многоугольника
     {
         {1, 1},
@@ -327,15 +327,15 @@ Widget::Widget(QWidget *parent)
 
     plot_lable_with_arrow(ui->graph_function, 2, 5, 4.812, 3.124, "Наибольшее расстояние\nмежду кривыми");
 
-/*
+
     QVector<QPair<double, double>> epsilon;
     for(const auto& p: data_NURBS_1)
         epsilon.push_back(calc_epsilon(p));
 
     for(const auto& p: epsilon)
         plot_point(ui->graph_function, p.first, p.second);
-*/
-    /*
+
+/*
     QVector<QPair<double, double>> epsilon1;
     epsilon1.push_back(calc_epsilon(data_NURBS_1[0]));
     plot_point(ui->graph_function, epsilon1[0].first, epsilon1[0].second);

@@ -307,8 +307,10 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, co
 
 QPair<double, double> calc_epsilon(const Point_curve& point, const double& angle = M_PI / 2)
 {
-    double rotatedX = point.derivative_1.first * cos(angle) - point.derivative_1.second * sin(angle);
-    double rotatedY = point.derivative_1.first * sin(angle) + point.derivative_1.second * cos(angle);
+    //double rotatedX = point.derivative_1.first * cos(angle) - point.derivative_1.second * sin(angle);
+    //double rotatedY = point.derivative_1.first * sin(angle) + point.derivative_1.second * cos(angle);
+    double rotatedX = point.derivative_1.first * 0 - point.derivative_1.second;
+    double rotatedY = point.derivative_1.first  + point.derivative_1.second * 0;
     QPair<double, double> perpendicular {rotatedX + point.curve.first, rotatedY + point.curve.second};
     return perpendicular;
 }
