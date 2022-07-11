@@ -59,6 +59,20 @@ double vector_len(const QPair<double, double>& p1, const Point_curve& p2)
     return sqrt(pow(p2.curve.first - p1.first, 2) + pow(p2.curve.second - p1.second, 2));
 }
 
+// Вычисляет угол между двумя векторами
+double vector_angle(const QPair<double, double>& v1,const Point_curve& curve_point, const QPair<double, double>& v2)
+{
+    double a_x = v1.first - curve_point.curve.first;
+    double a_y = v1.second - curve_point.curve.second;
+    double b_x = v2.first - curve_point.curve.first;
+    double b_y = v2.second - curve_point.curve.second;
+    double numerator = a_x * b_x + a_y * b_y;
+    double v1_len = vector_len(v1, curve_point);
+    double v2_len = vector_len(v2, curve_point);
+    double cos = numerator / (v2_len * v1_len);
+    return acos(cos) * 180 / M_PI;
+}
+
 // Возвращает индекс узлового промежутка (интервал)
 uint findSpan(const uint& n_real, const uint& n_kn, const uint& n_ver, const int& degree, const QVector<double>& u, const double& u_i)
 {
@@ -305,14 +319,26 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, co
     data_NURBS.derivative_2 = c2[2];
 }
 
-QPair<double, double> calc_epsilon(const Point_curve& point, const double& angle = M_PI / 2)
+// Вовзрашает rotatedPoint
+QPair<double, double> point_rotated(const Point_curve& point, const double& angle = M_PI / 2)
 {
-    //double rotatedX = point.derivative_1.first * cos(angle) - point.derivative_1.second * sin(angle);
-    //double rotatedY = point.derivative_1.first * sin(angle) + point.derivative_1.second * cos(angle);
-    double rotatedX = point.derivative_1.first * 0 - point.derivative_1.second;
-    double rotatedY = point.derivative_1.first  + point.derivative_1.second * 0;
+    double rotatedX = point.derivative_1.first * cos(angle) - point.derivative_1.second * sin(angle);
+    double rotatedY = point.derivative_1.first * sin(angle) + point.derivative_1.second * cos(angle);
     QPair<double, double> perpendicular {rotatedX + point.curve.first, rotatedY + point.curve.second};
     return perpendicular;
+}
+
+// Возвращаем точки с длинной + epsilon
+QPair<double, double> epsilon_point(const QPair<double, double>& rotated_point, const Point_curve& curve_point, const double& eps)
+{
+    double x = rotated_point.first - curve_point.curve.first;
+    double y = rotated_point.second - curve_point.curve.second;
+
+    double len = sqrt(x * x + y * y);
+    x *= eps / len;
+    y *= eps / len;
+
+    return QPair<double, double> { x + curve_point.curve.first, y + curve_point.curve.second};
 }
 
 // Возвращает вектор с точками спанов реального узлового вектора

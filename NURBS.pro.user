@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<<<<<<< HEAD
-<!-- Written by QtCreator 7.0.2, 2022-07-10T11:12:25. -->
-=======
-<!-- Written by QtCreator 7.0.2, 2022-07-08T12:23:11. -->
->>>>>>> parent of b2dd5a9 (Добавил проверку деления на ноль)
+<!-- Written by QtCreator 7.0.2, 2022-07-11T16:47:51. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>

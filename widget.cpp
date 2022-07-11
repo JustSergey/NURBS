@@ -322,27 +322,51 @@ Widget::Widget(QWidget *parent)
     plot_line(ui->graph_function, max_p1.curve.first, max_p1.curve.second, max_p2.curve.first, max_p2.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
     qDebug() << "MAX_LEN: " << max_perpendicular;
 
-
-
-
     plot_lable_with_arrow(ui->graph_function, 2, 5, 4.812, 3.124, "Наибольшее расстояние\nмежду кривыми");
 
 
+
+
+    /*
     QVector<QPair<double, double>> epsilon;
     for(const auto& p: data_NURBS_1)
         epsilon.push_back(calc_epsilon(p));
 
     for(const auto& p: epsilon)
         plot_point(ui->graph_function, p.first, p.second);
+    */
+
+
+
+    //QPair<double, double> unit_vector {data_NURBS_1[0].curve.first + 1, data_NURBS_1[0].curve.second};
+    //double angle = vector_angle(rotated_points[0], data_NURBS_1[0], unit_vector);
+
+
+    const double eps = 3;
+    QVector<QPair<double, double>> rotated_points;
+    QVector<Point_curve> epsilon_point_DATA (number_u_1 + 1);
+
+    QVector<QPair<double, double>> rotated_points1;
+    QVector<Point_curve> epsilon_point_DATA1 (number_u_1 + 1);
+
+    for(int i = 0; i < data_NURBS_1.size(); ++i)
+    {
+        rotated_points.push_back(point_rotated(data_NURBS_1[i]));
+        epsilon_point_DATA[i].curve = epsilon_point(rotated_points[i], data_NURBS_1[i], eps);
+
+        rotated_points1.push_back(point_rotated(data_NURBS_1[i], - M_PI / 2));
+        epsilon_point_DATA1[i].curve = epsilon_point(rotated_points1[i], data_NURBS_1[i], eps);
+    }
+
+    plot_curve(ui->graph_function, epsilon_point_DATA, "");
+    plot_curve(ui->graph_function, epsilon_point_DATA1, "");
+
+ //   plot_line(ui->graph_function, data_NURBS_1[0].curve.first,  data_NURBS_1[0].curve.second,
+ //           data_NURBS_1[0].curve.first + x, data_NURBS_1[0].curve.second + y);
 
 /*
-    QVector<QPair<double, double>> epsilon1;
-    epsilon1.push_back(calc_epsilon(data_NURBS_1[0]));
-    plot_point(ui->graph_function, epsilon1[0].first, epsilon1[0].second);
-    derivative_point_line(ui->graph_function, data_NURBS_1[0]);
-
     QVector<QPair<double, double>> epsilon2;
-    epsilon2.push_back(calc_epsilon(data_NURBS_1[0], M_PI / -2));
+    epsilon2.push_back(point_rotated(data_NURBS_1[0], M_PI / -2));
     plot_point(ui->graph_function, epsilon2[0].first, epsilon2[0].second);
     derivative_point_line(ui->graph_function, data_NURBS_1[0]);
 */
