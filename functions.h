@@ -322,7 +322,7 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_kn, cons
     data_NURBS.derivative_2 = c2[2];
 }
 
-// Возвращает точку, повернутую на angle
+// Возвращает точку, повернутую на angle (по умолчанию angle = 90 градусов)
 QPair<double, double> rotate_point(const Point_curve& point, const double& angle = M_PI / 2)
 {
     double rotatedX = point.derivative_1.first * cos(angle) - point.derivative_1.second * sin(angle);
@@ -331,17 +331,15 @@ QPair<double, double> rotate_point(const Point_curve& point, const double& angle
     return perpendicular;
 }
 
-// Возвращает точки с длинной + epsilon
-QPair<double, double> epsilon_point(const QPair<double, double>& rotated_point, const Point_curve& curve_point, const double& eps)
+// Возвращает точку с заданной длинной (epsilon) от точки point_2
+QPair<double, double> epsilon_point(const QPair<double, double>& point_1, const Point_curve& point_2, const double& epsilon)
 {
-    double x = rotated_point.first - curve_point.curve.first;
-    double y = rotated_point.second - curve_point.curve.second;
-
-    double len = sqrt(x * x + y * y);
-    x *= eps / len;
-    y *= eps / len;
-
-    return QPair<double, double> { x + curve_point.curve.first, y + curve_point.curve.second};
+    double x = point_1.first - point_2.curve.first;
+    double y = point_1.second - point_2.curve.second;
+    double vector_len = radius_vector_len(x, y);
+    x *= epsilon / vector_len;
+    y *= epsilon / vector_len;
+    return QPair<double, double> {x + point_2.curve.first, y + point_2.curve.second};
 }
 
 // Возвращает вектор с точками спанов реального узлового вектора
@@ -495,6 +493,7 @@ QVector<Point_curve> declining_degree_curve(const QVector<QVector<double>>& cont
 
         Point_curve max_p1, max_p2;
         max_perpendicular = 0;
+
         for(int i = 0; i < data_NURBS_new.size() - 1; ++i)
         {
             Point_curve u_perpendicular = finding_perpendicular(n_real, n_kn, degree, u, control_points, w, data_NURBS_new[i].curve);

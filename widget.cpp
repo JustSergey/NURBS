@@ -119,7 +119,7 @@ Widget::Widget(QWidget *parent)
 
 
 
-    /*
+
     QPair<double, double> point(2, 6); // Точка, к которой мы будем проводить перпендикуляр
     Point_curve u_perpendicular = finding_perpendicular(n, p, u, b, h, point, ui->graph_function); // Ближайшая точка для перпендикуляра
 
@@ -160,7 +160,7 @@ Widget::Widget(QWidget *parent)
     */
 
 
-/*
+    /*
     const QVector<QVector<double>> control_points_2 // Массив точек многоугольника
     {
         {0.8, 2},
@@ -188,15 +188,17 @@ Widget::Widget(QWidget *parent)
     }
 
     plot_curve(ui->graph_function, data_NURBS_2, "Аппроксимирующий NURBS", QColor(34, 139, 34)); // Рисуем сплайн
+    */
 
-/*
+    /*
     for(int i = 0; i < data_NURBS_2.size();)
     {
         Point_curve u_perpendicular = finding_perpendicular(n_real_1, degree_1, u_1, control_points_1, w_1, data_NURBS_2[i].curve);
         plot_line(ui->graph_function, data_NURBS_2[i].curve.first, data_NURBS_2[i].curve.second, u_perpendicular.curve.first, u_perpendicular.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
         i += 2;
     }
-*/
+    */
+
     /*
     Point_curve u_perpendicular;
     for(int i = 0; i < data_NURBS_1.size();)
@@ -372,7 +374,7 @@ Widget::Widget(QWidget *parent)
 
 
 
-    /*-----------Аппроксимирует кривую. Реализация без функции. Строит границы-----------
+    //-----------Аппроксимирует кривую. Реализация без функции. Строит границы-----------
     uint degree = 1;
     double max_perpendicular = 0;
     const double eps = 0.8;
@@ -432,7 +434,7 @@ Widget::Widget(QWidget *parent)
 
     }while(eps < max_perpendicular);
     qDebug() << degree;
-    */
+
 
 
 
