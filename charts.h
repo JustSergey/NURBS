@@ -44,7 +44,7 @@ void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon, 
         shape->addData(point[0], point[1]);
     }
 
-    shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
+    //shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
     shape->setName(label); // Обзываем полигон в легенде графика
     canvas->replot();
 }
@@ -98,12 +98,13 @@ void plot_tangent(QCustomPlot* canvas, const Point_curve& point, const QColor& c
 }
 
 // Рисует кривую NURBS
-void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS, const QString& label, const QColor& color = QColor(0, 0, 0, 255))
+void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS, const QString& label, const Qt::PenStyle& penStyle = Qt::PenStyle::SolidLine, const QColor& color = QColor(0, 0, 0, 255), const double& width = 1.5)
 {
     QCPCurve *curve = new QCPCurve(canvas->xAxis, canvas->yAxis);
     QPen pen;
     pen.setColor(QColor(color));
-    pen.setWidthF(2.5);
+    pen.setStyle(penStyle);
+    pen.setWidthF(width);
     curve->setPen(pen);
 
     for(const auto& point: data_NURBS) // Рисуем сплайн
@@ -114,10 +115,10 @@ void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS, con
 }
 
 // Рисует надпись
-void plot_lable(QCustomPlot* canvas, const double& x, const double& y, const QString& text)
+void plot_lable(QCustomPlot* canvas, const double& x, const double& y, const QString& text, const double& font_size = 10)
 {
     QCPItemText *label = new QCPItemText(canvas);
-    label->setFont(QFont("sans", 10));
+    label->setFont(QFont("sans", font_size));
     label->position->setCoords(x, y);
     label->setText(text);
     canvas->replot();
@@ -145,8 +146,8 @@ void curve_plot(QCustomPlot* canvas, const QVector<QVector<double>>& control_poi
     canvas->clearGraphs(); // Очищаем все графики
     canvas->legend->setVisible(true); // Включаем легенду графика
 
-    //plot_polygon(canvas, control_points, labels_legend_1); // Рисуем многоугольник с вершинами
-    plot_curve(canvas, data_NURBS, labels_legend_2, QColor(30, 144, 255)); // Рисуем сплайн
+    plot_polygon(canvas, control_points, labels_legend_1); // Рисуем многоугольник с вершинами
+    plot_curve(canvas, data_NURBS, labels_legend_2, Qt::PenStyle::SolidLine, QColor(30, 144, 255)); // Рисуем сплайн
 
 /*
     // Рисуем подписи к спанам реального диапазон (убрать при необходимости)

@@ -273,15 +273,14 @@ Widget::Widget(QWidget *parent)
     const QVector<QVector<double>> control_points_2 // Точки определяющего многоугольника
     {
         {1, 1},
-        {2.5, 3},
-        {5.2, 5},
-        {7, 1},
-        {9.5, 5},
-        {11, 3},
+        {3, 1.5},
+        {5, 4.5},
+        {7.5, 2},
+        {10, 4},
         {12, 1.5}
     };
 
-    const QVector<double> w_2 {1, 1, 1, 1, 1, 1, 1}; // Весовые коэффициенты
+    const QVector<double> w_2 {1, 1, 1, 1, 1, 1}; // Весовые коэффициенты
     const uint degree_2 = 2;                   // Степень аппроксимирующих полиномов
     const int number_u_2 = 60;                 // Кол-во разбиений (точек) в реальной части узлов. вектора
 
@@ -302,7 +301,7 @@ Widget::Widget(QWidget *parent)
     }
 
     labels_legend_2 = "Аппроксимирующий NURBS";
-    plot_curve(ui->graph_function, data_NURBS_2, labels_legend_2, QColor(28, 172, 120));
+    plot_curve(ui->graph_function, data_NURBS_2, labels_legend_2, Qt::PenStyle::SolidLine, QColor(50, 205, 50));
 
     Point_curve max_p1, max_p2;
     double max_perpendicular = 0;
@@ -311,6 +310,7 @@ Widget::Widget(QWidget *parent)
         Point_curve u_perpendicular = finding_perpendicular(n_real_1, n_kn_1, degree_1, u_1, control_points_1, w_1, data_NURBS_2[i].curve);
         //plot_line(ui->graph_function, data_NURBS_2[i].curve.first, data_NURBS_2[i].curve.second, u_perpendicular.curve.first, u_perpendicular.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
         double temp_max_perpendicular = vector_len(data_NURBS_2[i].curve, u_perpendicular);
+
         if(max_perpendicular < temp_max_perpendicular)
         {
             max_perpendicular = temp_max_perpendicular;
@@ -322,7 +322,7 @@ Widget::Widget(QWidget *parent)
     plot_line(ui->graph_function, max_p1.curve.first, max_p1.curve.second, max_p2.curve.first, max_p2.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
     qDebug() << "MAX_LEN: " << max_perpendicular;
 
-    plot_lable_with_arrow(ui->graph_function, 2, 5, 4.812, 3.124, "Наибольшее расстояние\nмежду кривыми");
+    plot_lable_with_arrow(ui->graph_function, 7.5, 5, 5.15, 3.1, "Наибольшее расстояние\nмежду кривыми");
 
 
 
@@ -342,7 +342,7 @@ Widget::Widget(QWidget *parent)
     //double angle = vector_angle(rotated_points[0], data_NURBS_1[0], unit_vector);
 
 
-    const double eps = 3;
+    const double eps = 0.8;
     QVector<QPair<double, double>> rotated_points;
     QVector<Point_curve> epsilon_point_DATA (number_u_1 + 1);
 
@@ -358,8 +358,8 @@ Widget::Widget(QWidget *parent)
         epsilon_point_DATA1[i].curve = epsilon_point(rotated_points1[i], data_NURBS_1[i], eps);
     }
 
-    plot_curve(ui->graph_function, epsilon_point_DATA, "");
-    plot_curve(ui->graph_function, epsilon_point_DATA1, "");
+    plot_curve(ui->graph_function, epsilon_point_DATA, "Граница", Qt::PenStyle::DashLine);
+    plot_curve(ui->graph_function, epsilon_point_DATA1, "", Qt::PenStyle::DashLine);
 
  //   plot_line(ui->graph_function, data_NURBS_1[0].curve.first,  data_NURBS_1[0].curve.second,
  //           data_NURBS_1[0].curve.first + x, data_NURBS_1[0].curve.second + y);
@@ -370,6 +370,20 @@ Widget::Widget(QWidget *parent)
     plot_point(ui->graph_function, epsilon2[0].first, epsilon2[0].second);
     derivative_point_line(ui->graph_function, data_NURBS_1[0]);
 */
+
+    plot_lable_with_arrow(ui->graph_function, 2, 1.41, 1.68, 2.17, "");
+    plot_lable_with_arrow(ui->graph_function, 2, 1.41, 2.3, 0.65, "");
+    plot_lable(ui->graph_function, 1.55, 1.65, "+ε", 8);
+    plot_lable(ui->graph_function, 1.85, 1, "-ε", 8);
+
+    ui->graph_function->legend->removeItem(ui->graph_function->legend->itemCount() - 1); // Удаляем точку из легенды
+
+    plot_lable_with_arrow(ui->graph_function, 11.25, 2.2, 11.714, 2.85, "");
+    plot_lable_with_arrow(ui->graph_function, 11.25, 2.2, 10.81, 1.525, "");
+    plot_lable(ui->graph_function, 11.75, 2.35, "+ε", 8);
+    plot_lable(ui->graph_function, 11.25, 1.8, "-ε", 8);
+
+
 }
 
 Widget::~Widget()
