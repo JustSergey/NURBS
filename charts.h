@@ -81,6 +81,27 @@ void plot_line(QCustomPlot* canvas, const double& x_1, const double& y_1, const 
     canvas->replot();
 }
 
+// Рисует двойнут стрелку "<-->"
+void plot_double_arrow(QCustomPlot* canvas, const double& x_1, const double& y_1, const double& x_2, const double& y_2)
+{
+    QCPItemLine *line = new QCPItemLine(canvas);
+    line->setHead(QCPLineEnding::esFlatArrow);
+    line->setTail(QCPLineEnding::esFlatArrow);
+    line->start->setCoords(x_1, y_1);
+    line->end->setCoords(x_2, y_2);
+    canvas->replot();
+}
+
+// Рисует стрелку "-->"
+void plot_arrow(QCustomPlot* canvas, const double& x_1, const double& y_1, const double& x_2, const double& y_2)
+{
+    QCPItemLine *line = new QCPItemLine(canvas);
+    line->setHead(QCPLineEnding::esFlatArrow);
+    line->start->setCoords(x_1, y_1);
+    line->end->setCoords(x_2, y_2);
+    canvas->replot();
+}
+
 // Рисует касательную к точке
 void plot_tangent(QCustomPlot* canvas, const Point_curve& point, const QColor& color = QColor(0, 100, 0), const double& width = 2.8)
 {
@@ -132,6 +153,7 @@ void plot_lable_with_arrow(QCustomPlot* canvas, const double& x_1, const double&
 
     QCPItemLine *line = new QCPItemLine(canvas);
     line->setHead(QCPLineEnding::esFlatArrow);
+    line->setTail(QCPLineEnding::esFlatArrow);
     line->start->setCoords(x_1, y_1);
     line->end->setCoords(x_2, y_2);
     canvas->replot();

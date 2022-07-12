@@ -248,7 +248,7 @@ Widget::Widget(QWidget *parent)
         curve_point_and_deriv_NURBS(data_NURBS_1[i], n_kn_1, degree_1, u_1, control_points_1, w_1, u_i, c2_1, nders_1);
     }
 
-    QString title = "Наибольшая метрика разности между 2-мя кривыми";
+    QString title = "Понижение степени кривой";
     QString labels_legend_1 = "Контрольные точки";
     QString labels_legend_2 = "Исходный NURBS";
 
@@ -271,7 +271,7 @@ Widget::Widget(QWidget *parent)
     };
 
     const QVector<double> w_2 {1, 1, 1, 1, 1, 1}; // Весовые коэффициенты
-    const uint degree_2 = 2;                   // Степень аппроксимирующих полиномов
+    const uint degree_2 = 1;                   // Степень аппроксимирующих полиномов
     const int number_u_2 = 60;                 // Кол-во разбиений (точек) в реальной части узлов. вектора
 
     const QVector<double> u_2 = u_fill(control_points_2, degree_2); // Узловой вектор
@@ -312,7 +312,18 @@ Widget::Widget(QWidget *parent)
     plot_line(ui->graph_function, max_p1.curve.first, max_p1.curve.second, max_p2.curve.first, max_p2.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
     qDebug() << "MAX_LEN: " << max_perpendicular;
 
-    plot_lable_with_arrow(ui->graph_function, 7.5, 5, 5.2, 3.21, "Наибольшее расстояние\nмежду кривыми");
+
+    QCPItemText *label = new QCPItemText(ui->graph_function);
+    label->setFont(QFont("sans", 10));
+    label->position->setCoords(7.5 + 0.3, 5 + 0.7);
+    label->setText("Наибольшее расстояние\nмежду кривыми");
+
+    QCPItemLine *line = new QCPItemLine(ui->graph_function);
+    line->setHead(QCPLineEnding::esFlatArrow);
+    line->start->setCoords(7.5, 5);
+    line->end->setCoords(5.32, 3.19);
+    ui->graph_function->replot();
+    //plot_lable_with_arrow(ui->graph_function, 7.5, 5, 5.37, 3, "Наибольшее расстояние\nмежду кривыми");
 
 
 
@@ -356,17 +367,17 @@ Widget::Widget(QWidget *parent)
     derivative_point_line(ui->graph_function, data_NURBS_1[0]);
 */
 
-    plot_lable_with_arrow(ui->graph_function, 2, 1.41, 1.77, 2.05, "");
-    plot_lable_with_arrow(ui->graph_function, 2, 1.41, 2.33, 0.55, "");
-    plot_lable(ui->graph_function, 1.55, 1.56, "+ε", 8);
-    plot_lable(ui->graph_function, 1.75, 0.85, "-ε", 8);
+    plot_double_arrow(ui->graph_function, 2.045, 1.28, 1.77, 2.05);
+    plot_double_arrow(ui->graph_function, 2.045, 1.28, 2.33, 0.55);
+    plot_lable(ui->graph_function, 1.55, 1.56, "+ε", 9);
+    plot_lable(ui->graph_function, 1.75, 0.85, "-ε", 9);
 
     ui->graph_function->legend->removeItem(ui->graph_function->legend->itemCount() - 1); // Удаляем точку из легенды
 
-    plot_lable_with_arrow(ui->graph_function, 11.25, 2.2, 11.714, 2.85, "");
-    plot_lable_with_arrow(ui->graph_function, 11.25, 2.2, 10.785, 1.546, "");
-    plot_lable(ui->graph_function, 11.75, 2.35, "+ε", 8);
-    plot_lable(ui->graph_function, 11.35, 1.75, "-ε", 8);
+    plot_double_arrow(ui->graph_function, 11.25, 2.2, 11.714, 2.85);
+    plot_double_arrow(ui->graph_function, 11.25, 2.2, 10.785, 1.546);
+    plot_lable(ui->graph_function, 11.75, 2.35, "+ε", 9);
+    plot_lable(ui->graph_function, 11.35, 1.75, "-ε", 9);
 
 
 
