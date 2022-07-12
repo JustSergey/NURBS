@@ -5,20 +5,17 @@
 #include "ui_widget.h"
 
 // Рисует линию (касательную) производной в точке
-void derivative_point_line(QCustomPlot* canvas, const Point_curve& point)
+void plot_tangent_point(QCustomPlot* canvas, const Point_curve& point)
 {
     QCPItemLine *line = new QCPItemLine(canvas);
     line->setHead(QCPLineEnding::esFlatArrow);
     line->start->setCoords(point.curve.first, point.curve.second);
     line->end->setCoords(point.derivative_1.first + point.curve.first, point.derivative_1.second + point.curve.second);
-    //line->start->setCoords(0, 0);
-    //line->end->setCoords(point.derivative_1.first, point.derivative_1.second);
-
     canvas->replot();
 }
 
 // Рисует многоугольник с вершинами
-void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon, const QString& label, const QColor& color = QColor(0, 0, 0, 255), const double& width = 1)
+void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon_points, const QString& label, const QColor& color = QColor(0, 0, 0, 255), const double& width = 1)
 {
     QCPCurve *shape = new QCPCurve(canvas->xAxis, canvas->yAxis);
 
@@ -30,8 +27,9 @@ void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon, 
     pen.setWidth(width); // Устанавливаем ширину
     shape->setPen(pen);
 
-    uint counter = 0;
-    for(const auto& point: polygon) // Рисуем точки
+    // uint counter = 0;
+
+    for(const auto& point: polygon_points) // Рисуем точки
     {
         /*
         // Делаем подписи к каждой вершине многоугольника
@@ -49,7 +47,7 @@ void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon, 
     canvas->replot();
 }
 
-// Рисует точки на графике
+// Рисует точку на графике
 void plot_point(QCustomPlot* canvas, const double& x, const double& y, const double& width = 5, const QString& text = "", const QColor& color = QColor(0, 0, 0, 255))
 {
     canvas->addGraph();
@@ -70,17 +68,16 @@ void plot_point(QCustomPlot* canvas, const double& x, const double& y, const dou
 }
 
 // Рисует линию между двумя точками
-void plot_line(QCustomPlot* canvas, const double& point_x_1, const double& point_y_1, const double& point_x_2, const double& point_y_2, const QColor& color = QColor(0, 0, 0), const double& width = 3.5)
+void plot_line(QCustomPlot* canvas, const double& x_1, const double& y_1, const double& x_2, const double& y_2, const QColor& color = QColor(0, 0, 0), const double& width = 3.5)
 {
     QCPItemLine *line = new QCPItemLine(canvas);
-
     QPen pen;
     pen.setStyle(Qt::PenStyle::DashLine);
     pen.setColor(color);
     pen.setWidth(width);
     line->setPen(pen);
-    line->start->setCoords(point_x_1, point_y_1);
-    line->end->setCoords(point_x_2, point_y_2);
+    line->start->setCoords(x_1, y_1);
+    line->end->setCoords(x_2, y_2);
     canvas->replot();
 }
 
@@ -98,7 +95,8 @@ void plot_tangent(QCustomPlot* canvas, const Point_curve& point, const QColor& c
 }
 
 // Рисует кривую NURBS
-void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS, const QString& label, const Qt::PenStyle& penStyle = Qt::PenStyle::SolidLine, const QColor& color = QColor(0, 0, 0, 255), const double& width = 1.5)
+void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS, const QString& label, const Qt::PenStyle& penStyle = Qt::PenStyle::SolidLine,
+                const QColor& color = QColor(0, 0, 0, 255), const double& width = 1.5)
 {
     QCPCurve *curve = new QCPCurve(canvas->xAxis, canvas->yAxis);
     QPen pen;
@@ -125,17 +123,17 @@ void plot_lable(QCustomPlot* canvas, const double& x, const double& y, const QSt
 }
 
 // Рисует надпись со стрелкой
-void plot_lable_with_arrow(QCustomPlot* canvas, const double& point_x_1, const double& point_y_1, const double& point_x_2, const double& point_y_2, const QString& text)
+void plot_lable_with_arrow(QCustomPlot* canvas, const double& x_1, const double& y_1, const double& x_2, const double& y_2, const QString& text)
 {
     QCPItemText *label = new QCPItemText(canvas);
     label->setFont(QFont("sans", 10));
-    label->position->setCoords(point_x_1 + 0.3, point_y_1 + 0.7);
+    label->position->setCoords(x_1 + 0.3, y_1 + 0.7);
     label->setText(text);
 
     QCPItemLine *line = new QCPItemLine(canvas);
     line->setHead(QCPLineEnding::esFlatArrow);
-    line->start->setCoords(point_x_1, point_y_1);
-    line->end->setCoords(point_x_2, point_y_2);
+    line->start->setCoords(x_1, y_1);
+    line->end->setCoords(x_2, y_2);
     canvas->replot();
 }
 

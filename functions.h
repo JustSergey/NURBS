@@ -4,7 +4,8 @@
 #include <math.h>
 #include <QDebug>
 
-struct Point_curve // Хранит точку кривой, её производную (1 и 2), интервал (span) и параметр u
+// Хранит точку кривой, её производную (1 и 2), интервал (span) и параметр u
+struct Point_curve
 {
     QPair<double, double> curve;
     QPair<double, double> derivative_1;
@@ -13,7 +14,7 @@ struct Point_curve // Хранит точку кривой, её произво�
     double u;
 };
 
-// Заполняет узловой вектор параметрами
+// Возвращает заполненный узловой вектор с параметрами
 QVector<double> u_fill(const QVector<QVector<double>>& control_points, const double& degree)
 {
     const uint n_ver = control_points.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
@@ -35,48 +36,48 @@ QVector<double> u_fill(const QVector<QVector<double>>& control_points, const dou
     return u;
 }
 
-// Вычисляет длину для радиус вектора
+// Возвращает длину радиус вектора
 double vector_len(const QPair<double, double>& point)
 {
     return sqrt(pow(point.first, 2) + pow(point.second, 2));
 }
 
-// Вычисляет длину для радиус вектора
+// Возвращает длину радиус вектора
 double vector_len(const double& x, const double& y)
 {
     return sqrt(pow(x, 2) + pow(y, 2));
 }
 
-// Вычисляет длину для вектора по координатам
-double vector_len(const QPair<double, double>& p1, const QPair<double, double>& p2)
+// Возвращает длину вектора
+double vector_len(const QPair<double, double>& point_1, const QPair<double, double>& point_2)
 {
-    return sqrt(pow(p2.first - p1.first, 2) + pow(p2.second - p1.second, 2));
+    return sqrt(pow(point_2.first - point_1.first, 2) + pow(point_2.second - point_1.second, 2));
 }
 
-// Вычисляет длину для вектора по координатам
-double vector_len(const QPair<double, double>& p1, const Point_curve& p2)
+// Возвращает длину вектора
+double vector_len(const QPair<double, double>& point_1, const Point_curve& point_2)
 {
-    return sqrt(pow(p2.curve.first - p1.first, 2) + pow(p2.curve.second - p1.second, 2));
+    return sqrt(pow(point_2.curve.first - point_1.first, 2) + pow(point_2.curve.second - point_1.second, 2));
 }
 
-// Вычисляет угол между двумя векторами
-double vector_angle(const QPair<double, double>& v1,const Point_curve& curve_point, const QPair<double, double>& v2)
+// Возвращает угол между двумя векторами
+double vector_angle(const QPair<double, double>& vec_1, const QPair<double, double>& vec_2, const Point_curve& curve_point)
 {
-    double a_x = v1.first - curve_point.curve.first;
-    double a_y = v1.second - curve_point.curve.second;
-    double b_x = v2.first - curve_point.curve.first;
-    double b_y = v2.second - curve_point.curve.second;
+    double a_x = vec_1.first - curve_point.curve.first;
+    double a_y = vec_1.second - curve_point.curve.second;
+    double b_x = vec_2.first - curve_point.curve.first;
+    double b_y = vec_2.second - curve_point.curve.second;
     double numerator = a_x * b_x + a_y * b_y;
-    double v1_len = vector_len(v1, curve_point);
-    double v2_len = vector_len(v2, curve_point);
+    double v1_len = vector_len(vec_1, curve_point);
+    double v2_len = vector_len(vec_2, curve_point);
     double cos = numerator / (v2_len * v1_len);
     return acos(cos) * 180 / M_PI;
 }
 
 // Возвращает индекс узлового промежутка (интервал)
-uint findSpan(const uint& n_real, const uint& n_kn, const uint& n_ver, const int& degree, const QVector<double>& u, const double& u_i)
+uint findSpan(const uint& n_kn, const uint& n_ver, const int& degree, const QVector<double>& u, const double& u_i)
 {
-    for(uint k = 0; k < u.size() - 1; ++k)
+    for(int k = 0; k < u.size() - 1; ++k)
     {
         if(u[k] > u[k + 1])
             qDebug() << "Сообщение из findSpan - Узловой вектор убывает u[k] > u[k + 1]";
@@ -210,7 +211,7 @@ void dersBasisFuns(const double& span, const double& u_i, const int& degree, con
     // Если все верно, то сумма должна быть = 1
 
     double sum = 0;
-    for(uint i = 0; i < nders.size(); ++i)
+    for(int i = 0; i < nders.size(); ++i)
         sum += nders[0][i];
 
     if((sum < (1 - 1e-10)) || (sum > 1 + 1e-10))
@@ -218,12 +219,12 @@ void dersBasisFuns(const double& span, const double& u_i, const int& degree, con
 }
 
 // Расчитывает для заданного "u" одну точку на В-сплайне и 1-ю и 2-ю проиизв. для этой точки
-void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, const uint& n_kn, const int& degree, const QVector<double>& u, const QVector<QVector<double>>& control_points,
+void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_kn, const int& degree, const QVector<double>& u, const QVector<QVector<double>>& control_points,
                                  const QVector<double>& w, const double& u_i, QVector<QPair<double, double>>& c2,  QVector<QVector<double>> nders)
 {
     const double n_ver = control_points.size();
 
-    double span = findSpan(n_real, n_kn, n_ver, degree, u, u_i); // Диапазон узлового веткора
+    double span = findSpan(n_kn, n_ver, degree, u, u_i); // Диапазон узлового веткора
     data_NURBS.span = span;
 
     //qDebug() << "Span =" << span << "\tu =" << u_i;
@@ -319,8 +320,8 @@ void curve_point_and_deriv_NURBS(Point_curve& data_NURBS, const uint& n_real, co
     data_NURBS.derivative_2 = c2[2];
 }
 
-// Вовзрашает rotatedPoint
-QPair<double, double> point_rotated(const Point_curve& point, const double& angle = M_PI / 2)
+// Возвращает точку, повернутую на angle
+QPair<double, double> rotate_point(const Point_curve& point, const double& angle = M_PI / 2)
 {
     double rotatedX = point.derivative_1.first * cos(angle) - point.derivative_1.second * sin(angle);
     double rotatedY = point.derivative_1.first * sin(angle) + point.derivative_1.second * cos(angle);
@@ -328,7 +329,7 @@ QPair<double, double> point_rotated(const Point_curve& point, const double& angl
     return perpendicular;
 }
 
-// Возвращаем точки с длинной + epsilon
+// Возвращает точки с длинной + epsilon
 QPair<double, double> epsilon_point(const QPair<double, double>& rotated_point, const Point_curve& curve_point, const double& eps)
 {
     double x = rotated_point.first - curve_point.curve.first;
@@ -347,7 +348,6 @@ QVector<double> real_span_calc(const uint& degree, const uint& n_kn, const QVect
     // Реальный диапазон
     double u_start = u[degree];
     const double u_end = u[n_kn - degree - 1];
-
     QVector<double> u_real_span;
 
     for(int i = 1; u_start < u_end; ++i)
@@ -357,21 +357,20 @@ QVector<double> real_span_calc(const uint& degree, const uint& n_kn, const QVect
     }
 
     u_real_span.push_back(u_end);
-
     return u_real_span;
 }
 
-// Рассчитывает косинус между двумя точками
-double cos_calc(const Point_curve& point_u, const QPair<double, double>& point)
+// Возвращает косинус между двумя точками
+double cos_calc(const Point_curve& point_1, const QPair<double, double>& point_2)
 {
-    double x = point_u.curve.first - point.first;
-    double y = point_u.curve.second - point.second;
-    double numerator = abs(x * point_u.derivative_1.first + y * point_u.derivative_1.second);
-    double denominator = vector_len(point_u.derivative_1) * vector_len(x, y);
+    double x = point_1.curve.first - point_2.first;
+    double y = point_1.curve.second - point_2.second;
+    double numerator = abs(x * point_1.derivative_1.first + y * point_1.derivative_1.second);
+    double denominator = vector_len(point_1.derivative_1) * vector_len(x, y);
     if(denominator == 0)
         return 0;
     else
-        return numerator / denominator; // Угол между точкой и u
+        return numerator / denominator;
 }
 
 // Возвращает точку кривой, перпендикулярной точке на плоскости
@@ -388,7 +387,7 @@ Point_curve finding_perpendicular(const int& n_real, const uint& n_kn, const int
         QVector<QVector<double>> nders(degree + 1, QVector<double>(degree + 1)); // nders - для заданного "u" массив BASIS функций и 1-я и 2-я производные
         QVector<QPair<double, double>> c2(degree + 1); // Индекс 2 для 2D задачи
 
-        curve_point_and_deriv_NURBS(point_u[i], n_real, n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
+        curve_point_and_deriv_NURBS(point_u[i], n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
 
         const double EPSILON_ANGLE = 0.01; // Эпсилон для косинуса прямого угла
 
@@ -407,19 +406,19 @@ Point_curve finding_perpendicular(const int& n_real, const uint& n_kn, const int
             if(point_u[i].u < u_real_span[i]) // Если точка вышла из спана
             {
                 point_u[i].u = u_real_span[i];
-                curve_point_and_deriv_NURBS(point_u[i], n_real, n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
+                curve_point_and_deriv_NURBS(point_u[i], n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
                 cos_data[i] = cos_calc(point_u[i], point);
                 break;
             }
             else if(point_u[i].u > u_real_span[i + 1])
             {
                 point_u[i].u = u_real_span[i + 1];
-                curve_point_and_deriv_NURBS(point_u[i], n_real, n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
+                curve_point_and_deriv_NURBS(point_u[i], n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
                 cos_data[i] = cos_calc(point_u[i], point);
                 break;
             }
 
-            curve_point_and_deriv_NURBS(point_u[i], n_real, n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
+            curve_point_and_deriv_NURBS(point_u[i], n_kn, degree, u_vector, polygon, w, point_u[i].u, c2, nders);
             cos_data[i] = cos_calc(point_u[i], point);
         } while (cos_data[i] > EPSILON_ANGLE);
     }
@@ -428,7 +427,6 @@ Point_curve finding_perpendicular(const int& n_real, const uint& n_kn, const int
     point_min_len = point_u[0]; // Присваиваем первую точку для дальнейшего сравнения
     double min_len = vector_len(point, point_u[0].curve);
     double min_cos = cos_data[0];
-
 
     for(int i = 1; i < point_u.size(); ++i) // Ищем точку с максимально нулевым косинусом
     {
@@ -457,8 +455,88 @@ Point_curve finding_perpendicular(const int& n_real, const uint& n_kn, const int
     plot_line(canvas, point.first, point.second, point_u[0].curve.first, point_u[0].curve.second, QColor(0, 0, 0), 2); // Рисуем перпендикуляр между точкой и кривой
     plot_line(canvas, point.first, point.second, point_u[1].curve.first, point_u[1].curve.second, QColor(0, 0, 0), 2); // Рисуем перпендикуляр между точкой и кривой
     plot_line(canvas, point.first, point.second, point_u[2].curve.first, point_u[2].curve.second, QColor(0, 0, 0), 2); // Рисуем перпендикуляр между точкой и кривой
-*/
+    */
+
     return point_min_len;
+}
+
+// Возвращает кривую с пониженной степенью
+QVector<Point_curve> declining_degree_curve(const QVector<QVector<double>>& control_points, const double& degree, const QVector<double> w, const int& number_u, const double& epsilon)
+{
+    // Рассчитываем точки исходной кривой
+    const QVector<double> u = u_fill(control_points, degree); // Узловой вектор
+    QVector<QVector<double>> nders(degree + 1, QVector<double>(degree + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
+    QVector<QPair<double, double>> c2(degree + 1);  // Индекс 2 для 2D задачи
+    QVector<Point_curve> data_NURBS(number_u + 1);  // Содержит точки кривой, 1-ой и 2-ой производной
+
+    const uint n_ver = control_points.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
+    const uint n_kn = n_ver + degree + 1;   // Количество узлов (длина) в узловом векторе (n_knots)
+    const uint n_real = n_ver - degree + 1; // Количество узлов (длина) реальной части узлового вектора
+
+    for(int i = 0; i < number_u + 1; ++i)
+    {
+        double u_i = (i / static_cast<double>(number_u));
+        curve_point_and_deriv_NURBS(data_NURBS[i], n_kn, degree, u, control_points, w, u_i, c2, nders);
+    }
+
+    uint degree_new = 1; // Начинаем с 1-ой степени кривой
+    double max_perpendicular = 0;
+    QVector<Point_curve> data_NURBS_new(number_u + 1);  // Содержит точки кривой, 1-ой и 2-ой производной
+
+    do
+    {
+        const QVector<double> u_new = u_fill(control_points, degree_new); // Узловой вектор
+        QVector<QVector<double>> nders_new(degree_new + 1, QVector<double>(degree_new + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
+        QVector<QPair<double, double>> c2_new(degree_new + 1);  // Индекс 2 для 2D задачи
+
+        const uint n_ver_new = control_points.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
+        const uint n_kn_new = n_ver_new + degree_new + 1;     // Количество узлов (длина) в узловом векторе (n_knots)
+
+        for(int i = 0; i < number_u + 1; ++i)
+        {
+            double u_i = (i / static_cast<double>(number_u));
+            curve_point_and_deriv_NURBS(data_NURBS_new[i], n_kn_new, degree_new, u_new, control_points, w, u_i, c2_new, nders_new);
+        }
+
+        Point_curve max_p1, max_p2;
+        max_perpendicular = 0;
+        for(int i = 0; i < data_NURBS_new.size() - 1; ++i)
+        {
+            Point_curve u_perpendicular = finding_perpendicular(n_real, n_kn, degree, u, control_points, w, data_NURBS_new[i].curve);
+            double temp_max_perpendicular = vector_len(data_NURBS_new[i].curve, u_perpendicular);
+
+            if(max_perpendicular < temp_max_perpendicular)
+            {
+                max_perpendicular = temp_max_perpendicular;
+                max_p1 = u_perpendicular;
+                max_p2 = data_NURBS_new[i];
+            }
+        }
+
+        QVector<QPair<double, double>> rotated_points;
+        QVector<Point_curve> epsilon_point_DATA (number_u + 1);
+
+        QVector<QPair<double, double>> rotated_points1;
+        QVector<Point_curve> reverse_epsilon_point_DATA (number_u + 1);
+
+        for(int i = 0; i < data_NURBS.size(); ++i)
+        {
+            rotated_points.push_back(rotate_point(data_NURBS[i]));
+            epsilon_point_DATA[i].curve = epsilon_point(rotated_points[i], data_NURBS[i], epsilon);
+
+            rotated_points1.push_back(rotate_point(data_NURBS[i], - M_PI / 2));
+            reverse_epsilon_point_DATA[i].curve = epsilon_point(rotated_points1[i], data_NURBS[i], epsilon);
+        }
+
+        if(epsilon > max_perpendicular)
+            continue;
+        else
+            ++degree_new;
+
+    }while(epsilon < max_perpendicular);
+
+    qDebug() << "Степень новой кривой = " << degree_new;
+    return data_NURBS_new;
 }
 
 #endif // FUNCTIONS_H
