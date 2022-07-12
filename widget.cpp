@@ -231,11 +231,7 @@ Widget::Widget(QWidget *parent)
     const QVector<double> w_1 {1, 1, 1, 1, 1, 1}; // Весовые коэффициенты
     const uint degree_1 = 5;                      // Степень аппроксимирующих полиномов
     const int number_u_1 = 60;                    // Кол-во разбиений (точек) в реальной части узлов. вектора
-
     const QVector<double> u_1 = u_fill(control_points_1, degree_1); // Узловой вектор
-
-    QVector<QVector<double>> nders_1(degree_1 + 1, QVector<double>(degree_1 + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
-    QVector<QPair<double, double>> c2_1(degree_1 + 1);  // Индекс 2 для 2D задачи
     QVector<Point_curve> data_NURBS_1(number_u_1 + 1);  // Содержит точки кривой, 1-ой и 2-ой производной
 
     const uint n_ver_1 = control_points_1.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
@@ -245,7 +241,7 @@ Widget::Widget(QWidget *parent)
     for(int i = 0; i < number_u_1 + 1; ++i)
     {
         double u_i = (i / static_cast<double>(number_u_1));
-        curve_point_and_deriv_NURBS(data_NURBS_1[i], n_kn_1, degree_1, u_1, control_points_1, w_1, u_i, c2_1, nders_1);
+        curve_point_and_deriv_NURBS(data_NURBS_1[i], n_kn_1, degree_1, u_1, control_points_1, w_1, u_i);
     }
 
     QString title = "Понижение степени кривой";
@@ -255,11 +251,10 @@ Widget::Widget(QWidget *parent)
     int x_min = -10, x_max = 10;
     int y_min = -10, y_max = 10;
     curve_plot(ui->graph_function, control_points_1, data_NURBS_1, x_min, x_max, y_min, y_max, title, labels_legend_1, labels_legend_2);
-
     //plot_polygon(ui->graph_function, control_points_1, labels_legend_1);
 
 
-/*
+    /*
     const QVector<QVector<double>> control_points_2 // Точки определяющего многоугольника
     {
         {1, 1},
@@ -271,13 +266,9 @@ Widget::Widget(QWidget *parent)
     };
 
     const QVector<double> w_2 {1, 1, 1, 1, 1, 1}; // Весовые коэффициенты
-    const uint degree_2 = 1;                   // Степень аппроксимирующих полиномов
+    const uint degree_2 = 2;                   // Степень аппроксимирующих полиномов
     const int number_u_2 = 60;                 // Кол-во разбиений (точек) в реальной части узлов. вектора
-
     const QVector<double> u_2 = u_fill(control_points_2, degree_2); // Узловой вектор
-
-    QVector<QVector<double>> nders_2(degree_2 + 1, QVector<double>(degree_2 + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
-    QVector<QPair<double, double>> c2_2(degree_2 + 1);  // Индекс 2 для 2D задачи
     QVector<Point_curve> data_NURBS_2(number_u_2 + 1);    // Содержит точки кривой, 1-ой и 2-ой производной
 
     const uint n_ver_2 = control_points_2.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
@@ -287,7 +278,7 @@ Widget::Widget(QWidget *parent)
     for(int i = 0; i < number_u_2 + 1; ++i)
     {
         double u_i = (i / static_cast<double>(number_u_2));
-        curve_point_and_deriv_NURBS(data_NURBS_2[i], n_kn_2, degree_2, u_2, control_points_2, w_2, u_i, c2_2, nders_2);
+        curve_point_and_deriv_NURBS(data_NURBS_2[i], n_kn_2, degree_2, u_2, control_points_2, w_2, u_i);
     }
 
     labels_legend_2 = "Аппроксимирующий NURBS";
@@ -298,7 +289,6 @@ Widget::Widget(QWidget *parent)
     for(int i = 0; i < data_NURBS_2.size() - 1; ++i)
     {
         Point_curve u_perpendicular = finding_perpendicular(n_real_1, n_kn_1, degree_1, u_1, control_points_1, w_1, data_NURBS_2[i].curve);
-        //plot_line(ui->graph_function, data_NURBS_2[i].curve.first, data_NURBS_2[i].curve.second, u_perpendicular.curve.first, u_perpendicular.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
         double temp_max_perpendicular = vector_len(data_NURBS_2[i].curve, u_perpendicular);
 
         if(max_perpendicular < temp_max_perpendicular)
@@ -324,9 +314,8 @@ Widget::Widget(QWidget *parent)
     line->end->setCoords(5.32, 3.19);
     ui->graph_function->replot();
     //plot_lable_with_arrow(ui->graph_function, 7.5, 5, 5.37, 3, "Наибольшее расстояние\nмежду кривыми");
+    */
 
-
-*/
 
     /*
     QVector<QPair<double, double>> epsilon;
@@ -337,7 +326,7 @@ Widget::Widget(QWidget *parent)
         plot_point(ui->graph_function, p.first, p.second);
     */
 
-/*
+    /*
     const double eps = 0.8;
     QVector<QPair<double, double>> rotated_points;
     QVector<Point_curve> epsilon_point_DATA (number_u_1 + 1);
@@ -356,17 +345,18 @@ Widget::Widget(QWidget *parent)
 
     plot_curve(ui->graph_function, epsilon_point_DATA, "Допустимое отклонение", Qt::PenStyle::DashLine);
     plot_curve(ui->graph_function, reverse_epsilon_point_DATA, "", Qt::PenStyle::DashLine);
-*/
- //   plot_line(ui->graph_function, data_NURBS_1[0].curve.first,  data_NURBS_1[0].curve.second,
- //           data_NURBS_1[0].curve.first + x, data_NURBS_1[0].curve.second + y);
+    */
+    //   plot_line(ui->graph_function, data_NURBS_1[0].curve.first,  data_NURBS_1[0].curve.second,
+    //           data_NURBS_1[0].curve.first + x, data_NURBS_1[0].curve.second + y);
 
-/*
+    /*
     QVector<QPair<double, double>> epsilon2;
     epsilon2.push_back(point_rotated(data_NURBS_1[0], M_PI / -2));
     plot_point(ui->graph_function, epsilon2[0].first, epsilon2[0].second);
     derivative_point_line(ui->graph_function, data_NURBS_1[0]);
-*/
-/*
+    */
+
+    /*
     plot_double_arrow(ui->graph_function, 2.045, 1.28, 1.77, 2.05);
     plot_double_arrow(ui->graph_function, 2.045, 1.28, 2.33, 0.55);
     plot_lable(ui->graph_function, 1.55, 1.56, "+ε", 9);
@@ -378,19 +368,17 @@ Widget::Widget(QWidget *parent)
     plot_double_arrow(ui->graph_function, 11.25, 2.2, 10.785, 1.546);
     plot_lable(ui->graph_function, 11.75, 2.35, "+ε", 9);
     plot_lable(ui->graph_function, 11.35, 1.75, "-ε", 9);
-*/
+    */
 
 
 
-/*
+    /*-----------Аппроксимирует кривую. Реализация без функции. Строит границы-----------
     uint degree = 1;
     double max_perpendicular = 0;
     const double eps = 0.8;
     do
     {
         const QVector<double> u_2 = u_fill(control_points_1, degree); // Узловой вектор
-        QVector<QVector<double>> nders_2(degree + 1, QVector<double>(degree + 1)); // Содержит для заданного "u" массив BASIS функций и 1-ую и 2-ую производную
-        QVector<QPair<double, double>> c2_2(degree + 1);  // Индекс 2 для 2D задачи
         QVector<Point_curve> data_NURBS_2(number_u_1 + 1);    // Содержит точки кривой, 1-ой и 2-ой производной
 
         const uint n_ver_2 = control_points_1.size(); // Количество вершин в определяющем многоугольнике (n_vertices) (отсчёт с 1)
@@ -399,7 +387,7 @@ Widget::Widget(QWidget *parent)
         for(int i = 0; i < number_u_1 + 1; ++i)
         {
             double u_i = (i / static_cast<double>(number_u_1));
-            curve_point_and_deriv_NURBS(data_NURBS_2[i], n_kn_2, degree, u_2, control_points_1, w_1, u_i, c2_2, nders_2);
+            curve_point_and_deriv_NURBS(data_NURBS_2[i], n_kn_2, degree, u_2, control_points_1, w_1, u_i);
         }
 
         Point_curve max_p1, max_p2;
@@ -407,7 +395,6 @@ Widget::Widget(QWidget *parent)
         for(int i = 0; i < data_NURBS_2.size() - 1; ++i)
         {
             Point_curve u_perpendicular = finding_perpendicular(n_real_1, n_kn_1, degree_1, u_1, control_points_1, w_1, data_NURBS_2[i].curve);
-            //plot_line(ui->graph_function, data_NURBS_2[i].curve.first, data_NURBS_2[i].curve.second, u_perpendicular.curve.first, u_perpendicular.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
             double temp_max_perpendicular = vector_len(data_NURBS_2[i].curve, u_perpendicular);
 
             if(max_perpendicular < temp_max_perpendicular)
@@ -417,7 +404,6 @@ Widget::Widget(QWidget *parent)
                 max_p2 = data_NURBS_2[i];
             }
         }
-
 
         QVector<QPair<double, double>> rotated_points;
         QVector<Point_curve> epsilon_point_DATA (number_u_1 + 1);
@@ -434,7 +420,6 @@ Widget::Widget(QWidget *parent)
             reverse_epsilon_point_DATA[i].curve = epsilon_point(rotated_points1[i], data_NURBS_1[i], eps);
         }
 
-
         if(eps > max_perpendicular)
         {
             plot_curve(ui->graph_function, epsilon_point_DATA, "Граница", Qt::PenStyle::DashLine);
@@ -446,20 +431,16 @@ Widget::Widget(QWidget *parent)
              ++degree;
 
     }while(eps < max_perpendicular);
-
     qDebug() << degree;
-*/
+    */
 
 
 
-
-
+    /* ------Аппроксимирует заданную кривую. Тут функция------------
     const double epsilon = 0.8;
-
     QVector<Point_curve> data_NURBS_new = declining_degree_curve(control_points_1, degree_1, w_1, number_u_1, epsilon);
-
     plot_curve(ui->graph_function, data_NURBS_new, labels_legend_2, Qt::PenStyle::SolidLine, QColor(50, 205, 50));
-
+    */
 
 
 }
