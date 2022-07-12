@@ -259,7 +259,7 @@ Widget::Widget(QWidget *parent)
     //plot_polygon(ui->graph_function, control_points_1, labels_legend_1);
 
 
-
+/*
     const QVector<QVector<double>> control_points_2 // Точки определяющего многоугольника
     {
         {1, 1},
@@ -326,7 +326,7 @@ Widget::Widget(QWidget *parent)
     //plot_lable_with_arrow(ui->graph_function, 7.5, 5, 5.37, 3, "Наибольшее расстояние\nмежду кривыми");
 
 
-
+*/
 
     /*
     QVector<QPair<double, double>> epsilon;
@@ -337,7 +337,7 @@ Widget::Widget(QWidget *parent)
         plot_point(ui->graph_function, p.first, p.second);
     */
 
-
+/*
     const double eps = 0.8;
     QVector<QPair<double, double>> rotated_points;
     QVector<Point_curve> epsilon_point_DATA (number_u_1 + 1);
@@ -356,7 +356,7 @@ Widget::Widget(QWidget *parent)
 
     plot_curve(ui->graph_function, epsilon_point_DATA, "Допустимое отклонение", Qt::PenStyle::DashLine);
     plot_curve(ui->graph_function, reverse_epsilon_point_DATA, "", Qt::PenStyle::DashLine);
-
+*/
  //   plot_line(ui->graph_function, data_NURBS_1[0].curve.first,  data_NURBS_1[0].curve.second,
  //           data_NURBS_1[0].curve.first + x, data_NURBS_1[0].curve.second + y);
 
@@ -366,7 +366,7 @@ Widget::Widget(QWidget *parent)
     plot_point(ui->graph_function, epsilon2[0].first, epsilon2[0].second);
     derivative_point_line(ui->graph_function, data_NURBS_1[0]);
 */
-
+/*
     plot_double_arrow(ui->graph_function, 2.045, 1.28, 1.77, 2.05);
     plot_double_arrow(ui->graph_function, 2.045, 1.28, 2.33, 0.55);
     plot_lable(ui->graph_function, 1.55, 1.56, "+ε", 9);
@@ -378,9 +378,7 @@ Widget::Widget(QWidget *parent)
     plot_double_arrow(ui->graph_function, 11.25, 2.2, 10.785, 1.546);
     plot_lable(ui->graph_function, 11.75, 2.35, "+ε", 9);
     plot_lable(ui->graph_function, 11.35, 1.75, "-ε", 9);
-
-
-
+*/
 
 
 
@@ -455,14 +453,14 @@ Widget::Widget(QWidget *parent)
 
 
 
-/*
+
     const double epsilon = 0.8;
 
     QVector<Point_curve> data_NURBS_new = declining_degree_curve(control_points_1, degree_1, w_1, number_u_1, epsilon);
 
     plot_curve(ui->graph_function, data_NURBS_new, labels_legend_2, Qt::PenStyle::SolidLine, QColor(50, 205, 50));
 
-*/
+
 
 }
 

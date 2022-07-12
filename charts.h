@@ -4,7 +4,7 @@
 #include "functions.h"
 #include "ui_widget.h"
 
-// Рисует линию (касательную) производной в точке
+// Рисует линию (касательную), начинающуюся от point
 void plot_tangent_point(QCustomPlot* canvas, const Point_curve& point)
 {
     QCPItemLine *line = new QCPItemLine(canvas);
@@ -18,32 +18,30 @@ void plot_tangent_point(QCustomPlot* canvas, const Point_curve& point)
 void plot_polygon(QCustomPlot* canvas, const QVector<QVector<double>>& polygon_points, const QString& label, const QColor& color = QColor(0, 0, 0, 255), const double& width = 1)
 {
     QCPCurve *shape = new QCPCurve(canvas->xAxis, canvas->yAxis);
-
     shape->setPen(color);
     shape->setLineStyle(QCPCurve::lsNone); // Убираем линии
     shape->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 6)); // Формируем вид точек
 
     QPen pen;
-    pen.setWidth(width); // Устанавливаем ширину
+    pen.setWidth(width);
     shape->setPen(pen);
 
     // uint counter = 0;
 
     for(const auto& point: polygon_points) // Рисуем точки
     {
-        /*
-        // Делаем подписи к каждой вершине многоугольника
+        shape->addData(point[0], point[1]);
+
+        /* Делает подписи к каждой вершине многоугольника
         QCPItemText *label = new QCPItemText(canvas);
         label->position->setCoords(point[0] + 0.35, point[1] - 0.2);
         label->setFont(QFont("sans", 10));
         label->setText(QString("P%1").arg(counter++));
-        */
-
-        shape->addData(point[0], point[1]);
+        */  
     }
 
     //shape->setLineStyle(QCPCurve::lsLine); // Добавляем линии
-    shape->setName(label); // Обзываем полигон в легенде графика
+    shape->setName(label); // Устанавливаем название полигона в легенде графика
     canvas->replot();
 }
 
@@ -102,7 +100,7 @@ void plot_arrow(QCustomPlot* canvas, const double& x_1, const double& y_1, const
     canvas->replot();
 }
 
-// Рисует касательную к точке
+// Рисует линию (касательную) c центром в point
 void plot_tangent(QCustomPlot* canvas, const Point_curve& point, const QColor& color = QColor(0, 100, 0), const double& width = 2.8)
 {
     QCPItemLine *line = new QCPItemLine(canvas);
@@ -116,8 +114,8 @@ void plot_tangent(QCustomPlot* canvas, const Point_curve& point, const QColor& c
 }
 
 // Рисует кривую NURBS
-void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS, const QString& label, const Qt::PenStyle& penStyle = Qt::PenStyle::SolidLine,
-                const QColor& color = QColor(0, 0, 0, 255), const double& width = 1.5)
+void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS, const QString& label, const Qt::PenStyle& penStyle = Qt::PenStyle::SolidLine, const QColor& color = QColor(0, 0, 0, 255),
+                const double& width = 1.5)
 {
     QCPCurve *curve = new QCPCurve(canvas->xAxis, canvas->yAxis);
     QPen pen;
@@ -126,10 +124,10 @@ void plot_curve(QCustomPlot* canvas, const QVector<Point_curve>& data_NURBS, con
     pen.setWidthF(width);
     curve->setPen(pen);
 
-    for(const auto& point: data_NURBS) // Рисуем сплайн
+    for(const auto& point: data_NURBS) // Рисуем сплайн по точкам
         curve->addData(point.curve.first, point.curve.second);
 
-    curve->setName(label); // Обзываем кривую в легенде графика
+    curve->setName(label);
     canvas->replot();
 }
 
@@ -153,7 +151,6 @@ void plot_lable_with_arrow(QCustomPlot* canvas, const double& x_1, const double&
 
     QCPItemLine *line = new QCPItemLine(canvas);
     line->setHead(QCPLineEnding::esFlatArrow);
-    line->setTail(QCPLineEnding::esFlatArrow);
     line->start->setCoords(x_1, y_1);
     line->end->setCoords(x_2, y_2);
     canvas->replot();
@@ -169,7 +166,7 @@ void curve_plot(QCustomPlot* canvas, const QVector<QVector<double>>& control_poi
     plot_polygon(canvas, control_points, labels_legend_1); // Рисуем многоугольник с вершинами
     plot_curve(canvas, data_NURBS, labels_legend_2, Qt::PenStyle::SolidLine, QColor(30, 144, 255)); // Рисуем сплайн
 
-/*
+    /*
     // Рисуем подписи к спанам реального диапазон (убрать при необходимости)
     plot_lable_with_arrow(canvas, 1.5, 4.8, 2.58, 3.14, "u∈[0, 1/5)");
 
@@ -184,9 +181,9 @@ void curve_plot(QCustomPlot* canvas, const QVector<QVector<double>>& control_poi
     canvas->replot();
 
     plot_lable_with_arrow(canvas, 7.4, 4.3, 6.28, 2.14, "u∈[3/5, 1)");
-*/
+    */
 
-   canvas->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Делаем график перетаскиваемым + масштабирование колеса прокрутки
+    canvas->setInteractions(QCP :: iRangeDrag | QCP :: iRangeZoom); // Делаем график перетаскиваемым + масштабирование колеса прокрутки
 
     // Подписываем оси Ox и Oy
     canvas->xAxis->setLabel("Ось X");
