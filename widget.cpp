@@ -221,7 +221,7 @@ Widget::Widget(QWidget *parent)
     const QVector<QVector<double>> control_points_1 // Точки определяющего многоугольника
     {
         {1, 1},
-        {3, 1.5},
+        {3.5, 1.25},
         {5, 4.5},
         {7.5, 2},
         {10, 4},
@@ -259,11 +259,11 @@ Widget::Widget(QWidget *parent)
     //plot_polygon(ui->graph_function, control_points_1, labels_legend_1);
 
 
-    /*
+
     const QVector<QVector<double>> control_points_2 // Точки определяющего многоугольника
     {
         {1, 1},
-        {3, 1.5},
+        {3.5, 1.25},
         {5, 4.5},
         {7.5, 2},
         {10, 4},
@@ -287,7 +287,7 @@ Widget::Widget(QWidget *parent)
     for(int i = 0; i < number_u_2 + 1; ++i)
     {
         double u_i = (i / static_cast<double>(number_u_2));
-        curve_point_and_deriv_NURBS(data_NURBS_2[i], n_real_2, n_kn_2, degree_2, u_2, control_points_2, w_2, u_i, c2_2, nders_2);
+        curve_point_and_deriv_NURBS(data_NURBS_2[i], n_kn_2, degree_2, u_2, control_points_2, w_2, u_i, c2_2, nders_2);
     }
 
     labels_legend_2 = "Аппроксимирующий NURBS";
@@ -312,7 +312,7 @@ Widget::Widget(QWidget *parent)
     plot_line(ui->graph_function, max_p1.curve.first, max_p1.curve.second, max_p2.curve.first, max_p2.curve.second, QColor(178, 34, 34)); // Рисуем перпендикуляр между точкой и кривой
     qDebug() << "MAX_LEN: " << max_perpendicular;
 
-    plot_lable_with_arrow(ui->graph_function, 7.5, 5, 5.15, 3.1, "Наибольшее расстояние\nмежду кривыми");
+    plot_lable_with_arrow(ui->graph_function, 7.5, 5, 5.2, 3.21, "Наибольшее расстояние\nмежду кривыми");
 
 
 
@@ -327,11 +327,6 @@ Widget::Widget(QWidget *parent)
     */
 
 
-
-    //QPair<double, double> unit_vector {data_NURBS_1[0].curve.first + 1, data_NURBS_1[0].curve.second};
-    //double angle = vector_angle(rotated_points[0], data_NURBS_1[0], unit_vector);
-
-/*
     const double eps = 0.8;
     QVector<QPair<double, double>> rotated_points;
     QVector<Point_curve> epsilon_point_DATA (number_u_1 + 1);
@@ -341,46 +336,44 @@ Widget::Widget(QWidget *parent)
 
     for(int i = 0; i < data_NURBS_1.size(); ++i)
     {
-        rotated_points.push_back(point_rotated(data_NURBS_1[i]));
+        rotated_points.push_back(rotate_point(data_NURBS_1[i]));
         epsilon_point_DATA[i].curve = epsilon_point(rotated_points[i], data_NURBS_1[i], eps);
 
-        rotated_points1.push_back(point_rotated(data_NURBS_1[i], - M_PI / 2));
+        rotated_points1.push_back(rotate_point(data_NURBS_1[i], - M_PI / 2));
         reverse_epsilon_point_DATA[i].curve = epsilon_point(rotated_points1[i], data_NURBS_1[i], eps);
     }
 
-    plot_curve(ui->graph_function, epsilon_point_DATA, "Граница", Qt::PenStyle::DashLine);
+    plot_curve(ui->graph_function, epsilon_point_DATA, "Допустимое отклонение", Qt::PenStyle::DashLine);
     plot_curve(ui->graph_function, reverse_epsilon_point_DATA, "", Qt::PenStyle::DashLine);
 
  //   plot_line(ui->graph_function, data_NURBS_1[0].curve.first,  data_NURBS_1[0].curve.second,
  //           data_NURBS_1[0].curve.first + x, data_NURBS_1[0].curve.second + y);
-*/
+
 /*
     QVector<QPair<double, double>> epsilon2;
     epsilon2.push_back(point_rotated(data_NURBS_1[0], M_PI / -2));
     plot_point(ui->graph_function, epsilon2[0].first, epsilon2[0].second);
     derivative_point_line(ui->graph_function, data_NURBS_1[0]);
 */
-/*
-    plot_lable_with_arrow(ui->graph_function, 2, 1.41, 1.68, 2.17, "");
-    plot_lable_with_arrow(ui->graph_function, 2, 1.41, 2.3, 0.65, "");
-    plot_lable(ui->graph_function, 1.55, 1.65, "+ε", 8);
-    plot_lable(ui->graph_function, 1.85, 1, "-ε", 8);
+
+    plot_lable_with_arrow(ui->graph_function, 2, 1.41, 1.77, 2.05, "");
+    plot_lable_with_arrow(ui->graph_function, 2, 1.41, 2.33, 0.55, "");
+    plot_lable(ui->graph_function, 1.55, 1.56, "+ε", 8);
+    plot_lable(ui->graph_function, 1.75, 0.85, "-ε", 8);
 
     ui->graph_function->legend->removeItem(ui->graph_function->legend->itemCount() - 1); // Удаляем точку из легенды
 
     plot_lable_with_arrow(ui->graph_function, 11.25, 2.2, 11.714, 2.85, "");
-    plot_lable_with_arrow(ui->graph_function, 11.25, 2.2, 10.81, 1.525, "");
+    plot_lable_with_arrow(ui->graph_function, 11.25, 2.2, 10.785, 1.546, "");
     plot_lable(ui->graph_function, 11.75, 2.35, "+ε", 8);
-    plot_lable(ui->graph_function, 11.25, 1.8, "-ε", 8);
+    plot_lable(ui->graph_function, 11.35, 1.75, "-ε", 8);
 
 
 
-    */
 
 
 
 /*
-
     uint degree = 1;
     double max_perpendicular = 0;
     const double eps = 0.8;
@@ -446,16 +439,19 @@ Widget::Widget(QWidget *parent)
     }while(eps < max_perpendicular);
 
     qDebug() << degree;
-
 */
 
 
+
+
+/*
     const double epsilon = 0.8;
 
     QVector<Point_curve> data_NURBS_new = declining_degree_curve(control_points_1, degree_1, w_1, number_u_1, epsilon);
 
     plot_curve(ui->graph_function, data_NURBS_new, labels_legend_2, Qt::PenStyle::SolidLine, QColor(50, 205, 50));
 
+*/
 
 }
 
