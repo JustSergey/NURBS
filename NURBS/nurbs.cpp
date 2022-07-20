@@ -1,5 +1,6 @@
 #include "nurbs.h"
 #include "mathutils.h"
+#include <cmath>
 
 class NURBS::Impl
 {

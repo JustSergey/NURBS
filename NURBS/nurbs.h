@@ -1,7 +1,6 @@
 #ifndef NURBS_H
 #define NURBS_H
 
-#include <math.h>
 #include <QDebug>
 
 // Хранит точку кривой, её 1-ую и 2-ую производную, интервал (span) и параметр

@@ -9,8 +9,6 @@ class Chart
 public:
     explicit Chart(QCustomPlot *canvas, const QString &title = "");
 
-    void set_title(const QString &title);
-
     // Рисует линию (касательную), начинающуюся от точки кривой (point)
     void paint_tangent(const Point_curve &point_curve) const;
 
@@ -54,8 +52,8 @@ public:
     void paint_curves_shift(const QPair<QVector<Point_curve>, QVector<Point_curve>> &points_NURBS) const;
 
 private:
-    QCustomPlot* m_canvas;
-    QString m_title;
+    QCustomPlot* _canvas;
+    QString _title;
 };
 
 #endif // CHART_H
