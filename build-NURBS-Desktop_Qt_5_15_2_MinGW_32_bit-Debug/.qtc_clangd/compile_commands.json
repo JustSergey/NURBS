@@ -9,14 +9,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
-=======
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
->>>>>>> Stashed changes
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
         "-nostdinc",
         "-nostdinc++",
         "-g",
+        "-std=gnu++1z",
         "-Wall",
         "-Wextra",
         "-Wextra",
@@ -25,7 +22,6 @@
         "-fsyntax-only",
         "-m32",
         "--target=i686-w64-mingw32",
-        "-std=gnu++14",
         "-DQ_CREATOR_RUN",
         "-DUNICODE",
         "-D_UNICODE",
@@ -38,11 +34,7 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Practice",
-=======
-        "C:\\Practice\\NURBS",
->>>>>>> Stashed changes
+        "C:\\Ryzhov\\NURBS\\NURBS",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -56,9 +48,9 @@
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
         "-isystem",
@@ -82,17 +74,10 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-<<<<<<< Updated upstream
-        "C:\\Practice\\main.cpp"
+        "C:\\Ryzhov\\NURBS\\NURBS\\chart.cpp"
     ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/main.cpp"
-=======
-        "C:\\Practice\\NURBS\\main.cpp"
-    ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/NURBS/main.cpp"
->>>>>>> Stashed changes
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/chart.cpp"
 },
 {
     "arguments": [
@@ -104,14 +89,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
-=======
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
->>>>>>> Stashed changes
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
         "-nostdinc",
         "-nostdinc++",
         "-g",
+        "-std=gnu++1z",
         "-Wall",
         "-Wextra",
         "-Wextra",
@@ -120,7 +102,6 @@
         "-fsyntax-only",
         "-m32",
         "--target=i686-w64-mingw32",
-        "-std=gnu++14",
         "-DQ_CREATOR_RUN",
         "-DUNICODE",
         "-D_UNICODE",
@@ -133,11 +114,7 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Practice",
-=======
-        "C:\\Practice\\NURBS",
->>>>>>> Stashed changes
+        "C:\\Ryzhov\\NURBS\\NURBS",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -151,9 +128,9 @@
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
         "-isystem",
@@ -177,17 +154,10 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-<<<<<<< Updated upstream
-        "C:\\Practice\\qcustomplot.cpp"
+        "C:\\Ryzhov\\NURBS\\NURBS\\main.cpp"
     ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/qcustomplot.cpp"
-=======
-        "C:\\Practice\\NURBS\\qcustomplot.cpp"
-    ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/NURBS/qcustomplot.cpp"
->>>>>>> Stashed changes
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/main.cpp"
 },
 {
     "arguments": [
@@ -199,14 +169,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
-=======
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
->>>>>>> Stashed changes
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
         "-nostdinc",
         "-nostdinc++",
         "-g",
+        "-std=gnu++1z",
         "-Wall",
         "-Wextra",
         "-Wextra",
@@ -215,7 +182,6 @@
         "-fsyntax-only",
         "-m32",
         "--target=i686-w64-mingw32",
-        "-std=gnu++14",
         "-DQ_CREATOR_RUN",
         "-DUNICODE",
         "-D_UNICODE",
@@ -228,11 +194,7 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Practice",
-=======
-        "C:\\Practice\\NURBS",
->>>>>>> Stashed changes
+        "C:\\Ryzhov\\NURBS\\NURBS",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -246,9 +208,9 @@
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
         "-isystem",
@@ -272,17 +234,10 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-<<<<<<< Updated upstream
-        "C:\\Practice\\widget.cpp"
+        "C:\\Ryzhov\\NURBS\\NURBS\\mathutils.cpp"
     ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/widget.cpp"
-=======
-        "C:\\Practice\\NURBS\\widget.cpp"
-    ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/NURBS/widget.cpp"
->>>>>>> Stashed changes
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/mathutils.cpp"
 },
 {
     "arguments": [
@@ -294,14 +249,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
-=======
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
->>>>>>> Stashed changes
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
         "-nostdinc",
         "-nostdinc++",
         "-g",
+        "-std=gnu++1z",
         "-Wall",
         "-Wextra",
         "-Wextra",
@@ -310,7 +262,6 @@
         "-fsyntax-only",
         "-m32",
         "--target=i686-w64-mingw32",
-        "-std=gnu++14",
         "-DQ_CREATOR_RUN",
         "-DUNICODE",
         "-D_UNICODE",
@@ -323,11 +274,7 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Practice",
-=======
-        "C:\\Practice\\NURBS",
->>>>>>> Stashed changes
+        "C:\\Ryzhov\\NURBS\\NURBS",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -341,9 +288,249 @@
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\i686-w64-mingw32",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\backward",
+        "-isystem",
+        "C:\\Qt\\Tools\\QtCreator\\bin\\clang\\lib\\clang\\14.0.3\\include",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\i686-w64-mingw32\\include",
+        "-fmessage-length=0",
+        "-fdiagnostics-show-note-include-stack",
+        "-fretain-comments-from-system-headers",
+        "-fmacro-backtrace-limit=0",
+        "-ferror-limit=1000",
+        "-x",
+        "c++",
+        "-Wno-unknown-pragmas",
+        "-Wno-unknown-warning-option",
+        "-Wno-documentation-unknown-command",
+        "-fno-delayed-template-parsing",
+        "C:\\Ryzhov\\NURBS\\NURBS\\nurbs.cpp"
+    ],
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/nurbs.cpp"
+},
+{
+    "arguments": [
+        "clang",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedMingwHeaders",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
+        "-I",
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
+        "-nostdinc",
+        "-nostdinc++",
+        "-g",
+        "-std=gnu++1z",
+        "-Wall",
+        "-Wextra",
+        "-Wextra",
+        "-fexceptions",
+        "-mthreads",
+        "-fsyntax-only",
+        "-m32",
+        "--target=i686-w64-mingw32",
+        "-DQ_CREATOR_RUN",
+        "-DUNICODE",
+        "-D_UNICODE",
+        "-DWIN32",
+        "-DMINGW_HAS_SECURE_API",
+        "-DQT_QML_DEBUG",
+        "-DQT_PRINTSUPPORT_LIB",
+        "-DQT_WIDGETS_LIB",
+        "-DQT_GUI_LIB",
+        "-DQT_CORE_LIB",
+        "-DQT_NEEDS_QMAIN",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\NURBS",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtPrintSupport",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtWidgets",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtGui",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtANGLE",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\i686-w64-mingw32",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\backward",
+        "-isystem",
+        "C:\\Qt\\Tools\\QtCreator\\bin\\clang\\lib\\clang\\14.0.3\\include",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\i686-w64-mingw32\\include",
+        "-fmessage-length=0",
+        "-fdiagnostics-show-note-include-stack",
+        "-fretain-comments-from-system-headers",
+        "-fmacro-backtrace-limit=0",
+        "-ferror-limit=1000",
+        "-x",
+        "c++",
+        "-Wno-unknown-pragmas",
+        "-Wno-unknown-warning-option",
+        "-Wno-documentation-unknown-command",
+        "-fno-delayed-template-parsing",
+        "C:\\Ryzhov\\NURBS\\NURBS\\qcustomplot.cpp"
+    ],
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/qcustomplot.cpp"
+},
+{
+    "arguments": [
+        "clang",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedMingwHeaders",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
+        "-I",
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
+        "-nostdinc",
+        "-nostdinc++",
+        "-g",
+        "-std=gnu++1z",
+        "-Wall",
+        "-Wextra",
+        "-Wextra",
+        "-fexceptions",
+        "-mthreads",
+        "-fsyntax-only",
+        "-m32",
+        "--target=i686-w64-mingw32",
+        "-DQ_CREATOR_RUN",
+        "-DUNICODE",
+        "-D_UNICODE",
+        "-DWIN32",
+        "-DMINGW_HAS_SECURE_API",
+        "-DQT_QML_DEBUG",
+        "-DQT_PRINTSUPPORT_LIB",
+        "-DQT_WIDGETS_LIB",
+        "-DQT_GUI_LIB",
+        "-DQT_CORE_LIB",
+        "-DQT_NEEDS_QMAIN",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\NURBS",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtPrintSupport",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtWidgets",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtGui",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtANGLE",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\i686-w64-mingw32",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\backward",
+        "-isystem",
+        "C:\\Qt\\Tools\\QtCreator\\bin\\clang\\lib\\clang\\14.0.3\\include",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\i686-w64-mingw32\\include",
+        "-fmessage-length=0",
+        "-fdiagnostics-show-note-include-stack",
+        "-fretain-comments-from-system-headers",
+        "-fmacro-backtrace-limit=0",
+        "-ferror-limit=1000",
+        "-x",
+        "c++",
+        "-Wno-unknown-pragmas",
+        "-Wno-unknown-warning-option",
+        "-Wno-documentation-unknown-command",
+        "-fno-delayed-template-parsing",
+        "C:\\Ryzhov\\NURBS\\NURBS\\widget.cpp"
+    ],
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/widget.cpp"
+},
+{
+    "arguments": [
+        "clang",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedMingwHeaders",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
+        "-I",
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
+        "-nostdinc",
+        "-nostdinc++",
+        "-g",
+        "-std=gnu++1z",
+        "-Wall",
+        "-Wextra",
+        "-Wextra",
+        "-fexceptions",
+        "-mthreads",
+        "-fsyntax-only",
+        "-m32",
+        "--target=i686-w64-mingw32",
+        "-DQ_CREATOR_RUN",
+        "-DUNICODE",
+        "-D_UNICODE",
+        "-DWIN32",
+        "-DMINGW_HAS_SECURE_API",
+        "-DQT_QML_DEBUG",
+        "-DQT_PRINTSUPPORT_LIB",
+        "-DQT_WIDGETS_LIB",
+        "-DQT_GUI_LIB",
+        "-DQT_CORE_LIB",
+        "-DQT_NEEDS_QMAIN",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\NURBS",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtPrintSupport",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtWidgets",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtGui",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtANGLE",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
         "-isystem",
@@ -367,17 +554,10 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-<<<<<<< Updated upstream
-        "C:\\Practice\\charts.h"
+        "C:\\Ryzhov\\NURBS\\NURBS\\chart.h"
     ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/charts.h"
-=======
-        "C:\\Practice\\NURBS\\charts.h"
-    ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/NURBS/charts.h"
->>>>>>> Stashed changes
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/chart.h"
 },
 {
     "arguments": [
@@ -389,14 +569,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
-=======
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
->>>>>>> Stashed changes
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
         "-nostdinc",
         "-nostdinc++",
         "-g",
+        "-std=gnu++1z",
         "-Wall",
         "-Wextra",
         "-Wextra",
@@ -405,7 +582,6 @@
         "-fsyntax-only",
         "-m32",
         "--target=i686-w64-mingw32",
-        "-std=gnu++14",
         "-DQ_CREATOR_RUN",
         "-DUNICODE",
         "-D_UNICODE",
@@ -418,11 +594,7 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Practice",
-=======
-        "C:\\Practice\\NURBS",
->>>>>>> Stashed changes
+        "C:\\Ryzhov\\NURBS\\NURBS",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -436,9 +608,9 @@
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
         "-isystem",
@@ -462,17 +634,10 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-<<<<<<< Updated upstream
-        "C:\\Practice\\functions.h"
+        "C:\\Ryzhov\\NURBS\\NURBS\\mathutils.h"
     ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/functions.h"
-=======
-        "C:\\Practice\\NURBS\\functions.h"
-    ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/NURBS/functions.h"
->>>>>>> Stashed changes
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/mathutils.h"
 },
 {
     "arguments": [
@@ -484,14 +649,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
-=======
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
->>>>>>> Stashed changes
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
         "-nostdinc",
         "-nostdinc++",
         "-g",
+        "-std=gnu++1z",
         "-Wall",
         "-Wextra",
         "-Wextra",
@@ -500,7 +662,6 @@
         "-fsyntax-only",
         "-m32",
         "--target=i686-w64-mingw32",
-        "-std=gnu++14",
         "-DQ_CREATOR_RUN",
         "-DUNICODE",
         "-D_UNICODE",
@@ -513,11 +674,7 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Practice",
-=======
-        "C:\\Practice\\NURBS",
->>>>>>> Stashed changes
+        "C:\\Ryzhov\\NURBS\\NURBS",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -531,9 +688,9 @@
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
         "-isystem",
@@ -557,17 +714,10 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-<<<<<<< Updated upstream
-        "C:\\Practice\\qcustomplot.h"
+        "C:\\Ryzhov\\NURBS\\NURBS\\nurbs.h"
     ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/qcustomplot.h"
-=======
-        "C:\\Practice\\NURBS\\qcustomplot.h"
-    ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/NURBS/qcustomplot.h"
->>>>>>> Stashed changes
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/nurbs.h"
 },
 {
     "arguments": [
@@ -579,14 +729,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
-=======
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
->>>>>>> Stashed changes
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
         "-nostdinc",
         "-nostdinc++",
         "-g",
+        "-std=gnu++1z",
         "-Wall",
         "-Wextra",
         "-Wextra",
@@ -595,7 +742,6 @@
         "-fsyntax-only",
         "-m32",
         "--target=i686-w64-mingw32",
-        "-std=gnu++14",
         "-DQ_CREATOR_RUN",
         "-DUNICODE",
         "-D_UNICODE",
@@ -608,11 +754,7 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Practice",
-=======
-        "C:\\Practice\\NURBS",
->>>>>>> Stashed changes
+        "C:\\Ryzhov\\NURBS\\NURBS",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -626,9 +768,9 @@
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
         "-isystem",
@@ -652,17 +794,10 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-<<<<<<< Updated upstream
-        "C:\\Practice\\widget.h"
+        "C:\\Ryzhov\\NURBS\\NURBS\\qcustomplot.h"
     ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/widget.h"
-=======
-        "C:\\Practice\\NURBS\\widget.h"
-    ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/NURBS/widget.h"
->>>>>>> Stashed changes
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/qcustomplot.h"
 },
 {
     "arguments": [
@@ -674,14 +809,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
-=======
-        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
->>>>>>> Stashed changes
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
         "-nostdinc",
         "-nostdinc++",
         "-g",
+        "-std=gnu++1z",
         "-Wall",
         "-Wextra",
         "-Wextra",
@@ -690,7 +822,6 @@
         "-fsyntax-only",
         "-m32",
         "--target=i686-w64-mingw32",
-        "-std=gnu++14",
         "-DQ_CREATOR_RUN",
         "-DUNICODE",
         "-D_UNICODE",
@@ -703,11 +834,7 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
-<<<<<<< Updated upstream
-        "C:\\Practice",
-=======
-        "C:\\Practice\\NURBS",
->>>>>>> Stashed changes
+        "C:\\Ryzhov\\NURBS\\NURBS",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -721,9 +848,9 @@
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
         "-I",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
         "-isystem",
@@ -747,9 +874,89 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-        "C:\\Practice\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\ui_widget.h"
+        "C:\\Ryzhov\\NURBS\\NURBS\\widget.h"
     ],
-    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
-    "file": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/ui_widget.h"
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/NURBS/widget.h"
+},
+{
+    "arguments": [
+        "clang",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedMingwHeaders",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders",
+        "-I",
+        "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
+        "-I",
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-FxlcpX\\clang-uiheader-cqrXBA",
+        "-nostdinc",
+        "-nostdinc++",
+        "-g",
+        "-std=gnu++1z",
+        "-Wall",
+        "-Wextra",
+        "-Wextra",
+        "-fexceptions",
+        "-mthreads",
+        "-fsyntax-only",
+        "-m32",
+        "--target=i686-w64-mingw32",
+        "-DQ_CREATOR_RUN",
+        "-DUNICODE",
+        "-D_UNICODE",
+        "-DWIN32",
+        "-DMINGW_HAS_SECURE_API",
+        "-DQT_QML_DEBUG",
+        "-DQT_PRINTSUPPORT_LIB",
+        "-DQT_WIDGETS_LIB",
+        "-DQT_GUI_LIB",
+        "-DQT_CORE_LIB",
+        "-DQT_NEEDS_QMAIN",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\NURBS",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtPrintSupport",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtWidgets",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtGui",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtANGLE",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\include\\QtCore",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\debug",
+        "-I",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+        "-I",
+        "C:\\Qt\\5.15.2\\mingw81_32\\mkspecs\\win32-g++",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\i686-w64-mingw32",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\backward",
+        "-isystem",
+        "C:\\Qt\\Tools\\QtCreator\\bin\\clang\\lib\\clang\\14.0.3\\include",
+        "-isystem",
+        "C:\\Qt\\Tools\\mingw810_32\\i686-w64-mingw32\\include",
+        "-fmessage-length=0",
+        "-fdiagnostics-show-note-include-stack",
+        "-fretain-comments-from-system-headers",
+        "-fmacro-backtrace-limit=0",
+        "-ferror-limit=1000",
+        "-x",
+        "c++-header",
+        "-Wno-unknown-pragmas",
+        "-Wno-unknown-warning-option",
+        "-Wno-documentation-unknown-command",
+        "-fno-delayed-template-parsing",
+        "C:\\Ryzhov\\NURBS\\build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug\\ui_widget.h"
+    ],
+    "directory": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Ryzhov/NURBS/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/ui_widget.h"
 }
 ]

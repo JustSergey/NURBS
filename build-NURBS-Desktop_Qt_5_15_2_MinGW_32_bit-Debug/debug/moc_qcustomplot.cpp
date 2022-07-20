@@ -7,11 +7,7 @@
 *****************************************************************************/
 
 #include <memory>
-<<<<<<< Updated upstream
-#include "../../qcustomplot.h"
-=======
 #include "../../NURBS/qcustomplot.h"
->>>>>>> Stashed changes
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #include <QtCore/QSharedPointer>

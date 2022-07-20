@@ -22,9 +22,9 @@ class Ui_Widget
 public:
     QGridLayout *gridLayout_2;
     QGridLayout *gridLayout;
-    QCustomPlot *graph_second_derivative;
-    QCustomPlot *graph_function;
-    QCustomPlot *graph_first_derivative;
+    QCustomPlot *canvas_1;
+    QCustomPlot *canvas_2;
+    QCustomPlot *canvas_3;
 
     void setupUi(QWidget *Widget)
     {
@@ -35,20 +35,20 @@ public:
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         gridLayout = new QGridLayout();
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        graph_second_derivative = new QCustomPlot(Widget);
-        graph_second_derivative->setObjectName(QString::fromUtf8("graph_second_derivative"));
+        canvas_1 = new QCustomPlot(Widget);
+        canvas_1->setObjectName(QString::fromUtf8("canvas_1"));
 
-        gridLayout->addWidget(graph_second_derivative, 0, 2, 1, 1);
+        gridLayout->addWidget(canvas_1, 0, 0, 1, 1);
 
-        graph_function = new QCustomPlot(Widget);
-        graph_function->setObjectName(QString::fromUtf8("graph_function"));
+        canvas_2 = new QCustomPlot(Widget);
+        canvas_2->setObjectName(QString::fromUtf8("canvas_2"));
 
-        gridLayout->addWidget(graph_function, 0, 0, 1, 1);
+        gridLayout->addWidget(canvas_2, 0, 1, 1, 1);
 
-        graph_first_derivative = new QCustomPlot(Widget);
-        graph_first_derivative->setObjectName(QString::fromUtf8("graph_first_derivative"));
+        canvas_3 = new QCustomPlot(Widget);
+        canvas_3->setObjectName(QString::fromUtf8("canvas_3"));
 
-        gridLayout->addWidget(graph_first_derivative, 0, 1, 1, 1);
+        gridLayout->addWidget(canvas_3, 0, 2, 1, 1);
 
 
         gridLayout_2->addLayout(gridLayout, 0, 0, 1, 1);
@@ -61,7 +61,7 @@ public:
 
     void retranslateUi(QWidget *Widget)
     {
-        Widget->setWindowTitle(QCoreApplication::translate("Widget", "NURBS", nullptr));
+        Widget->setWindowTitle(QCoreApplication::translate("Widget", "Widget", nullptr));
     } // retranslateUi
 
 };

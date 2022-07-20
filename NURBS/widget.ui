@@ -11,19 +11,19 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>NURBS</string>
+   <string>Widget</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="2">
-      <widget class="QCustomPlot" name="graph_second_derivative" native="true"/>
-     </item>
      <item row="0" column="0">
-      <widget class="QCustomPlot" name="graph_function" native="true"/>
+      <widget class="QCustomPlot" name="canvas_1" native="true"/>
      </item>
      <item row="0" column="1">
-      <widget class="QCustomPlot" name="graph_first_derivative" native="true"/>
+      <widget class="QCustomPlot" name="canvas_2" native="true"/>
+     </item>
+     <item row="0" column="2">
+      <widget class="QCustomPlot" name="canvas_3" native="true"/>
      </item>
     </layout>
    </item>
