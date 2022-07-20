@@ -9,7 +9,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
+=======
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
+>>>>>>> Stashed changes
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -34,7 +38,11 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Practice",
+=======
+        "C:\\Practice\\NURBS",
+>>>>>>> Stashed changes
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -74,10 +82,17 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
+<<<<<<< Updated upstream
         "C:\\Practice\\main.cpp"
     ],
     "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
     "file": "C:/Practice/main.cpp"
+=======
+        "C:\\Practice\\NURBS\\main.cpp"
+    ],
+    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Practice/NURBS/main.cpp"
+>>>>>>> Stashed changes
 },
 {
     "arguments": [
@@ -89,7 +104,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
+=======
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
+>>>>>>> Stashed changes
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -114,7 +133,11 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Practice",
+=======
+        "C:\\Practice\\NURBS",
+>>>>>>> Stashed changes
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -154,10 +177,17 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
+<<<<<<< Updated upstream
         "C:\\Practice\\qcustomplot.cpp"
     ],
     "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
     "file": "C:/Practice/qcustomplot.cpp"
+=======
+        "C:\\Practice\\NURBS\\qcustomplot.cpp"
+    ],
+    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Practice/NURBS/qcustomplot.cpp"
+>>>>>>> Stashed changes
 },
 {
     "arguments": [
@@ -169,7 +199,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
+=======
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
+>>>>>>> Stashed changes
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -194,7 +228,11 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Practice",
+=======
+        "C:\\Practice\\NURBS",
+>>>>>>> Stashed changes
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -234,10 +272,17 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
+<<<<<<< Updated upstream
         "C:\\Practice\\widget.cpp"
     ],
     "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
     "file": "C:/Practice/widget.cpp"
+=======
+        "C:\\Practice\\NURBS\\widget.cpp"
+    ],
+    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Practice/NURBS/widget.cpp"
+>>>>>>> Stashed changes
 },
 {
     "arguments": [
@@ -249,7 +294,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
+=======
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
+>>>>>>> Stashed changes
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -274,7 +323,11 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Practice",
+=======
+        "C:\\Practice\\NURBS",
+>>>>>>> Stashed changes
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -314,10 +367,17 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
+<<<<<<< Updated upstream
         "C:\\Practice\\charts.h"
     ],
     "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
     "file": "C:/Practice/charts.h"
+=======
+        "C:\\Practice\\NURBS\\charts.h"
+    ],
+    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Practice/NURBS/charts.h"
+>>>>>>> Stashed changes
 },
 {
     "arguments": [
@@ -329,7 +389,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
+=======
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
+>>>>>>> Stashed changes
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -354,7 +418,11 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Practice",
+=======
+        "C:\\Practice\\NURBS",
+>>>>>>> Stashed changes
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -394,10 +462,17 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
+<<<<<<< Updated upstream
         "C:\\Practice\\functions.h"
     ],
     "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
     "file": "C:/Practice/functions.h"
+=======
+        "C:\\Practice\\NURBS\\functions.h"
+    ],
+    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Practice/NURBS/functions.h"
+>>>>>>> Stashed changes
 },
 {
     "arguments": [
@@ -409,7 +484,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
+=======
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
+>>>>>>> Stashed changes
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -434,7 +513,11 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Practice",
+=======
+        "C:\\Practice\\NURBS",
+>>>>>>> Stashed changes
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -474,10 +557,17 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
+<<<<<<< Updated upstream
         "C:\\Practice\\qcustomplot.h"
     ],
     "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
     "file": "C:/Practice/qcustomplot.h"
+=======
+        "C:\\Practice\\NURBS\\qcustomplot.h"
+    ],
+    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Practice/NURBS/qcustomplot.h"
+>>>>>>> Stashed changes
 },
 {
     "arguments": [
@@ -489,7 +579,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
+=======
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
+>>>>>>> Stashed changes
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -514,7 +608,11 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Practice",
+=======
+        "C:\\Practice\\NURBS",
+>>>>>>> Stashed changes
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",
@@ -554,10 +652,17 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
+<<<<<<< Updated upstream
         "C:\\Practice\\widget.h"
     ],
     "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
     "file": "C:/Practice/widget.h"
+=======
+        "C:\\Practice\\NURBS\\widget.h"
+    ],
+    "directory": "C:/Practice/build-NURBS-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/.qtc_clangd",
+    "file": "C:/Practice/NURBS/widget.h"
+>>>>>>> Stashed changes
 },
 {
     "arguments": [
@@ -569,7 +674,11 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-mlKJKA\\clang-uiheader-aMPyuO",
+=======
+        "C:\\Users\\Наумов\\AppData\\Local\\Temp\\QtCreator-VOUBvV\\clang-uiheader-tvsQyH",
+>>>>>>> Stashed changes
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -594,7 +703,11 @@
         "-DQT_CORE_LIB",
         "-DQT_NEEDS_QMAIN",
         "-I",
+<<<<<<< Updated upstream
         "C:\\Practice",
+=======
+        "C:\\Practice\\NURBS",
+>>>>>>> Stashed changes
         "-I",
         "C:\\Qt\\5.15.2\\mingw81_32\\include",
         "-I",

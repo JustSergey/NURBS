@@ -377,7 +377,7 @@ Widget::Widget(QWidget *parent)
     //-----------Аппроксимирует кривую. Реализация без функции. Строит границы-----------
     uint degree = 1;
     double max_perpendicular = 0;
-    const double eps = 0.8;
+    const double eps = 1;
     do
     {
         const QVector<double> u_2 = u_fill(control_points_1, degree); // Узловой вектор
@@ -416,10 +416,10 @@ Widget::Widget(QWidget *parent)
         for(int i = 0; i < data_NURBS_1.size(); ++i)
         {
             rotated_points.push_back(rotate_point(data_NURBS_1[i]));
-            epsilon_point_DATA[i].curve = epsilon_point(rotated_points[i], data_NURBS_1[i], eps);
+            epsilon_point_DATA[i].curve = epsilon_point(data_NURBS_1[i], rotated_points[i], eps);
 
             rotated_points1.push_back(rotate_point(data_NURBS_1[i], - M_PI / 2));
-            reverse_epsilon_point_DATA[i].curve = epsilon_point(rotated_points1[i], data_NURBS_1[i], eps);
+            reverse_epsilon_point_DATA[i].curve = epsilon_point(data_NURBS_1[i], rotated_points1[i], eps);
         }
 
         if(eps > max_perpendicular)

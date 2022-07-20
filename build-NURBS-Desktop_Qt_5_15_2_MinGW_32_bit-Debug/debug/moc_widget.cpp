@@ -7,7 +7,11 @@
 *****************************************************************************/
 
 #include <memory>
+<<<<<<< Updated upstream
 #include "../../widget.h"
+=======
+#include "../../NURBS/widget.h"
+>>>>>>> Stashed changes
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)

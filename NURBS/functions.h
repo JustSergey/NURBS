@@ -332,14 +332,14 @@ QPair<double, double> rotate_point(const Point_curve& point, const double& angle
 }
 
 // Возвращает точку с заданной длинной (epsilon) от точки point_2
-QPair<double, double> epsilon_point(const QPair<double, double>& point_1, const Point_curve& point_2, const double& epsilon)
+QPair<double, double> epsilon_point(const Point_curve &point_1, const QPair<double, double> &point_2, const double &epsilon)
 {
-    double x = point_1.first - point_2.curve.first;
-    double y = point_1.second - point_2.curve.second;
-    double vector_len = radius_vector_len(x, y);
-    x *= epsilon / vector_len;
-    y *= epsilon / vector_len;
-    return QPair<double, double> {x + point_2.curve.first, y + point_2.curve.second};
+    double x = point_2.first - point_1.curve.first;
+    double y = point_2.second - point_1.curve.second;
+    double len_vec = radius_vector_len(x, y);
+    x *= epsilon / len_vec;
+    y *= epsilon / len_vec;
+    return QPair<double, double> {x + point_1.curve.first, y + point_1.curve.second};
 }
 
 // Возвращает вектор с точками спанов реального узлового вектора
@@ -360,7 +360,7 @@ QVector<double> real_span_calc(const uint& degree, const uint& n_kn, const QVect
     return u_real_span;
 }
 
-// Возвращает косинус между двумя точками
+// Возвращает косинус между производной в точке кривой и вектором, начинающимся от точки кривой
 double cos_calc(const Point_curve& point_1, const QPair<double, double>& point_2)
 {
     double x = point_1.curve.first - point_2.first;
@@ -516,10 +516,10 @@ QVector<Point_curve> declining_degree_curve(const QVector<QVector<double>>& cont
         for(int i = 0; i < data_NURBS.size(); ++i)
         {
             rotated_points.push_back(rotate_point(data_NURBS[i]));
-            epsilon_point_DATA[i].curve = epsilon_point(rotated_points[i], data_NURBS[i], epsilon);
+            epsilon_point_DATA[i].curve = epsilon_point(data_NURBS[i], rotated_points[i], epsilon);
 
             rotated_points1.push_back(rotate_point(data_NURBS[i], - M_PI / 2));
-            reverse_epsilon_point_DATA[i].curve = epsilon_point(rotated_points1[i], data_NURBS[i], epsilon);
+            reverse_epsilon_point_DATA[i].curve = epsilon_point(data_NURBS[i], rotated_points1[i] , epsilon);
         }
 
         if(epsilon > max_perpendicular)

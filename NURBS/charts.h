@@ -79,7 +79,7 @@ void plot_line(QCustomPlot* canvas, const double& x_1, const double& y_1, const 
     canvas->replot();
 }
 
-// Рисует двойнут стрелку "<-->"
+// Рисует двойную стрелку "<-->"
 void plot_double_arrow(QCustomPlot* canvas, const double& x_1, const double& y_1, const double& x_2, const double& y_2)
 {
     QCPItemLine *line = new QCPItemLine(canvas);
